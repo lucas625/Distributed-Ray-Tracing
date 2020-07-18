@@ -12,6 +12,7 @@ The implementation of a distributed ray tracing based on microservices as [Lucas
   - [Requirements](#requirements)
   - [Guidelines](#guidelines)
   - [Installation](#installation)
+    - [Ray-Tracing](#ray-tracing)
   - [Run the project](#run-the-project)
   - [Testing](#testing)
 
@@ -30,6 +31,14 @@ Developer: [Lucas Aurelio](https://github.com/lucas625)
 ## Installation
 
 Follow the next steps to install the dependencies.
+
+### Ray-Tracing
+
+To set ray tracing project use:
+
+```sh
+sudo docker build -t drt-ray-tracing ./ray-tracing/
+```
 
 ## Run the project
 

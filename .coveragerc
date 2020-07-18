@@ -1,0 +1,6 @@
+[run]
+include=
+    ray-tracing/*
+
+omit =
+    */tests/*
