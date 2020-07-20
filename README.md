@@ -1,6 +1,6 @@
 # Distributed-Ray-Tracing
 
-[![Build Status](https://travis-ci.org/lucas625/Distributed-Ray-Tracing.svg?branch=master)](https://travis-ci.org/lucas625/Distributed-Ray-Tracing) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/43e28987829f4de1a99b94d6798640d9)](https://www.codacy.com/manual/lucas625/Distributed-Ray-Tracing?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lucas625/Distributed-Ray-Tracing&amp;utm_campaign=Badge_Grade)[![codecov](https://codecov.io/gh/lucas625/Distributed-Ray-Tracing/branch/master/graph/badge.svg)](https://codecov.io/gh/lucas625/Distributed-Ray-Tracing)
+[![Build Status](https://travis-ci.org/lucas625/Distributed-Ray-Tracing.svg?branch=master)](https://travis-ci.org/lucas625/Distributed-Ray-Tracing) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/c97b506fef9f4eb8a23da10b04a04fb1)](https://www.codacy.com/manual/lucas625/Distributed-Ray-Tracing?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lucas625/Distributed-Ray-Tracing&amp;utm_campaign=Badge_Grade)[![codecov](https://codecov.io/gh/lucas625/Distributed-Ray-Tracing/branch/master/graph/badge.svg)](https://codecov.io/gh/lucas625/Distributed-Ray-Tracing)
 
 The implementation of a distributed ray tracing based on microservices as [Lucas Aurelio](https://github.com/lucas625) is completion of course work.
 
