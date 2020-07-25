@@ -15,6 +15,7 @@ The implementation of a distributed ray tracing based on microservices as [Lucas
     - [Ray-Tracing](#ray-tracing)
   - [Run the project](#run-the-project)
   - [Testing](#testing)
+    - [Ray-Tracing Test](#ray-tracing-test)
 
 ## Team
 
@@ -37,7 +38,11 @@ Follow the next steps to install the dependencies.
 To set ray tracing project use:
 
 ```sh
-sudo docker build -t drt-ray-tracing ./ray-tracing/
+# Build the image
+docker build -t drt-ray-tracing .
+
+# Run the container
+docker run -p 8081:8081 --name drt-ray-tracing-container --rm drt-ray-tracing
 ```
 
 ## Run the project
@@ -47,3 +52,11 @@ After completing the installation of the project, follow the next steps to execu
 ## Testing
 
 Follow the next steps to test the application.
+
+### Ray-Tracing Test
+
+Inside **drt-ray-tracing-container** run:
+
+```sh
+go test -v
+```

@@ -25,14 +25,15 @@ func IsEqualDimension(vect1, vect2 *Vector) bool {
 // Init is a function to initialize a Vector.
 //
 // Parameters:
-// 	size - The size of the Vector.
+// 	dimension - The dimension of the Vector.
 //
 // Returns:
-// 	a Vector
+// 	A Vector
+//	An error if any
 //
-func Init(size int) Vector {
+func Init(dimension int) (Vector, error) {
 	if size < 0 {
-		negativeDimensionError(size)
+		return nil, negativeDimensionError(dimension)
 	}
-	return Vector{Coordinates: make([]float64, size)}
+	return Vector{Coordinates: make([]float64, dimension)}, nil
 }
