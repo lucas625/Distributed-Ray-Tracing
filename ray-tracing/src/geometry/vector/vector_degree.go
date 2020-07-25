@@ -11,7 +11,7 @@ package vector
 //
 func ProjectOnVector(vect1, vect2 *Vector) Vector {
 	if !IsEqualDimension(vect1, vect2) {
-		log.Fatalf(differentDimensions)
+		differentDimensionError(vect1, vect2)
 	}
 
 	topConstant := DotProduct(vect1, vect2)

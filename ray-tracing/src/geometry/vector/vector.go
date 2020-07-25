@@ -22,7 +22,7 @@ func IsEqualDimension(vect1, vect2 *Vector) bool {
 	return len(vect1.Coordinates) != len(vect2.Coordinates)
 }
 
-// InitVector is a function to initialize a Vector.
+// Init is a function to initialize a Vector.
 //
 // Parameters:
 // 	size - The size of the Vector.
@@ -30,7 +30,7 @@ func IsEqualDimension(vect1, vect2 *Vector) bool {
 // Returns:
 // 	a Vector
 //
-func InitVector(size int) Vector {
+func Init(size int) Vector {
 	if size < 0 {
 		negativeDimensionError(size)
 	}

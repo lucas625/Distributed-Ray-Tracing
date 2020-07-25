@@ -14,7 +14,7 @@ import (
 // 	The resulting vector.
 //
 func ScalarMultiplication(vect *Vector, scalar float64) Vector {
-	vectAux := InitVector(len(vect.Coordinates))
+	vectAux := Init(len(vect.Coordinates))
 	for i := 0; i < len(vect.Coordinates); i++ {
 		vectAux.Coordinates[i] = scalar * vect.Coordinates[i]
 	}
@@ -40,7 +40,7 @@ func Sum(vect1 *Vector, vect2 *Vector, scalar1, scalar2 float64) Vector {
 	multipliedVect1 := ScalarMultiplication(vect1, scalar1)
 	multipliedVect2 := ScalarMultiplication(vect2, scalar2)
 
-	resultingVector := InitVector(len(vect1.Coordinates))
+	resultingVector := Init(len(vect1.Coordinates))
 	for i := 0; i < len(vect1.Coordinates); i++ {
 		resultingVector.Coordinates[i] = multipliedVect1.Coordinates[i] + multipliedVect2.Coordinates[i]
 	}
