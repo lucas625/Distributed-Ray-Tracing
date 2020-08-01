@@ -22,6 +22,26 @@ func IsEqualDimension(vect1, vect2 *Vector) bool {
 	return len(vect1.Coordinates) == len(vect2.Coordinates)
 }
 
+// IsEqual is a function to check if two vectors are equal.
+//
+// Parameters:
+// 	vect1 - The first vector.
+// 	vect2 - The second vector.
+//
+// Returns:
+// 	If the two vectors are equal.
+//
+func IsEqual(vect1, vect2 *Vector) bool {
+	if !IsEqualDimension(vect1, vect2) {
+		return false
+	}
+	for index, _ := range vect1.Coordinates {
+		if vect1.Coordinates[index] != vect2.Coordinates[index] {
+			return false
+		}
+	}
+	return true
+}
 // Init is a function to initialize a Vector.
 //
 // Parameters:
