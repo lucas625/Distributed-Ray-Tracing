@@ -29,11 +29,11 @@ func IsEqualDimension(vect1, vect2 *Vector) bool {
 //
 // Returns:
 // 	A Vector
-//	An error if any
+//	An error.
 //
-func Init(dimension int) (Vector, error) {
-	if size < 0 {
+func Init(dimension int) (*Vector, error) {
+	if dimension < 0 {
 		return nil, negativeDimensionError(dimension)
 	}
-	return Vector{Coordinates: make([]float64, dimension)}, nil
+	return &Vector{Coordinates: make([]float64, dimension)}, nil
 }

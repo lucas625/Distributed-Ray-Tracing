@@ -42,7 +42,7 @@ To set ray tracing project use:
 docker build -t drt-ray-tracing .
 
 # Run the container
-docker run -p 8081:8081 --name drt-ray-tracing-container --rm drt-ray-tracing
+docker build -t drt-ray-tracing . && docker run -p 8081:8081 --name drt-ray-tracing-container -v $(pwd):/ray-tracing --rm drt-ray-tracing
 ```
 
 ## Run the project
@@ -58,5 +58,5 @@ Follow the next steps to test the application.
 Inside **drt-ray-tracing-container** run:
 
 ```sh
-go test -v
+go test ./...
 ```

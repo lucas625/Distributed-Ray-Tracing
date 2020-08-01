@@ -2,6 +2,7 @@ package vector
 
 import (
 	"errors"
+	"fmt"
 )
 
 // differentDimensionError is a function to print the error where two vectors do not have the same dimension.
@@ -11,10 +12,14 @@ import (
 //	vect2 - The second vector.
 //
 // Returns:
-//  an Error
+//  An Error
 //
 func differentDimensionError(vect1, vect2 *Vector) error {
-	return errors.New("Invalid dimension of vector. Expected: %d and got: %d.\n", len(vect1.Coordinates), len(vect2.Coordinates))
+	errorMessage := fmt.Sprintf(
+		"Invalid dimension of vector. Expected: %d and got: %d.\n",
+		len(vect1.Coordinates),
+		len(vect2.Coordinates))
+	return errors.New(errorMessage)
 }
 
 // non3DError is a function to print the error where a vector is not 3D.
@@ -23,10 +28,11 @@ func differentDimensionError(vect1, vect2 *Vector) error {
 //  vect - The first vector.
 //
 // Returns:
-//  an Error.
+//  An Error.
 //
 func non3DError(vect *Vector) error {
-	return errors.New("Invalid dimension of vector. Expected 3D and got %d.\n", len(vect.Coordinates))
+	errorMessage := fmt.Sprintf("Invalid dimension of vector. Expected 3D and got %d.", len(vect.Coordinates))
+	return errors.New(errorMessage)
 }
 
 // negativeDimensionError is a function to print the error where a vector has negative dimension.
@@ -35,8 +41,9 @@ func non3DError(vect *Vector) error {
 // 	dimension - The dimension of the vector.
 //
 // Returns:
-//  an Error.
+//  An Error.
 //
 func negativeDimensionError(dimension int) error {
-	return errors.New("Invalid vector size %d.\n", dimension)
+	errorMessage := fmt.Sprintf("Invalid vector size %d.", dimension)
+	return errors.New(errorMessage)
 }

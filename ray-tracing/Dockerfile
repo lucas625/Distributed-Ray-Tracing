@@ -5,3 +5,5 @@ WORKDIR /ray-tracing
 
 RUN apk add git
 RUN go mod download
+
+ENV CGO_ENABLED 0

@@ -5,8 +5,9 @@ import (
 )
 
 func TestInitPositiveDimension(t *testing.T) {
-	vect, err := Init(1)
-	if err == nil {
-		t.Errorf("Vector Initiated with %dD", len(vect.Coordinates))
+	dimension := 1
+	_, err := Init(dimension)
+	if err != nil {
+		t.Errorf("Vector failed to be Instantiated with %dD", dimension)
 	}
 }
