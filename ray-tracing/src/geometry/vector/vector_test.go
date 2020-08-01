@@ -57,7 +57,7 @@ func TestInitNegativeDimension(t *testing.T) {
 	_, err := Init(dimension)
 	if err == nil {
 		t.Errorf("Vector instantiated with negative dimension: %d.", dimension)
-	} else if err.Error() != fmt.Sprintf("Invalid vector size %d.", dimension){
+	} else if err.Error() != fmt.Sprintf("Invalid vector size %d.", dimension) {
 		t.Errorf(
 			"Vector failed to be instantiated with negative dimension: %d but with wrong error message: \"%s\".",
 			dimension,

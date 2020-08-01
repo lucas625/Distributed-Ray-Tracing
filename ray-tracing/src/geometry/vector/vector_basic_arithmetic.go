@@ -109,7 +109,7 @@ func CrossProduct(vect1, vect2 *Vector) (*Vector, error) {
 	return &Vector{Coordinates: []float64{i, j, k}}, nil
 }
 
-// VectorNorm is a function to calculate the norm of a Vector.
+// Norm is a function to calculate the norm of a Vector.
 //
 // Parameters:
 // 	vect - The Vector.
@@ -118,7 +118,7 @@ func CrossProduct(vect1, vect2 *Vector) (*Vector, error) {
 // 	The norm of the Vector.
 //  An error.
 //
-func VectorNorm(vect *Vector) (float64, error) {
+func Norm(vect *Vector) (float64, error) {
 	dotProduct, err := DotProduct(vect, vect)
 	if err != nil {
 		return 0, err
@@ -126,7 +126,7 @@ func VectorNorm(vect *Vector) (float64, error) {
 	return math.Sqrt(dotProduct), nil
 }
 
-// NormalizeVector is a function to normalize a Vector.
+// Normalize is a function to normalize a Vector.
 //
 // Parameters:
 // 	vect - The Vector.
@@ -135,8 +135,8 @@ func VectorNorm(vect *Vector) (float64, error) {
 // 	The normalized Vector.
 //  An error.
 //
-func NormalizeVector(vect *Vector) (*Vector, error) {
-	vectorNorm, err := VectorNorm(vect)
+func Normalize(vect *Vector) (*Vector, error) {
+	vectorNorm, err := Norm(vect)
 	if err != nil {
 		return nil, err
 	}
