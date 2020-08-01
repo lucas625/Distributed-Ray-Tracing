@@ -19,7 +19,7 @@ type Vector struct {
 // 	If the vectors are of the same dimension.
 //
 func IsEqualDimension(vect1, vect2 *Vector) bool {
-	return len(vect1.Coordinates) != len(vect2.Coordinates)
+	return len(vect1.Coordinates) == len(vect2.Coordinates)
 }
 
 // Init is a function to initialize a Vector.
