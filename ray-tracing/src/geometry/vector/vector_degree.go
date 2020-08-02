@@ -8,14 +8,21 @@ package vector
 //
 // Returns:
 // 	The resulting vector.
+//  An error.
 //
-func ProjectOnVector(vect1, vect2 *Vector) Vector {
+func ProjectOnVector(vect1, vect2 *Vector) (*Vector, error) {
 	if !IsEqualDimension(vect1, vect2) {
-		log.Fatalf(differentDimensions)
+		return nil, differentDimensionError(vect1, vect2)
 	}
 
-	topConstant := DotProduct(vect1, vect2)
-	bottomConstant := DotProduct(vect2, vect2)
+	topConstant, err := DotProduct(vect1, vect2)
+	if err != nil {
+		return nil, err
+	}
+	bottomConstant, err := DotProduct(vect2, vect2)
+	if err != nil {
+		return nil, err
+	}
 
 	return ScalarMultiplication(vect2, topConstant/bottomConstant)
 }
@@ -28,10 +35,14 @@ func ProjectOnVector(vect1, vect2 *Vector) Vector {
 //
 // Returns:
 // 	The resulting vector.
+//  An error.
 //
-func Orthogonalize(vect1, vect2 *Vector) Vector {
-	vectAux := ProjectOnVector(vect1, vect2)
-	return Sum(vect1, &vectAux, 1, -1)
+func Orthogonalize(vect1, vect2 *Vector) (*Vector, error) {
+	vectAux, err := ProjectOnVector(vect1, vect2)
+	if err != nil {
+		return nil, err
+	}
+	return Sum(vect1, vectAux, 1, -1)
 }
 
 // CheckOrtogonalVector is a function to check if two vectors are orthogonal to each other.
@@ -42,7 +53,12 @@ func Orthogonalize(vect1, vect2 *Vector) Vector {
 //
 // Returns:
 // 	If the vectors are orthogonal to each other.
+//  An error.
 //
-func IsOrthogonalVector(vect1, vect2 *Vector) bool {
-	return DotProduct(vect1, vect2) == 0
+func IsOrthogonalVector(vect1, vect2 *Vector) (bool, error) {
+	dotProduct, err := DotProduct(vect1, vect2)
+	if err != nil {
+		return false, err
+	}
+	return dotProduct == 0, nil
 }

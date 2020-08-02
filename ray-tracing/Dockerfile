@@ -3,4 +3,7 @@ FROM golang:1.15-rc-alpine3.12
 COPY . /ray-tracing
 WORKDIR /ray-tracing
 
+RUN apk add git
 RUN go mod download
+
+ENV CGO_ENABLED 0

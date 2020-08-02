@@ -1,16 +1,12 @@
-language: python
-python:
-  - "3.7"
+language: go
+go:
+  - stable
 install:
-  - pip install pipenv
-  - pipenv install --dev
+  - cd ray-tracing
+  - go mod download
 before_script:
-  - export SECRET_KEY="TEST"
-  - export ALLOWED_HOSTS="['*']"
-  - export DEBUG="False"
+  - export CGO_ENABLED=0
 script:
-  # - pipenv run coverage run manage.py test --no-input --debug-mode -v 2
-  # - pipenv run coverage html -d public/coverage
-  # - pipenv run coverage report -m
+  - go test ./... -cover
 after_success:
   - bash <(curl -s https://codecov.io/bash)
