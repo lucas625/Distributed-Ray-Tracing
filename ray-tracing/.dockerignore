@@ -1,3 +1,8 @@
+# -------------- IDEs --------------
+
+.vscode
+.idea
+
 # -------------- Files --------------
 
 .env
@@ -10,3 +15,7 @@
 
 Dockerfile
 .dockerignore
+
+# -------------- Coverage --------------
+
+coverage.txt
