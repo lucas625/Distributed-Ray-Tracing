@@ -48,7 +48,7 @@ func IsEqual(vect1, vect2 *Vector) bool {
 // 	dimension - The dimension of the Vector.
 //
 // Returns:
-// 	A Vector
+// 	A Vector.
 //	An error.
 //
 func Init(dimension int) (*Vector, error) {
