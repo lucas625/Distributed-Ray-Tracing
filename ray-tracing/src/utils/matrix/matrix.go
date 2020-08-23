@@ -13,7 +13,7 @@ type Matrix struct {
 	Columns int
 }
 
-// BuildIdMatrix is a function to build an Identity Matrix.
+// BuildIdentity is a function to build an identity matrix.
 //
 // Parameters:
 // 	size - The number of lines and columns of the matrix.
@@ -22,18 +22,18 @@ type Matrix struct {
 // 	A Matrix.
 //  An error.
 //
-func BuildIdMatrix(size int) (*Matrix, error) {
+func BuildIdentity(size int) (*Matrix, error) {
 	if size < 1 {
 		return nil, invalidSize(size, size)
 	}
-	matrix, _ := InitMatrix(size, size)
-	for i := range [size]int{} {
+	matrix, _ := Init(size, size)
+	for i := 0; i < size; i++ {
 		matrix.Values[i][i] = 1
 	}
 	return matrix, nil
 }
 
-// InitMatrix is a function to initialize a Matrix.
+// Init is a function to initialize a matrix.
 //
 // Parameters:
 // 	lin - The number of lines of the matrix.
@@ -43,13 +43,13 @@ func BuildIdMatrix(size int) (*Matrix, error) {
 // 	A Matrix.
 //	An error.
 //
-func InitMatrix(lines, columns int) (*Matrix, error) {
+func Init(lines, columns int) (*Matrix, error) {
 	if lines <= 0 || columns <= 0 {
 		return nil, invalidSize(lines, columns)
 	}
-	matrix := Matrix{Values: make([][]float64, lin), Lines: lin, Columns: col}
+	matrix := Matrix{Values: make([][]float64, lines), Lines: lines, Columns: columns}
 	for i := range matrix.Values {
-		matrix.Values[i] = make([]float64, col)
+		matrix.Values[i] = make([]float64, columns)
 	}
 	return &matrix, nil
 }
