@@ -1,12 +1,5 @@
 package matrix
 
-import (
-	"errors"
-	"fmt"
-	"log"
-	"strconv"
-)
-
 // Matrix is a class for matrices.
 //
 // Members:
@@ -18,6 +11,26 @@ type Matrix struct {
 	Values  [][]float64
 	Lines   int
 	Columns int
+}
+
+// BuildIdMatrix is a function to build an Identity Matrix.
+//
+// Parameters:
+// 	size - The number of lines and columns of the matrix.
+//
+// Returns:
+// 	A Matrix.
+//  An error.
+//
+func BuildIdMatrix(size int) (*Matrix, error) {
+	if size < 1 {
+		return nil, invalidSize(size, size)
+	}
+	matrix, _ := InitMatrix(size, size)
+	for i := range [size]int{} {
+		matrix.Values[i][i] = 1
+	}
+	return matrix, nil
 }
 
 // InitMatrix is a function to initialize a Matrix.

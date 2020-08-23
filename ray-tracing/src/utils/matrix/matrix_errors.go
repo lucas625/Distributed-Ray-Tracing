@@ -12,7 +12,7 @@ import (
 //	columns - The number of columns of the matrix.
 //
 // Returns:
-//  An Error
+//  An Error.
 //
 func invalidSize(lines, columns int) error {
 	errorMessage := fmt.Sprintf(
