@@ -13,6 +13,28 @@ type Matrix struct {
 	Columns int
 }
 
+// IsEqual is a function to check if two matrices are equal.
+//
+// Parameters:
+// 	other - The second matrix.
+//
+// Returns:
+// 	A Matrix.
+//
+func (matrix *Matrix) IsEqual(other *Matrix) bool {
+	if matrix.Lines != other.Lines || matrix.Columns != other.Columns {
+		return false
+	}
+	for lineIndex := 0; lineIndex < matrix.Lines; lineIndex++{
+		for columnIndex := 0; columnIndex < matrix.Columns; columnIndex++ {
+			if matrix.Values[lineIndex][columnIndex] != other.Values[lineIndex][columnIndex] {
+				return false
+			}
+		}
+	}
+	return true
+}
+
 // BuildIdentity is a function to build an identity matrix.
 //
 // Parameters:
@@ -27,8 +49,8 @@ func BuildIdentity(size int) (*Matrix, error) {
 		return nil, invalidSize(size, size)
 	}
 	matrix, _ := Init(size, size)
-	for i := 0; i < size; i++ {
-		matrix.Values[i][i] = 1
+	for lineIndex := 0; lineIndex < size; lineIndex++ {
+		matrix.Values[lineIndex][lineIndex] = 1
 	}
 	return matrix, nil
 }
@@ -48,8 +70,8 @@ func Init(lines, columns int) (*Matrix, error) {
 		return nil, invalidSize(lines, columns)
 	}
 	matrix := Matrix{Values: make([][]float64, lines), Lines: lines, Columns: columns}
-	for i := range matrix.Values {
-		matrix.Values[i] = make([]float64, columns)
+	for lineIndex := range matrix.Values {
+		matrix.Values[lineIndex] = make([]float64, columns)
 	}
 	return &matrix, nil
 }

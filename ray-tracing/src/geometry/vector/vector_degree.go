@@ -45,7 +45,7 @@ func Orthogonalize(vect1, vect2 *Vector) (*Vector, error) {
 	return Sum(vect1, vectAux, 1, -1)
 }
 
-// CheckOrtogonalVector is a function to check if two vectors are orthogonal to each other.
+// IsOrthogonalVector is a function to check if two vectors are orthogonal to each other.
 //
 // Parameters:
 // 	vect1 - The first vector.
