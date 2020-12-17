@@ -19,7 +19,7 @@ func TestScalarMultiplication(t *testing.T) {
 	matrix.Values[2] = []float64{5, 6}
 
 	scalar := 3.0
-	resultingMatrix, err := matrix.ScalarMultiplication(scalar)
+	resultingMatrix, err := ScalarMultiplication(matrix, scalar)
 	if err != nil {
 		t.Errorf("Failed to multiply matrix %v by constant %v.", matrix, scalar)
 	}

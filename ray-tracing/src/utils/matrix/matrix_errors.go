@@ -21,3 +21,20 @@ func invalidSize(lines, columns int) error {
 		columns)
 	return errors.New(errorMessage)
 }
+
+// incompatibleSize is a function to get the error where two matrices don't have a compatible size.
+//
+// Parameters:
+//	matrix1 - The first matrix.
+//	matrix2 - The second matrix.
+//
+// Returns:
+//  An Error.
+//
+func incompatibleSize(matrix1, matrix2 *Matrix) error {
+	errorMessage := fmt.Sprintf(
+		"Incompatible size for matrices:\nFirst matrix: Lines: %d and Columns: %d." +
+			"\nSecond matrix: Lines: %d and Columns: %d.\n",
+		matrix1.Lines, matrix1.Columns, matrix2.Lines, matrix2.Columns)
+	return errors.New(errorMessage)
+}
