@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-// differentDimensionError is a function to print the error where two vectors do not have the same dimension.
+// differentDimensionError is a function to get the error where two vectors do not have the same dimension.
 //
 // Parameters:
 //	vect1 - The first vector.
@@ -22,7 +22,7 @@ func differentDimensionError(vect1, vect2 *Vector) error {
 	return errors.New(errorMessage)
 }
 
-// non3DError is a function to print the error where a vector is not 3D.
+// non3DError is a function to get the error where a vector is not 3D.
 //
 // Parameters:
 //  vect - The first vector.
@@ -35,7 +35,7 @@ func non3DError(vect *Vector) error {
 	return errors.New(errorMessage)
 }
 
-// negativeDimensionError is a function to print the error where a vector has negative dimension.
+// negativeDimensionError is a function to get the error where a vector has negative dimension.
 //
 // Parameters:
 // 	dimension - The dimension of the vector.

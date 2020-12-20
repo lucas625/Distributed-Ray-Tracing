@@ -129,7 +129,7 @@ func TestIsEqual(t *testing.T) {
 	}
 }
 
-// TestIsEqual tests if two vectors are equal.
+// TestIsDifferent tests if two vectors are different.
 //
 // Parameters:
 //  t - Test instance.
