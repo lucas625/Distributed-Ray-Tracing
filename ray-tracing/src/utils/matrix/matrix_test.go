@@ -127,3 +127,32 @@ func TestBuildIdentityPositiveSize(t *testing.T) {
 		}
 	}
 }
+
+// TestTranspose tests the transposition of a matrix.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestTranspose(t *testing.T) {
+	matrix, _ := Init(3, 2)
+	matrix.Values[0] = []float64{1, 2}
+	matrix.Values[1] = []float64{3, 4}
+	matrix.Values[2] = []float64{5, 6}
+
+	resultingMatrix, err := Transpose(matrix)
+	if err != nil {
+		t.Errorf("Failed to transpose matrix %v.", matrix)
+	}
+
+	expectedMatrix, _ := Init(2, 3)
+	expectedMatrix.Values[0] = []float64{1, 3, 5}
+	expectedMatrix.Values[1] = []float64{2, 4, 6}
+
+
+	if !resultingMatrix.IsEqual(expectedMatrix) {
+		t.Errorf("Invalid transposition of matrix %v: %v.", matrix, resultingMatrix)
+	}
+}

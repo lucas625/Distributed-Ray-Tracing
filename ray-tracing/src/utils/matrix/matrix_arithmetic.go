@@ -36,15 +36,15 @@ func MultiplyMatrix(matrix1, matrix2 *Matrix) (*Matrix, error) {
 	if matrix1.Columns != matrix2.Lines {
 		return nil, incompatibleSize(matrix1, matrix2)
 	}
-	auxiliar_matrix, _ := Init(matrix1.Lines, matrix2.Columns)
-	for first_matrix_line_index := 0; first_matrix_line_index < matrix1.Lines; first_matrix_line_index++ {
-		for second_matrix_column_index := 0; second_matrix_column_index < matrix2.Columns; second_matrix_column_index++ {
-			for first_matrix_column_index := 0; first_matrix_column_index < matrix1.Columns; first_matrix_column_index++ {
-				first_value := matrix1.Values[first_matrix_line_index][first_matrix_column_index]
-				second_value := matrix2.Values[first_matrix_column_index][second_matrix_column_index]
-				auxiliar_matrix.Values[first_matrix_line_index][first_matrix_column_index] += first_value * second_value
+	multipliedMatrix, _ := Init(matrix1.Lines, matrix2.Columns)
+	for firstMatrixLineIndex := 0; firstMatrixLineIndex < matrix1.Lines; firstMatrixLineIndex++ {
+		for secondMatrixColumnIndex := 0; secondMatrixColumnIndex < matrix2.Columns; secondMatrixColumnIndex++ {
+			for firstMatrixColumnIndex := 0; firstMatrixColumnIndex < matrix1.Columns; firstMatrixColumnIndex++ {
+				firstValue := matrix1.Values[firstMatrixLineIndex][firstMatrixColumnIndex]
+				secondValue := matrix2.Values[firstMatrixColumnIndex][secondMatrixColumnIndex]
+				multipliedMatrix.Values[firstMatrixLineIndex][firstMatrixColumnIndex] += firstValue * secondValue
 			}
 		}
 	}
-	return auxiliar_matrix, nil
+	return multipliedMatrix, nil
 }

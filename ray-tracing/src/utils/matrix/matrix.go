@@ -55,6 +55,30 @@ func BuildIdentity(size int) (*Matrix, error) {
 	return matrix, nil
 }
 
+// Transpose is a function to transpose a Matrix.
+//
+// Parameters:
+// 	matrix - the target Matrix.
+//
+// Returns:
+// 	The transposed Matrix.
+//
+func Transpose(matrix *Matrix) (*Matrix, error) {
+	transposedMatrix, err := Init(matrix.Columns, matrix.Lines)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for lineIndex := 0; lineIndex < matrix.Lines; lineIndex++ {
+		for columnIndex := 0; columnIndex < matrix.Columns; columnIndex++ {
+			transposedMatrix.Values[columnIndex][lineIndex] = matrix.Values[lineIndex][columnIndex]
+		}
+	}
+
+	return transposedMatrix, nil
+}
+
 // Init is a function to initialize a matrix.
 //
 // Parameters:

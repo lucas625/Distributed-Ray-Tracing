@@ -32,6 +32,40 @@ func TestScalarMultiplication(t *testing.T) {
 	}
 
 	if !resultingMatrix.IsEqual(matrix) {
-		t.Errorf("Invalid multiplication of matrix %v by constant %v: %v.", matrix, scalar, expectedMatrix)
+		t.Errorf("Invalid multiplication of matrix %v by constant %v: %v.", matrix, scalar, resultingMatrix)
+	}
+}
+
+// TestMultiplyMatrix tests the multiplication of a matrix by another.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestMultiplyMatrix(t *testing.T) {
+	matrix1, _ := Init(3, 2)
+	matrix1.Values[0] = []float64{1, 2}
+	matrix1.Values[1] = []float64{3, 4}
+	matrix1.Values[2] = []float64{5, 6}
+
+	matrix2, _ := Init(2, 3)
+	matrix2.Values[0] = []float64{7, 8, 9}
+	matrix2.Values[1] = []float64{10, 11, 12}
+
+	resultingMatrix, err := MultiplyMatrix(matrix1, matrix2)
+	if err != nil {
+		t.Errorf("Failed to multiply matrices %v %v.", matrix1, matrix2)
+	}
+
+	expectedMatrix, _ := Init(3, 3)
+	expectedMatrix.Values[0] = []float64{27, 30, 33}
+	expectedMatrix.Values[1] = []float64{61, 68, 75}
+	expectedMatrix.Values[2] = []float64{95, 106, 117}
+
+
+	if !resultingMatrix.IsEqual(expectedMatrix) {
+		t.Errorf("Invalid multiplication of matrix %v by matrix %v: %v.", matrix1, matrix2, resultingMatrix)
 	}
 }
