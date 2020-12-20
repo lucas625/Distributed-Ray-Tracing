@@ -3,4 +3,4 @@ include=
     ray-tracing/*
 
 omit =
-    */tests/*
+    */*_test.go
