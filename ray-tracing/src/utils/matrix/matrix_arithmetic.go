@@ -42,7 +42,7 @@ func MultiplyMatrix(matrix1, matrix2 *Matrix) (*Matrix, error) {
 			for firstMatrixColumnIndex := 0; firstMatrixColumnIndex < matrix1.Columns; firstMatrixColumnIndex++ {
 				firstValue := matrix1.Values[firstMatrixLineIndex][firstMatrixColumnIndex]
 				secondValue := matrix2.Values[firstMatrixColumnIndex][secondMatrixColumnIndex]
-				multipliedMatrix.Values[firstMatrixLineIndex][firstMatrixColumnIndex] += firstValue * secondValue
+				multipliedMatrix.Values[firstMatrixLineIndex][secondMatrixColumnIndex] += firstValue * secondValue
 			}
 		}
 	}

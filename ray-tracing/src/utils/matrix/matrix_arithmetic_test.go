@@ -25,13 +25,11 @@ func TestScalarMultiplication(t *testing.T) {
 	}
 
 	expectedMatrix, _ := Init(3, 2)
-	for lineIndex := 0; lineIndex < expectedMatrix.Lines; lineIndex++ {
-		for columnIndex := 0; columnIndex < expectedMatrix.Columns; columnIndex++ {
-			expectedMatrix.Values[lineIndex][columnIndex] = scalar * matrix.Values[lineIndex][columnIndex]
-		}
-	}
+	expectedMatrix.Values[0] = []float64{3, 6}
+	expectedMatrix.Values[1] = []float64{9, 12}
+	expectedMatrix.Values[2] = []float64{15, 18}
 
-	if !resultingMatrix.IsEqual(matrix) {
+	if !resultingMatrix.IsEqual(expectedMatrix) {
 		t.Errorf("Invalid multiplication of matrix %v by constant %v: %v.", matrix, scalar, resultingMatrix)
 	}
 }
