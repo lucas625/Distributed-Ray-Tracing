@@ -35,7 +35,7 @@ func IsEqual(vect1, vect2 *Vector) bool {
 	if !IsEqualDimension(vect1, vect2) {
 		return false
 	}
-	for index, _ := range vect1.Coordinates {
+	for index := range vect1.Coordinates {
 		if vect1.Coordinates[index] != vect2.Coordinates[index] {
 			return false
 		}
