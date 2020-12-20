@@ -16,13 +16,13 @@ import (
 //
 func TestScalarMultiplication(t *testing.T) {
 	vect := &Vector{Coordinates: []float64{10, 20, 30}}
-	multiplied_vector, err := ScalarMultiplication(vect, 2)
+	multipliedVector, err := ScalarMultiplication(vect, 2)
 	if err != nil {
 		t.Errorf(err.Error())
 	}
 	expectedVector := &Vector{Coordinates: []float64{20, 40, 60}}
-	if !IsEqual(expectedVector, multiplied_vector) {
-		t.Errorf("Vectors are different: %v %v", expectedVector.Coordinates, multiplied_vector.Coordinates)
+	if !IsEqual(expectedVector, multipliedVector) {
+		t.Errorf("Vectors are different: %v %v", expectedVector.Coordinates, multipliedVector.Coordinates)
 	}
 }
 
@@ -37,13 +37,13 @@ func TestScalarMultiplication(t *testing.T) {
 func TestSum(t *testing.T) {
 	vect1 := &Vector{Coordinates: []float64{10, 20, 30}}
 	vect2 := &Vector{Coordinates: []float64{5, 10, 20}}
-	vector_sum, err := Sum(vect1, vect2, 1, 1)
+	vectorSum, err := Sum(vect1, vect2, 1, 1)
 	if err != nil {
 		t.Errorf(err.Error())
 	}
 	expectedVector := &Vector{Coordinates: []float64{15, 30, 50}}
-	if !IsEqual(expectedVector, vector_sum) {
-		t.Errorf("Vectors are different: %v %v", expectedVector.Coordinates, vector_sum.Coordinates)
+	if !IsEqual(expectedVector, vectorSum) {
+		t.Errorf("Vectors are different: %v %v", expectedVector.Coordinates, vectorSum.Coordinates)
 	}
 }
 
@@ -80,13 +80,13 @@ func TestSumDifferentDimensions(t *testing.T) {
 func TestSubtraction(t *testing.T) {
 	vect1 := &Vector{Coordinates: []float64{10, 20, 30}}
 	vect2 := &Vector{Coordinates: []float64{5, 10, 20}}
-	vector_sum, err := Sum(vect1, vect2, 3, -1)
+	vectorSum, err := Sum(vect1, vect2, 3, -1)
 	if err != nil {
 		t.Errorf(err.Error())
 	}
 	expectedVector := &Vector{Coordinates: []float64{25, 50, 70}}
-	if !IsEqual(expectedVector, vector_sum) {
-		t.Errorf("Vectors are different: %v %v", expectedVector.Coordinates, vector_sum.Coordinates)
+	if !IsEqual(expectedVector, vectorSum) {
+		t.Errorf("Vectors are different: %v %v", expectedVector.Coordinates, vectorSum.Coordinates)
 	}
 }
 
