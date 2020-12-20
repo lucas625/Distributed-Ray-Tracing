@@ -6,7 +6,16 @@ The implementation of a distributed ray tracing based on microservices as [Lucas
 
 ## Table of Contents
 
-[[_TOC_]]
+- [Distributed-Ray-Tracing](#distributed-ray-tracing)
+  - [Table of Contents](#table-of-contents)
+  - [Team](#team)
+  - [Requirements](#requirements)
+  - [Guidelines](#guidelines)
+  - [Installation](#installation)
+    - [Ray-Tracing](#ray-tracing)
+  - [Run the project](#run-the-project)
+  - [Testing](#testing)
+    - [Ray-Tracing Test](#ray-tracing-test)
 
 ## Team
 
