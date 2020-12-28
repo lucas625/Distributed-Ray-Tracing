@@ -34,6 +34,26 @@ func TestScalarMultiplication(t *testing.T) {
 	}
 }
 
+// TestScalarMultiplicationNegativeLines tests the multiplication of a matrix by a constant.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestScalarMultiplicationNegativeLines(t *testing.T) {
+	matrix, _ := Init(3, 2)
+	matrix.Lines = -1
+
+	scalar := 3.0
+	_, err := ScalarMultiplication(matrix, scalar)
+	if err == nil {
+		t.Errorf(
+			"It shouldn't be possible to multiply matrix with negative lines %v by a constant", matrix)
+	}
+}
+
 // TestMultiplyMatrix tests the multiplication of a matrix by another.
 //
 // Parameters:
@@ -66,4 +86,24 @@ func TestMultiplyMatrix(t *testing.T) {
 	if !resultingMatrix.IsEqual(expectedMatrix) {
 		t.Errorf("Invalid multiplication of matrix %v by matrix %v: %v.", matrix1, matrix2, resultingMatrix)
 	}
+}
+
+// TestMultiplyMatrixIncompatibleSize tests the multiplication of a matrix by another.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestMultiplyMatrixIncompatibleSize(t *testing.T) {
+	firstMatrix, _ := Init(3, 3)
+	secondMatrix, _ := Init(2, 3)
+
+	_, err := MultiplyMatrix(firstMatrix, secondMatrix)
+	if err == nil {
+		t.Errorf("It shouldn't be possible to multiply matrices with incompatible size %v %v.",
+			firstMatrix, secondMatrix)
+	}
+
 }

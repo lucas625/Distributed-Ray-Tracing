@@ -156,3 +156,85 @@ func TestTranspose(t *testing.T) {
 		t.Errorf("Invalid transposition of matrix %v: %v.", matrix, resultingMatrix)
 	}
 }
+
+// TestIsEqual tests the is equal of a matrix.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestIsEqual(t *testing.T) {
+	firstMatrix, _ := Init(3, 2)
+	firstMatrix.Values[0] = []float64{1, 2}
+	firstMatrix.Values[1] = []float64{3, 4}
+	firstMatrix.Values[2] = []float64{5, 6}
+
+	secondMatrix, _ := Init(3, 2)
+	secondMatrix.Values[0] = []float64{1, 2}
+	secondMatrix.Values[1] = []float64{3, 4}
+	secondMatrix.Values[2] = []float64{5, 6}
+
+	if !firstMatrix.IsEqual(secondMatrix) {
+		t.Errorf("Matrix are different of matrix %v: %v.", firstMatrix, secondMatrix)
+	}
+}
+
+// TestIsEqualDifferent tests the is equal of a matrix.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestIsEqualDifferent(t *testing.T) {
+	firstMatrix, _ := Init(3, 2)
+	firstMatrix.Values[0] = []float64{1, 2}
+	firstMatrix.Values[1] = []float64{3, 4}
+	firstMatrix.Values[2] = []float64{5, 6}
+
+	secondMatrix, _ := Init(3, 2)
+	secondMatrix.Values[0] = []float64{10, 20}
+	secondMatrix.Values[1] = []float64{30, 40}
+	secondMatrix.Values[2] = []float64{50, 60}
+
+	if firstMatrix.IsEqual(secondMatrix) {
+		t.Errorf("Matrix are equal of matrix %v: %v.", firstMatrix, secondMatrix)
+	}
+}
+
+// TestIsEqualDifferentLines tests the is equal of a matrix.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestIsEqualDifferentLines(t *testing.T) {
+	firstMatrix, _ := Init(2, 2)
+	secondMatrix, _ := Init(3, 2)
+
+	if firstMatrix.IsEqual(secondMatrix) {
+		t.Errorf("Matrix are equal of matrix %v: %v.", firstMatrix, secondMatrix)
+	}
+}
+
+// TestIsEqualDifferentColumns tests the is equal of a matrix.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestIsEqualDifferentColumns(t *testing.T) {
+	firstMatrix, _ := Init(3, 3)
+	secondMatrix, _ := Init(3, 2)
+
+	if firstMatrix.IsEqual(secondMatrix) {
+		t.Errorf("Matrix are equal of matrix %v: %v.", firstMatrix, secondMatrix)
+	}
+}

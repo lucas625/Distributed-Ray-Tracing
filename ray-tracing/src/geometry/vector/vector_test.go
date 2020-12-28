@@ -113,7 +113,7 @@ func TestCoordinates(t *testing.T) {
 	}
 }
 
-// TestIsEqualOk tests if two vectors are equal.
+// TestIsEqual tests if two vectors are equal.
 //
 // Parameters:
 //  t - Test instance.
@@ -121,7 +121,7 @@ func TestCoordinates(t *testing.T) {
 // Returns:
 //  none
 //
-func TestIsEqualOk(t *testing.T) {
+func TestIsEqual(t *testing.T) {
 	vect1 := &Vector{Coordinates: []float64{10, 20, 30}}
 	vect2 := &Vector{Coordinates: []float64{10, 20, 30}}
 	if !IsEqual(vect1, vect2) {
@@ -129,7 +129,7 @@ func TestIsEqualOk(t *testing.T) {
 	}
 }
 
-// TestIsEqualFail tests if two vectors are different.
+// TestIsEqualDifferent tests if two vectors are different.
 //
 // Parameters:
 //  t - Test instance.
@@ -137,7 +137,7 @@ func TestIsEqualOk(t *testing.T) {
 // Returns:
 //  none
 //
-func TestIsEqualFail(t *testing.T) {
+func TestIsEqualDifferent(t *testing.T) {
 	vect1 := &Vector{Coordinates: []float64{10, 20, 30}}
 	vect2 := &Vector{Coordinates: []float64{10, 30, 20}}
 	if IsEqual(vect1, vect2) {
