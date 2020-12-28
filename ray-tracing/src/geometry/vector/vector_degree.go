@@ -24,7 +24,7 @@ func ProjectOnVector(vect1, vect2 *Vector) (*Vector, error) {
 		return nil, err
 	}
 
-	return ScalarMultiplication(vect2, topConstant/bottomConstant)
+	return ScalarMultiplication(vect2, topConstant/bottomConstant), nil
 }
 
 // Orthogonalize is a function to orthogonalize two vectors.

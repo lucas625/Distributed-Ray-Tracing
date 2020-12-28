@@ -145,7 +145,7 @@ func TestIsEqualFail(t *testing.T) {
 	}
 }
 
-// TestIsEqualFailDifferentDimensions tests if two vectors are different.
+// TestIsEqualFailDifferentDimensions tests if two vectors are different by their dimension.
 //
 // Parameters:
 //  t - Test instance.
