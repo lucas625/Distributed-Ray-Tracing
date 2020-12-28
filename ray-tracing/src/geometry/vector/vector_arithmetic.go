@@ -12,17 +12,13 @@ import (
 //
 // Returns:
 // 	The resulting vector.
-//	An error.
 //
-func ScalarMultiplication(vect *Vector, scalar float64) (*Vector, error) {
-	vectAux, err := Init(len(vect.Coordinates))
-	if err != nil {
-		return nil, err
-	}
+func ScalarMultiplication(vect *Vector, scalar float64) *Vector {
+	vectAux, _ := Init(len(vect.Coordinates))
 	for i := 0; i < len(vect.Coordinates); i++ {
 		vectAux.Coordinates[i] = scalar * vect.Coordinates[i]
 	}
-	return vectAux, nil
+	return vectAux
 }
 
 // Sum is a function to sum 2 vectors.
@@ -42,23 +38,12 @@ func Sum(vect1 *Vector, vect2 *Vector, scalar1, scalar2 float64) (*Vector, error
 		return nil, differentDimensionError(vect1, vect2)
 	}
 
-	multipliedVect1, err := ScalarMultiplication(vect1, scalar1)
-	if err != nil {
-		return nil, err
-	}
-
-	multipliedVect2, err := ScalarMultiplication(vect2, scalar2)
-	if err != nil {
-		return nil, err
-	}
-
-	resultingVector, err := Init(len(vect1.Coordinates))
-	if err != nil {
-		return nil, err
-	}
-
+	firstMultipliedVector := ScalarMultiplication(vect1, scalar1)
+	secondMultipliedVector := ScalarMultiplication(vect2, scalar2)
+	
+	resultingVector, _ := Init(len(vect1.Coordinates))
 	for i := 0; i < len(vect1.Coordinates); i++ {
-		resultingVector.Coordinates[i] = multipliedVect1.Coordinates[i] + multipliedVect2.Coordinates[i]
+		resultingVector.Coordinates[i] = firstMultipliedVector.Coordinates[i] + secondMultipliedVector.Coordinates[i]
 	}
 	return resultingVector, nil
 }
@@ -116,29 +101,28 @@ func CrossProduct(vect1, vect2 *Vector) (*Vector, error) {
 //
 // Returns:
 // 	The norm of the Vector.
-//  An error.
 //
-func Norm(vect *Vector) (float64, error) {
-	dotProduct, err := DotProduct(vect, vect)
-	if err != nil {
-		return 0, err
-	}
-	return math.Sqrt(dotProduct), nil
+func Norm(vect *Vector) float64 {
+	dotProduct, _ := DotProduct(vect, vect)
+	return math.Sqrt(dotProduct)
 }
 
 // Normalize is a function to normalize a Vector.
 //
 // Parameters:
-// 	vect - The Vector.
+// 	vector - The Vector.
 //
 // Returns:
 // 	The normalized Vector.
-//  An error.
 //
-func Normalize(vect *Vector) (*Vector, error) {
-	vectorNorm, err := Norm(vect)
-	if err != nil {
-		return nil, err
+func Normalize(vector *Vector) *Vector {
+	vectorNorm := Norm(vector)
+	var normalizedVector *Vector
+	if vectorNorm != 0 {
+		normalizedVector = ScalarMultiplication(vector, 1/vectorNorm)
+	} else {
+		normalizedVector, _ = Init(len(vector.Coordinates))
 	}
-	return ScalarMultiplication(vect, 1/vectorNorm)
+
+	return normalizedVector
 }

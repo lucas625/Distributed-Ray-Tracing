@@ -16,10 +16,7 @@ import (
 //
 func TestScalarMultiplication(t *testing.T) {
 	vect := &Vector{Coordinates: []float64{10, 20, 30}}
-	multipliedVector, err := ScalarMultiplication(vect, 2)
-	if err != nil {
-		t.Errorf(err.Error())
-	}
+	multipliedVector := ScalarMultiplication(vect, 2)
 	expectedVector := &Vector{Coordinates: []float64{20, 40, 60}}
 	if !IsEqual(expectedVector, multipliedVector) {
 		t.Errorf("Vectors are different: %v %v", expectedVector.Coordinates, multipliedVector.Coordinates)
@@ -207,10 +204,7 @@ func TestCrossProductNon3D(t *testing.T) {
 //
 func TestNorm(t *testing.T) {
 	vect := &Vector{Coordinates: []float64{3, 4}}
-	norm, err := Norm(vect)
-	if err != nil {
-		t.Errorf(err.Error())
-	}
+	norm := Norm(vect)
 	expectedNorm := float64(5)
 	if !(expectedNorm == norm) {
 		t.Errorf("Norm is wrong: %v %v", expectedNorm, norm)
@@ -227,11 +221,25 @@ func TestNorm(t *testing.T) {
 //
 func TestNormalize(t *testing.T) {
 	vect := &Vector{Coordinates: []float64{2, 1, 2}}
-	normalizedVector, err := Normalize(vect)
-	if err != nil {
-		t.Errorf(err.Error())
-	}
+	normalizedVector := Normalize(vect)
 	expectedNormalizedVector := &Vector{Coordinates: []float64{float64(2)/3, float64(1)/3, float64(2)/3}}
+	if !IsEqual(expectedNormalizedVector, normalizedVector) {
+		t.Errorf("Normalized vector is wrong: %v %v", expectedNormalizedVector, normalizedVector)
+	}
+}
+
+// TestNormalize tests the normalization of a vector.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestNormalizeNullVector(t *testing.T) {
+	vector := &Vector{Coordinates: []float64{0, 0, 0}}
+	normalizedVector := Normalize(vector)
+	expectedNormalizedVector := &Vector{Coordinates: []float64{0, 0, 0}}
 	if !IsEqual(expectedNormalizedVector, normalizedVector) {
 		t.Errorf("Normalized vector is wrong: %v %v", expectedNormalizedVector, normalizedVector)
 	}

@@ -3,7 +3,7 @@ package matrix
 // ScalarMultiplication is a function to multiply a Matrix by a constant.
 //
 // Parameters:
-// 	matrix - A pointer to a Matrix.
+//  matrix - A pointer to a Matrix.
 //  scalar - A constant.
 //
 // Returns:

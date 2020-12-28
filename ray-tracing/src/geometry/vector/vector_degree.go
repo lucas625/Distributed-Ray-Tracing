@@ -14,17 +14,9 @@ func ProjectOnVector(vect1, vect2 *Vector) (*Vector, error) {
 	if !IsEqualDimension(vect1, vect2) {
 		return nil, differentDimensionError(vect1, vect2)
 	}
-
-	topConstant, err := DotProduct(vect1, vect2)
-	if err != nil {
-		return nil, err
-	}
-	bottomConstant, err := DotProduct(vect2, vect2)
-	if err != nil {
-		return nil, err
-	}
-
-	return ScalarMultiplication(vect2, topConstant/bottomConstant)
+	topConstant, _ := DotProduct(vect1, vect2)
+	bottomConstant, _ := DotProduct(vect2, vect2)
+	return ScalarMultiplication(vect2, topConstant/bottomConstant), nil
 }
 
 // Orthogonalize is a function to orthogonalize two vectors.
