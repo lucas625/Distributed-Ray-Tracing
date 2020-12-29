@@ -27,27 +27,9 @@ type Matrix struct {
 //
 func (matrix *Matrix) GetValue(lineIndex, columnIndex int) (float64, error) {
 	if lineIndex < 0 || lineIndex >= matrix.Lines() || columnIndex < 0 || columnIndex >= matrix.Columns() {
-		return 0, indexOutOfLimits(matrix, lineIndex, columnIndex)
+		return 0, indexError(matrix, lineIndex, columnIndex)
 	}
 	return matrix.values[lineIndex][columnIndex], nil
-}
-
-// SetValue is a setter for the Matrix's values.
-//
-// Parameters:
-// 	lineIndex - the index of the line.
-// 	columnIndex - the index of the column.
-// 	value - the new value.
-//
-// Returns:
-//  An error.
-//
-func (matrix *Matrix) SetValue(lineIndex, columnIndex int, value float64) error {
-	if lineIndex < 0 || lineIndex >= matrix.Lines() || columnIndex < 0 || columnIndex >= matrix.Columns() {
-		return indexOutOfLimits(matrix, lineIndex, columnIndex)
-	}
-	matrix.values[lineIndex][columnIndex] = value
-	return nil
 }
 
 // Lines is a getter for the Matrix's lines.
@@ -74,13 +56,31 @@ func (matrix *Matrix) Columns() int {
 	return matrix.columns
 }
 
+// SetValue is a setter for the Matrix's values.
+//
+// Parameters:
+// 	lineIndex - the index of the line.
+// 	columnIndex - the index of the column.
+// 	value - the new value.
+//
+// Returns:
+//  An error.
+//
+func (matrix *Matrix) SetValue(lineIndex, columnIndex int, value float64) error {
+	if lineIndex < 0 || lineIndex >= matrix.Lines() || columnIndex < 0 || columnIndex >= matrix.Columns() {
+		return indexError(matrix, lineIndex, columnIndex)
+	}
+	matrix.values[lineIndex][columnIndex] = value
+	return nil
+}
+
 // IsEqual is a function to check if two matrices are equal.
 //
 // Parameters:
 // 	other - The second matrix.
 //
 // Returns:
-// 	A Matrix.
+// 	If the matrix are equal.
 //
 func (matrix *Matrix) IsEqual(other *Matrix) bool {
 	if matrix.Lines() != other.Lines() || matrix.Columns() != other.Columns() {

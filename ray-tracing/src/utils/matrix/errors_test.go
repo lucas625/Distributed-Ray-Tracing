@@ -45,3 +45,24 @@ func TestIncompatibleSize(t *testing.T) {
 		t.Errorf("Wrong error message for incompatible size: \"%s\".", err.Error())
 	}
 }
+
+// TestIndexError tests index error of a Matrix.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestIndexError(t *testing.T) {
+	matrix, _ := Init(1, 1)
+	expectedError := fmt.Sprintf(
+		"Index out of limits of the matrix. Expected from 0 0 to: %v %v and got %v %v.\n",
+		matrix.Lines(), matrix.Columns(), -1, -1)
+	err := indexError(matrix, -1, -1)
+	if err == nil {
+		t.Errorf("IndexError not raised.")
+	} else if err.Error() != expectedError {
+		t.Errorf("Wrong IndexError message.")
+	}
+}

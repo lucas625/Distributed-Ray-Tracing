@@ -39,7 +39,7 @@ func incompatibleSize(matrix1, matrix2 *Matrix) error {
 	return errors.New(errorMessage)
 }
 
-// indexOutOfLimits is a function to get the error where we try to access an index out of the matrix.
+// indexError is a function to get the error where we try to access an index out of the matrix.
 //
 // Parameters:
 //	matrix - The Matrix.
@@ -49,7 +49,7 @@ func incompatibleSize(matrix1, matrix2 *Matrix) error {
 // Returns:
 //  An Error.
 //
-func indexOutOfLimits(matrix *Matrix, lineIndex, columnIndex int) error {
+func indexError(matrix *Matrix, lineIndex, columnIndex int) error {
 	errorMessage := fmt.Sprintf(
 		"Index out of limits of the matrix. Expected from 0 0 to: %v %v and got %v %v.\n",
 		matrix.Lines(), matrix.Columns(), lineIndex, columnIndex)

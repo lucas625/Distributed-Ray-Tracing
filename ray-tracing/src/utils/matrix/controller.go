@@ -30,14 +30,12 @@ func BuildIdentity(size int) (*Matrix, error) {
 //
 func Transpose(matrix *Matrix) *Matrix {
 	transposedMatrix, _ := Init(matrix.Columns(), matrix.Lines())
-
 	for lineIndex := 0; lineIndex < matrix.Lines(); lineIndex++ {
 		for columnIndex := 0; columnIndex < matrix.Columns(); columnIndex++ {
 			matrixValue, _ := matrix.GetValue(lineIndex, columnIndex)
 			transposedMatrix.SetValue(columnIndex, lineIndex, matrixValue)
 		}
 	}
-
 	return transposedMatrix
 }
 
@@ -49,20 +47,16 @@ func Transpose(matrix *Matrix) *Matrix {
 //
 // Returns:
 // 	The resulting matrix.
-//  An error.
 //
-func ScalarMultiplication(matrix *Matrix, scalar float64) (*Matrix, error) {
-	matrixAux, err := Init(matrix.Lines(), matrix.Columns())
-	if err != nil {
-		return nil, err
-	}
+func ScalarMultiplication(matrix *Matrix, scalar float64) *Matrix {
+	matrixAux, _ := Init(matrix.Lines(), matrix.Columns())
 	for lineIndex := 0; lineIndex < matrix.Lines(); lineIndex++ {
 		for columnIndex := 0; columnIndex < matrix.Columns(); columnIndex++ {
 			matrixValue, _ := matrix.GetValue(lineIndex, columnIndex)
 			matrixAux.SetValue(lineIndex, columnIndex, matrixValue * scalar)
 		}
 	}
-	return matrixAux, nil
+	return matrixAux
 }
 
 // MultiplyMatrix is a function to multiply two Matrices.
