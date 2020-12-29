@@ -14,9 +14,9 @@ import (
 //
 func TestScalarMultiplication(t *testing.T) {
 	matrix, _ := Init(3, 2)
-	matrix.Values[0] = []float64{1, 2}
-	matrix.Values[1] = []float64{3, 4}
-	matrix.Values[2] = []float64{5, 6}
+	matrix.Values()[0] = []float64{1, 2}
+	matrix.Values()[1] = []float64{3, 4}
+	matrix.Values()[2] = []float64{5, 6}
 
 	scalar := 3.0
 	resultingMatrix, err := ScalarMultiplication(matrix, scalar)
@@ -25,9 +25,9 @@ func TestScalarMultiplication(t *testing.T) {
 	}
 
 	expectedMatrix, _ := Init(3, 2)
-	expectedMatrix.Values[0] = []float64{3, 6}
-	expectedMatrix.Values[1] = []float64{9, 12}
-	expectedMatrix.Values[2] = []float64{15, 18}
+	expectedMatrix.Values()[0] = []float64{3, 6}
+	expectedMatrix.Values()[1] = []float64{9, 12}
+	expectedMatrix.Values()[2] = []float64{15, 18}
 
 	if !resultingMatrix.IsEqual(expectedMatrix) {
 		t.Errorf("Invalid multiplication of matrix %v by constant %v: %v.", matrix, scalar, resultingMatrix)
@@ -44,7 +44,7 @@ func TestScalarMultiplication(t *testing.T) {
 //
 func TestScalarMultiplicationNegativeLines(t *testing.T) {
 	matrix, _ := Init(3, 2)
-	matrix.Lines = -1
+	matrix.lines = -1
 
 	scalar := 3.0
 	_, err := ScalarMultiplication(matrix, scalar)
@@ -64,13 +64,13 @@ func TestScalarMultiplicationNegativeLines(t *testing.T) {
 //
 func TestMultiplyMatrix(t *testing.T) {
 	matrix1, _ := Init(3, 2)
-	matrix1.Values[0] = []float64{1, 2}
-	matrix1.Values[1] = []float64{3, 4}
-	matrix1.Values[2] = []float64{5, 6}
+	matrix1.Values()[0] = []float64{1, 2}
+	matrix1.Values()[1] = []float64{3, 4}
+	matrix1.Values()[2] = []float64{5, 6}
 
 	matrix2, _ := Init(2, 3)
-	matrix2.Values[0] = []float64{7, 8, 9}
-	matrix2.Values[1] = []float64{10, 11, 12}
+	matrix2.Values()[0] = []float64{7, 8, 9}
+	matrix2.Values()[1] = []float64{10, 11, 12, 15}
 
 	resultingMatrix, err := MultiplyMatrix(matrix1, matrix2)
 	if err != nil {
@@ -78,9 +78,9 @@ func TestMultiplyMatrix(t *testing.T) {
 	}
 
 	expectedMatrix, _ := Init(3, 3)
-	expectedMatrix.Values[0] = []float64{27, 30, 33}
-	expectedMatrix.Values[1] = []float64{61, 68, 75}
-	expectedMatrix.Values[2] = []float64{95, 106, 117}
+	expectedMatrix.Values()[0] = []float64{27, 30, 33}
+	expectedMatrix.Values()[1] = []float64{61, 68, 75}
+	expectedMatrix.Values()[2] = []float64{95, 106, 117}
 
 
 	if !resultingMatrix.IsEqual(expectedMatrix) {

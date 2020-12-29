@@ -11,13 +11,13 @@ package matrix
 //  An error.
 //
 func ScalarMultiplication(matrix *Matrix, scalar float64) (*Matrix, error) {
-	matrixAux, err := Init(matrix.Lines, matrix.Columns)
+	matrixAux, err := Init(matrix.lines, matrix.columns)
 	if err != nil {
 		return nil, err
 	}
-	for lineIndex := 0; lineIndex < matrix.Lines; lineIndex++ {
-		for columnIndex := 0; columnIndex < matrix.Columns; columnIndex++ {
-			matrixAux.Values[lineIndex][columnIndex] = matrix.Values[lineIndex][columnIndex] * scalar
+	for lineIndex := 0; lineIndex < matrix.lines; lineIndex++ {
+		for columnIndex := 0; columnIndex < matrix.columns; columnIndex++ {
+			matrixAux.Values()[lineIndex][columnIndex] = matrix.Values()[lineIndex][columnIndex] * scalar
 		}
 	}
 	return matrixAux, nil
@@ -33,16 +33,16 @@ func ScalarMultiplication(matrix *Matrix, scalar float64) (*Matrix, error) {
 // 	The resulting matrix
 //
 func MultiplyMatrix(matrix1, matrix2 *Matrix) (*Matrix, error) {
-	if matrix1.Columns != matrix2.Lines {
+	if matrix1.columns != matrix2.lines {
 		return nil, incompatibleSize(matrix1, matrix2)
 	}
-	multipliedMatrix, _ := Init(matrix1.Lines, matrix2.Columns)
-	for firstMatrixLineIndex := 0; firstMatrixLineIndex < matrix1.Lines; firstMatrixLineIndex++ {
-		for secondMatrixColumnIndex := 0; secondMatrixColumnIndex < matrix2.Columns; secondMatrixColumnIndex++ {
-			for firstMatrixColumnIndex := 0; firstMatrixColumnIndex < matrix1.Columns; firstMatrixColumnIndex++ {
-				firstValue := matrix1.Values[firstMatrixLineIndex][firstMatrixColumnIndex]
-				secondValue := matrix2.Values[firstMatrixColumnIndex][secondMatrixColumnIndex]
-				multipliedMatrix.Values[firstMatrixLineIndex][secondMatrixColumnIndex] += firstValue * secondValue
+	multipliedMatrix, _ := Init(matrix1.lines, matrix2.columns)
+	for firstMatrixLineIndex := 0; firstMatrixLineIndex < matrix1.lines; firstMatrixLineIndex++ {
+		for secondMatrixColumnIndex := 0; secondMatrixColumnIndex < matrix2.columns; secondMatrixColumnIndex++ {
+			for firstMatrixColumnIndex := 0; firstMatrixColumnIndex < matrix1.columns; firstMatrixColumnIndex++ {
+				firstValue := matrix1.Values()[firstMatrixLineIndex][firstMatrixColumnIndex]
+				secondValue := matrix2.Values()[firstMatrixColumnIndex][secondMatrixColumnIndex]
+				multipliedMatrix.Values()[firstMatrixLineIndex][secondMatrixColumnIndex] += firstValue * secondValue
 			}
 		}
 	}

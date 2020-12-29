@@ -19,16 +19,16 @@ func TestInitPositiveSize(t *testing.T) {
 	if err != nil {
 		t.Errorf("Matrix failed to be instantiated with size: %d.", size)
 	}
-	if matrix.Lines != size {
-		t.Errorf("Matrix instantiated with wrong lines: %d %d.", size, matrix.Lines)
+	if matrix.lines != size {
+		t.Errorf("Matrix instantiated with wrong lines: %d %d.", size, matrix.lines)
 	}
-	if matrix.Columns != size {
-		t.Errorf("Matrix instantiated with wrong columns: %d %d.", size, matrix.Columns)
+	if matrix.columns != size {
+		t.Errorf("Matrix instantiated with wrong columns: %d %d.", size, matrix.columns)
 	}
 	for line := 0; line < size; line++ {
 		for column := 0; column < size; column++ {
-			if matrix.Values[line][column] != 0 {
-				t.Errorf("Matrix instantiated with invalid values: %v.", matrix.Values)
+			if matrix.Values()[line][column] != 0 {
+				t.Errorf("Matrix instantiated with invalid values: %v.", matrix.Values())
 			}
 		}
 	}
@@ -47,7 +47,7 @@ func TestInitZeroSize(t *testing.T) {
 	_, err := Init(size, size)
 	if err == nil {
 		t.Errorf("Matrix instantiated with zero size: %d.", size)
-	} else if err.Error() != fmt.Sprintf("Invalid size for matrix. Lines: %d and Columns: %d.\n", size, size) {
+	} else if err.Error() != fmt.Sprintf("Invalid size for matrix. lines: %d and columns: %d.\n", size, size) {
 		t.Errorf(
 			"Matrix failed to be instantiated with zero size: %d but with wrong error message: \"%s\".",
 			size,
@@ -68,7 +68,7 @@ func TestInitNegativeSize(t *testing.T) {
 	_, err := Init(size, size)
 	if err == nil {
 		t.Errorf("Matrix instantiated with negative size: %d.", size)
-	} else if err.Error() != fmt.Sprintf("Invalid size for matrix. Lines: %d and Columns: %d.\n", size, size) {
+	} else if err.Error() != fmt.Sprintf("Invalid size for matrix. lines: %d and columns: %d.\n", size, size) {
 		t.Errorf(
 			"Matrix failed to be instantiated with negative size: %d but with wrong error message: \"%s\".",
 			size,
@@ -89,7 +89,7 @@ func TestBuildIdentityZeroSize(t *testing.T) {
 	_, err := BuildIdentity(size)
 	if err == nil {
 		t.Errorf("Identity matrix instantiated with zero size: %d.", size)
-	} else if err.Error() != fmt.Sprintf("Invalid size for matrix. Lines: %d and Columns: %d.\n", size, size) {
+	} else if err.Error() != fmt.Sprintf("Invalid size for matrix. lines: %d and columns: %d.\n", size, size) {
 		t.Errorf(
 			"Identity matrix failed to be instantiated with zero size: %d but with wrong error message: \"%s\".",
 			size,
@@ -112,17 +112,17 @@ func TestBuildIdentityPositiveSize(t *testing.T) {
 	if err != nil {
 		t.Errorf("Identity matrix failed to be instantiated with size: %d.", size)
 	}
-	if matrix.Lines != size {
-		t.Errorf("Identity matrix instantiated with wrong lines: %d %d.", size, matrix.Lines)
+	if matrix.lines != size {
+		t.Errorf("Identity matrix instantiated with wrong lines: %d %d.", size, matrix.lines)
 	}
-	if matrix.Columns != size {
-		t.Errorf("Identity matrix instantiated with wrong columns: %d %d.", size, matrix.Columns)
+	if matrix.columns != size {
+		t.Errorf("Identity matrix instantiated with wrong columns: %d %d.", size, matrix.columns)
 	}
 	for line := 0; line < size; line++ {
 		for column := 0; column < size; column++ {
-			if (line != column && matrix.Values[line][column] != 0) ||
-				(line == column && matrix.Values[line][column] != 1) {
-				t.Errorf("Identity matrix instantiated with invalid values: %v.", matrix.Values)
+			if (line != column && matrix.Values()[line][column] != 0) ||
+				(line == column && matrix.Values()[line][column] != 1) {
+				t.Errorf("Identity matrix instantiated with invalid values: %v.", matrix.Values())
 			}
 		}
 	}
@@ -138,9 +138,9 @@ func TestBuildIdentityPositiveSize(t *testing.T) {
 //
 func TestTranspose(t *testing.T) {
 	matrix, _ := Init(3, 2)
-	matrix.Values[0] = []float64{1, 2}
-	matrix.Values[1] = []float64{3, 4}
-	matrix.Values[2] = []float64{5, 6}
+	matrix.Values()[0] = []float64{1, 2}
+	matrix.Values()[1] = []float64{3, 4}
+	matrix.Values()[2] = []float64{5, 6}
 
 	resultingMatrix, err := Transpose(matrix)
 	if err != nil {
@@ -148,8 +148,8 @@ func TestTranspose(t *testing.T) {
 	}
 
 	expectedMatrix, _ := Init(2, 3)
-	expectedMatrix.Values[0] = []float64{1, 3, 5}
-	expectedMatrix.Values[1] = []float64{2, 4, 6}
+	expectedMatrix.Values()[0] = []float64{1, 3, 5}
+	expectedMatrix.Values()[1] = []float64{2, 4, 6}
 
 
 	if !resultingMatrix.IsEqual(expectedMatrix) {
@@ -167,14 +167,14 @@ func TestTranspose(t *testing.T) {
 //
 func TestIsEqual(t *testing.T) {
 	firstMatrix, _ := Init(3, 2)
-	firstMatrix.Values[0] = []float64{1, 2}
-	firstMatrix.Values[1] = []float64{3, 4}
-	firstMatrix.Values[2] = []float64{5, 6}
+	firstMatrix.Values()[0] = []float64{1, 2}
+	firstMatrix.Values()[1] = []float64{3, 4}
+	firstMatrix.Values()[2] = []float64{5, 6}
 
 	secondMatrix, _ := Init(3, 2)
-	secondMatrix.Values[0] = []float64{1, 2}
-	secondMatrix.Values[1] = []float64{3, 4}
-	secondMatrix.Values[2] = []float64{5, 6}
+	secondMatrix.Values()[0] = []float64{1, 2}
+	secondMatrix.Values()[1] = []float64{3, 4}
+	secondMatrix.Values()[2] = []float64{5, 6}
 
 	if !firstMatrix.IsEqual(secondMatrix) {
 		t.Errorf("Matrix are different of matrix %v: %v.", firstMatrix, secondMatrix)
@@ -191,14 +191,14 @@ func TestIsEqual(t *testing.T) {
 //
 func TestIsEqualDifferent(t *testing.T) {
 	firstMatrix, _ := Init(3, 2)
-	firstMatrix.Values[0] = []float64{1, 2}
-	firstMatrix.Values[1] = []float64{3, 4}
-	firstMatrix.Values[2] = []float64{5, 6}
+	firstMatrix.Values()[0] = []float64{1, 2}
+	firstMatrix.Values()[1] = []float64{3, 4}
+	firstMatrix.Values()[2] = []float64{5, 6}
 
 	secondMatrix, _ := Init(3, 2)
-	secondMatrix.Values[0] = []float64{10, 20}
-	secondMatrix.Values[1] = []float64{30, 40}
-	secondMatrix.Values[2] = []float64{50, 60}
+	secondMatrix.Values()[0] = []float64{10, 20}
+	secondMatrix.Values()[1] = []float64{30, 40}
+	secondMatrix.Values()[2] = []float64{50, 60}
 
 	if firstMatrix.IsEqual(secondMatrix) {
 		t.Errorf("Matrix are equal of matrix %v: %v.", firstMatrix, secondMatrix)
