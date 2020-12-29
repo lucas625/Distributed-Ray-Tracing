@@ -37,7 +37,7 @@ func TestIncompatibleSize(t *testing.T) {
 	expectedError := fmt.Sprintf(
 		"Incompatible size for matrices:\nFirst matrix: lines: %d and columns: %d." +
 			"\nSecond matrix: lines: %d and columns: %d.\n",
-		firstMatrix.lines, firstMatrix.columns, secondMatrix.lines, secondMatrix.columns)
+		firstMatrix.Lines(), firstMatrix.Columns(), secondMatrix.Lines(), secondMatrix.Columns())
 	err := incompatibleSize(firstMatrix, secondMatrix)
 	if err == nil {
 		t.Errorf("No incompatible size error returned for matrices: %v %v.", firstMatrix, secondMatrix)
