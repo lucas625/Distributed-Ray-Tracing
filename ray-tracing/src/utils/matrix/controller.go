@@ -1,9 +1,9 @@
 package matrix
 
-// BuildIdentity is a function to build an identity matrix.
+// BuildIdentity builds an identity Matrix.
 //
 // Parameters:
-// 	size - The number of lines and columns of the matrix.
+// 	size - The number of lines and columns of the identity Matrix.
 //
 // Returns:
 // 	A Matrix.
@@ -20,15 +20,15 @@ func BuildIdentity(size int) (*Matrix, error) {
 	return matrix, nil
 }
 
-// Transpose is a function to transpose a Matrix.
+// Transpose transposes a Matrix.
 //
 // Parameters:
-// 	matrix - the target Matrix.
+// 	none
 //
 // Returns:
 // 	The transposed Matrix.
 //
-func Transpose(matrix *Matrix) *Matrix {
+func (matrix *Matrix) Transpose() *Matrix {
 	transposedMatrix, _ := Init(matrix.Columns(), matrix.Lines())
 	for lineIndex := 0; lineIndex < matrix.Lines(); lineIndex++ {
 		for columnIndex := 0; columnIndex < matrix.Columns(); columnIndex++ {
@@ -39,51 +39,49 @@ func Transpose(matrix *Matrix) *Matrix {
 	return transposedMatrix
 }
 
-// ScalarMultiplication is a function to multiply a Matrix by a constant.
+// ScalarMultiplication multiplies a Matrix by a constant.
 //
 // Parameters:
-//  matrix - A pointer to a Matrix.
-//  scalar - A constant.
+//  scalar - A number.
 //
 // Returns:
 // 	The resulting matrix.
 //
-func ScalarMultiplication(matrix *Matrix, scalar float64) *Matrix {
-	matrixAux, _ := Init(matrix.Lines(), matrix.Columns())
+func (matrix *Matrix) ScalarMultiplication(scalar float64) *Matrix {
+	newMatrix, _ := Init(matrix.Lines(), matrix.Columns())
 	for lineIndex := 0; lineIndex < matrix.Lines(); lineIndex++ {
 		for columnIndex := 0; columnIndex < matrix.Columns(); columnIndex++ {
 			matrixValue, _ := matrix.GetValue(lineIndex, columnIndex)
-			matrixAux.SetValue(lineIndex, columnIndex, matrixValue * scalar)
+			newMatrix.SetValue(lineIndex, columnIndex, matrixValue * scalar)
 		}
 	}
-	return matrixAux
+	return newMatrix
 }
 
-// MultiplyMatrix is a function to multiply two Matrices.
+// MultiplyMatrix multiplies two Matrices.
 //
 // Parameters:
-// 	matrix1 - A pointer to a Matrix.
-//  matrix2 - A pointer to a Matrix.
+//  secondMatrix - The second Matrix.
 //
 // Returns:
 // 	The resulting matrix
 //
-func MultiplyMatrix(matrix1, matrix2 *Matrix) (*Matrix, error) {
-	if matrix1.Columns() != matrix2.Lines() {
-		return nil, incompatibleSize(matrix1, matrix2)
+func (matrix *Matrix) MultiplyMatrix(secondMatrix *Matrix) (*Matrix, error) {
+	if matrix.Columns() != secondMatrix.Lines() {
+		return nil, incompatibleSize(matrix, secondMatrix)
 	}
-	multipliedMatrix, _ := Init(matrix1.Lines(), matrix2.Columns())
-	for firstMatrixLineIndex := 0; firstMatrixLineIndex < matrix1.Lines(); firstMatrixLineIndex++ {
-		for secondMatrixColumnIndex := 0; secondMatrixColumnIndex < matrix2.Columns(); secondMatrixColumnIndex++ {
+	newMatrix, _ := Init(matrix.Lines(), secondMatrix.Columns())
+	for firstMatrixLineIndex := 0; firstMatrixLineIndex < matrix.Lines(); firstMatrixLineIndex++ {
+		for secondMatrixColumnIndex := 0; secondMatrixColumnIndex < secondMatrix.Columns(); secondMatrixColumnIndex++ {
 			totalSlotValue := 0.0
-			for firstMatrixColumnIndex := 0; firstMatrixColumnIndex < matrix1.Columns(); firstMatrixColumnIndex++ {
-				firstValue, _ := matrix1.GetValue(firstMatrixLineIndex, firstMatrixColumnIndex)
-				secondValue, _ := matrix2.GetValue(firstMatrixColumnIndex, secondMatrixColumnIndex)
+			for firstMatrixColumnIndex := 0; firstMatrixColumnIndex < matrix.Columns(); firstMatrixColumnIndex++ {
+				firstValue, _ := matrix.GetValue(firstMatrixLineIndex, firstMatrixColumnIndex)
+				secondValue, _ := secondMatrix.GetValue(firstMatrixColumnIndex, secondMatrixColumnIndex)
 				totalSlotValue += firstValue * secondValue
 
 			}
-			multipliedMatrix.SetValue(firstMatrixLineIndex, secondMatrixColumnIndex, totalSlotValue)
+			newMatrix.SetValue(firstMatrixLineIndex, secondMatrixColumnIndex, totalSlotValue)
 		}
 	}
-	return multipliedMatrix, nil
+	return newMatrix, nil
 }

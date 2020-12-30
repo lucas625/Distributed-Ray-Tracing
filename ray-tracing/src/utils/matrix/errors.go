@@ -5,11 +5,11 @@ import (
 "fmt"
 )
 
-// invalidSize is a function to get the error where a matrix has a invalid size for lines or columns.
+// invalidSize is the error where a Matrix has a invalid size for lines or columns.
 //
 // Parameters:
-//	lines - The number of lines of the matrix.
-//	columns - The number of columns of the matrix.
+//	lines   - The number of lines of the Matrix.
+//	columns - The number of columns of the Matrix.
 //
 // Returns:
 //  An Error.
@@ -22,29 +22,29 @@ func invalidSize(lines, columns int) error {
 	return errors.New(errorMessage)
 }
 
-// incompatibleSize is a function to get the error where two matrices don't have a compatible size.
+// incompatibleSize is the error where two matrices don't have the size compatible.
 //
 // Parameters:
-//	matrix1 - The first matrix.
-//	matrix2 - The second matrix.
+//	firstMatrix  - The first Matrix.
+//	secondMatrix - The second Matrix.
 //
 // Returns:
 //  An Error.
 //
-func incompatibleSize(matrix1, matrix2 *Matrix) error {
+func incompatibleSize(firstMatrix, secondMatrix *Matrix) error {
 	errorMessage := fmt.Sprintf(
 		"Incompatible size for matrices:\nFirst matrix: lines: %d and columns: %d." +
 			"\nSecond matrix: lines: %d and columns: %d.\n",
-		matrix1.Lines(), matrix1.Columns(), matrix2.Lines(), matrix2.Columns())
+		firstMatrix.Lines(), firstMatrix.Columns(), secondMatrix.Lines(), secondMatrix.Columns())
 	return errors.New(errorMessage)
 }
 
-// indexError is a function to get the error where we try to access an index out of the matrix.
+// indexError is the error where we try to access an index out of the limits of the Matrix.
 //
 // Parameters:
-//	matrix - The Matrix.
-//	lineIndex - The index of the line.
-//	columnIndex - The index of column.
+//	matrix      - The Matrix.
+//	lineIndex   - The index of the line.
+//	columnIndex - The index of the column.
 //
 // Returns:
 //  An Error.

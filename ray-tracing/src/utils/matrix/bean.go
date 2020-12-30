@@ -18,8 +18,8 @@ type Matrix struct {
 // GetValue is a getter for the Matrix's values.
 //
 // Parameters:
-// 	lineIndex - the index of the line.
-// 	columnIndex - the index of the column.
+// 	lineIndex   - The index of the line.
+// 	columnIndex - The index of the column.
 //
 // Returns:
 // 	The value of the Matrix.
@@ -59,9 +59,9 @@ func (matrix *Matrix) Columns() int {
 // SetValue is a setter for the Matrix's values.
 //
 // Parameters:
-// 	lineIndex - the index of the line.
-// 	columnIndex - the index of the column.
-// 	value - the new value.
+// 	lineIndex   - The index of the line.
+// 	columnIndex - The index of the column.
+// 	value       - The new value.
 //
 // Returns:
 //  An error.
@@ -74,13 +74,13 @@ func (matrix *Matrix) SetValue(lineIndex, columnIndex int, value float64) error 
 	return nil
 }
 
-// IsEqual is a function to check if two matrices are equal.
+// IsEqual checks if two matrices are equal.
 //
 // Parameters:
 // 	other - The second matrix.
 //
 // Returns:
-// 	If the matrix are equal.
+// 	If the matrices are equal.
 //
 func (matrix *Matrix) IsEqual(other *Matrix) bool {
 	if matrix.Lines() != other.Lines() || matrix.Columns() != other.Columns() {
@@ -98,19 +98,19 @@ func (matrix *Matrix) IsEqual(other *Matrix) bool {
 	return true
 }
 
-// ToString is parses the matrix to string.
+// ToString parses the Matrix to string.
 //
 // Parameters:
 // 	none
 //
 // Returns:
-// 	The matrix as a string.
+// 	The Matrix as a string.
 //
 func (matrix *Matrix) ToString() string {
 	return fmt.Sprintf("Lines: %v Columns: %v\n Matrix: %v\n", matrix.Lines(), matrix.Columns(), matrix.values)
 }
 
-// CopyAllValues gets all Values of the matrix as a deep copy.
+// CopyAllValues gets all values of the Matrix as a copy.
 //
 // Parameters:
 // 	none
@@ -130,11 +130,11 @@ func (matrix *Matrix) CopyAllValues() [][]float64 {
 	return copiedMatrix
 }
 
-// Init is a function to initialize a matrix.
+// Init is the constructor.
 //
 // Parameters:
-// 	lin - The number of lines of the matrix.
-// 	col - The number of columns of the matrix.
+// 	lines   - The number of lines of the Matrix.
+// 	columns - The number of columns of the Matrix.
 //
 // Returns:
 // 	A Matrix.

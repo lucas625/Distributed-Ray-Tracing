@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// TestInitPositiveSize tests the instantiation of a matrix with positive lines and columns.
+// TestMatrix_Init_Success tests the instantiation of a matrix.
 //
 // Parameters:
 //  t - Test instance.
@@ -13,23 +13,23 @@ import (
 // Returns:
 //  none
 //
-func TestInitPositiveSize(t *testing.T) {
+func TestMatrix_Init_Success(t *testing.T) {
 	size := 1
 	matrix, err := Init(size, size)
 	if err != nil {
 		t.Errorf("Matrix failed to be instantiated with size: %d.", size)
 	}
 	if matrix.Lines() != size {
-		t.Errorf("Matrix instantiated with wrong lines: %d %d.", size, matrix.Lines())
+		t.Errorf("Matrix instantiated with wrong lines: Expected: %d and Got: %d.", size, matrix.Lines())
 	}
 	if matrix.Columns() != size {
-		t.Errorf("Matrix instantiated with wrong columns: %d %d.", size, matrix.Columns())
+		t.Errorf("Matrix instantiated with wrong columns: Expected: %d and Got: %d.", size, matrix.Columns())
 	}
 	for line := 0; line < size; line++ {
 		for column := 0; column < size; column++ {
 			matrixValue, _ := matrix.GetValue(line, column)
 			if matrixValue != 0 {
-				t.Errorf("Matrix instantiated with invalid values: %v.", matrix.values)
+				t.Errorf("Matrix instantiated with non zero values: %v.", matrix.values)
 			}
 		}
 	}

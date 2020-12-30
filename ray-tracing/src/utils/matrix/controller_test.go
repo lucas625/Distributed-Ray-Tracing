@@ -71,7 +71,7 @@ func TestTranspose(t *testing.T) {
 	matrix.values[1] = []float64{3, 4}
 	matrix.values[2] = []float64{5, 6}
 
-	resultingMatrix := Transpose(matrix)
+	resultingMatrix := matrix.Transpose()
 
 	expectedMatrix, _ := Init(2, 3)
 	expectedMatrix.values[0] = []float64{1, 3, 5}
@@ -98,7 +98,7 @@ func TestScalarMultiplication(t *testing.T) {
 	matrix.values[2] = []float64{5, 6}
 
 	scalar := 3.0
-	resultingMatrix := ScalarMultiplication(matrix, scalar)
+	resultingMatrix := matrix.ScalarMultiplication(scalar)
 
 	expectedMatrix, _ := Init(3, 2)
 	expectedMatrix.values[0] = []float64{3, 6}
@@ -128,7 +128,7 @@ func TestMultiplyMatrix(t *testing.T) {
 	matrix2.values[0] = []float64{7, 8, 9}
 	matrix2.values[1] = []float64{10, 11, 12}
 
-	resultingMatrix, err := MultiplyMatrix(matrix1, matrix2)
+	resultingMatrix, err := matrix1.MultiplyMatrix(matrix2)
 	if err != nil {
 		t.Errorf("Failed to multiply matrices %v %v.", matrix1, matrix2)
 	}
@@ -156,7 +156,7 @@ func TestMultiplyMatrixIncompatibleSize(t *testing.T) {
 	firstMatrix, _ := Init(3, 3)
 	secondMatrix, _ := Init(2, 3)
 
-	_, err := MultiplyMatrix(firstMatrix, secondMatrix)
+	_, err := firstMatrix.MultiplyMatrix(secondMatrix)
 	if err == nil {
 		t.Errorf("It shouldn't be possible to multiply matrices with incompatible size %v %v.",
 			firstMatrix, secondMatrix)
