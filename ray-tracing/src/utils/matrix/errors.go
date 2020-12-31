@@ -16,7 +16,7 @@ import (
 //
 func invalidSize(lines, columns int) error {
 	errorMessage := fmt.Sprintf(
-		"Invalid size for matrix. lines: %d and columns: %d.\n",
+		"Invalid size for matrix. lines: %d and columns: %d.",
 		lines,
 		columns)
 	return errors.New(errorMessage)
@@ -34,7 +34,7 @@ func invalidSize(lines, columns int) error {
 func incompatibleSize(firstMatrix, secondMatrix *Matrix) error {
 	errorMessage := fmt.Sprintf(
 		"Incompatible size for matrices:\nFirst matrix: lines: %d and columns: %d." +
-			"\nSecond matrix: lines: %d and columns: %d.\n",
+			"\nSecond matrix: lines: %d and columns: %d.",
 		firstMatrix.Lines(), firstMatrix.Columns(), secondMatrix.Lines(), secondMatrix.Columns())
 	return errors.New(errorMessage)
 }
@@ -51,7 +51,7 @@ func incompatibleSize(firstMatrix, secondMatrix *Matrix) error {
 //
 func indexError(matrix *Matrix, lineIndex, columnIndex int) error {
 	errorMessage := fmt.Sprintf(
-		"Index out of limits of the matrix. Expected from 0 0 to: %v %v and got %v %v.\n",
+		"Index out of limits of the matrix. Expected from 0 0 to: %v %v and got %v %v.",
 		matrix.Lines(), matrix.Columns(), lineIndex, columnIndex)
 	return errors.New(errorMessage)
 }

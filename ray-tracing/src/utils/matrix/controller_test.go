@@ -18,7 +18,7 @@ func TestBuildIdentityZeroSize(t *testing.T) {
 	_, err := BuildIdentity(size)
 	if err == nil {
 		t.Errorf("Identity matrix instantiated with zero size: %d.", size)
-	} else if err.Error() != fmt.Sprintf("Invalid size for matrix. lines: %d and columns: %d.\n", size, size) {
+	} else if err.Error() != fmt.Sprintf("Invalid size for matrix. lines: %d and columns: %d.", size, size) {
 		t.Errorf(
 			"Identity matrix failed to be instantiated with zero size: %d but with wrong error message: \"%s\".",
 			size,

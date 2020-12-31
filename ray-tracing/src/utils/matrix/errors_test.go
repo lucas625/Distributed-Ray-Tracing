@@ -18,7 +18,7 @@ func TestInvalidSizeError(t *testing.T) {
 	err := invalidSize(size, size)
 	if err == nil {
 		t.Errorf("No invalid size error returned for size: %d.", size)
-	} else if err.Error() != fmt.Sprintf("Invalid size for matrix. lines: %d and columns: %d.\n", size, size) {
+	} else if err.Error() != fmt.Sprintf("Invalid size for matrix. lines: %d and columns: %d.", size, size) {
 		t.Errorf("Wrong error message for invalid size: \"%s\".", err.Error())
 	}
 }
@@ -36,7 +36,7 @@ func TestIncompatibleSize(t *testing.T) {
 	secondMatrix, _ := Init(2, 3)
 	expectedError := fmt.Sprintf(
 		"Incompatible size for matrices:\nFirst matrix: lines: %d and columns: %d." +
-			"\nSecond matrix: lines: %d and columns: %d.\n",
+			"\nSecond matrix: lines: %d and columns: %d.",
 		firstMatrix.Lines(), firstMatrix.Columns(), secondMatrix.Lines(), secondMatrix.Columns())
 	err := incompatibleSize(firstMatrix, secondMatrix)
 	if err == nil {
@@ -57,7 +57,7 @@ func TestIncompatibleSize(t *testing.T) {
 func TestIndexError(t *testing.T) {
 	matrix, _ := Init(1, 1)
 	expectedError := fmt.Sprintf(
-		"Index out of limits of the matrix. Expected from 0 0 to: %v %v and got %v %v.\n",
+		"Index out of limits of the matrix. Expected from 0 0 to: %v %v and got %v %v.",
 		matrix.Lines(), matrix.Columns(), -1, -1)
 	err := indexError(matrix, -1, -1)
 	if err == nil {
