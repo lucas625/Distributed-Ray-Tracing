@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// TestBuildIdentityZeroSize tests the build identity matrix with zero size.
+// TestMatrix_BuildIdentity tests the build identity Matrix.
 //
 // Parameters:
 //  t - Test instance.
@@ -13,28 +13,7 @@ import (
 // Returns:
 //  none
 //
-func TestBuildIdentityZeroSize(t *testing.T) {
-	size := 0
-	_, err := BuildIdentity(size)
-	if err == nil {
-		t.Errorf("Identity matrix instantiated with zero size: %d.", size)
-	} else if err.Error() != fmt.Sprintf("Invalid size for matrix. lines: %d and columns: %d.", size, size) {
-		t.Errorf(
-			"Identity matrix failed to be instantiated with zero size: %d but with wrong error message: \"%s\".",
-			size,
-			err.Error())
-	}
-}
-
-// TestBuildIdentityPositiveSize tests the build identity matrix with positive size.
-//
-// Parameters:
-//  t - Test instance.
-//
-// Returns:
-//  none
-//
-func TestBuildIdentityPositiveSize(t *testing.T) {
+func TestMatrix_BuildIdentity(t *testing.T) {
 	size := 3
 	matrix, err := BuildIdentity(size)
 	if err != nil {
@@ -57,7 +36,7 @@ func TestBuildIdentityPositiveSize(t *testing.T) {
 	}
 }
 
-// TestTranspose tests the transposition of a matrix.
+// TestMatrix_BuildIdentity_ZeroSize tests the build identity matrix with zero size.
 //
 // Parameters:
 //  t - Test instance.
@@ -65,7 +44,30 @@ func TestBuildIdentityPositiveSize(t *testing.T) {
 // Returns:
 //  none
 //
-func TestTranspose(t *testing.T) {
+func TestMatrix_BuildIdentity_ZeroSize(t *testing.T) {
+	size := 0
+	_, err := BuildIdentity(size)
+
+	expectedErrorMessage := fmt.Sprintf("Invalid size for matrix. lines: %d and columns: %d.", size, size)
+
+	if err == nil {
+		t.Errorf("Identity matrix instantiated with zero size: %d.", size)
+	} else if err.Error() != expectedErrorMessage {
+		t.Errorf(
+			"Identity matrix failed to be instantiated with zero size: %d but with wrong error message: \"%s\".",
+			size, err.Error())
+	}
+}
+
+// TestMatrix_Transpose tests the transposition of a matrix.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestMatrix_Transpose(t *testing.T) {
 	matrix, _ := Init(3, 2)
 	matrix.values[0] = []float64{1, 2}
 	matrix.values[1] = []float64{3, 4}
@@ -83,7 +85,7 @@ func TestTranspose(t *testing.T) {
 	}
 }
 
-// TestScalarMultiplication tests the multiplication of a matrix by a constant.
+// TestMatrix_ScalarMultiplication tests the multiplication of a matrix by a constant.
 //
 // Parameters:
 //  t - Test instance.
@@ -91,7 +93,7 @@ func TestTranspose(t *testing.T) {
 // Returns:
 //  none
 //
-func TestScalarMultiplication(t *testing.T) {
+func TestMatrix_ScalarMultiplication(t *testing.T) {
 	matrix, _ := Init(3, 2)
 	matrix.values[0] = []float64{1, 2}
 	matrix.values[1] = []float64{3, 4}
@@ -110,7 +112,7 @@ func TestScalarMultiplication(t *testing.T) {
 	}
 }
 
-// TestMultiplyMatrix tests the multiplication of a matrix by another.
+// TestMatrix_MultiplyMatrix tests the multiplication of a matrix by another.
 //
 // Parameters:
 //  t - Test instance.
@@ -118,7 +120,7 @@ func TestScalarMultiplication(t *testing.T) {
 // Returns:
 //  none
 //
-func TestMultiplyMatrix(t *testing.T) {
+func TestMatrix_MultiplyMatrix(t *testing.T) {
 	matrix1, _ := Init(3, 2)
 	matrix1.values[0] = []float64{1, 2}
 	matrix1.values[1] = []float64{3, 4}
@@ -138,13 +140,12 @@ func TestMultiplyMatrix(t *testing.T) {
 	expectedMatrix.values[1] = []float64{61, 68, 75}
 	expectedMatrix.values[2] = []float64{95, 106, 117}
 
-
 	if !resultingMatrix.IsEqual(expectedMatrix) {
 		t.Errorf("Invalid multiplication of matrix %v by matrix %v: %v.", matrix1, matrix2, resultingMatrix)
 	}
 }
 
-// TestMultiplyMatrixIncompatibleSize tests the multiplication of a matrix by another.
+// TestMatrix_MultiplyMatrix_IncompatibleSize tests the multiplication of a matrix by another.
 //
 // Parameters:
 //  t - Test instance.
@@ -152,7 +153,7 @@ func TestMultiplyMatrix(t *testing.T) {
 // Returns:
 //  none
 //
-func TestMultiplyMatrixIncompatibleSize(t *testing.T) {
+func TestMatrix_MultiplyMatrix_IncompatibleSize(t *testing.T) {
 	firstMatrix, _ := Init(3, 3)
 	secondMatrix, _ := Init(2, 3)
 

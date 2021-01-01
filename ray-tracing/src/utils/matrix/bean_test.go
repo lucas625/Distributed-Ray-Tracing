@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-// TestMatrix_Init_Success tests the instantiation of a Matrix.
+// TestMatrix_Init tests the instantiation of a Matrix.
 //
 // Parameters:
 //  t - Test instance.
@@ -13,7 +13,7 @@ import (
 // Returns:
 //  none
 //
-func TestMatrix_Init_Success(t *testing.T) {
+func TestMatrix_Init(t *testing.T) {
 	size := 1
 	matrix, err := Init(size, size)
 	if err != nil {
