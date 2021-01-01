@@ -15,11 +15,11 @@ import (
 //  none
 //
 func TestScalarMultiplication(t *testing.T) {
-	vect := &Vector{Coordinates: []float64{10, 20, 30}}
+	vect := &Vector{coordinates: []float64{10, 20, 30}}
 	multipliedVector := ScalarMultiplication(vect, 2)
-	expectedVector := &Vector{Coordinates: []float64{20, 40, 60}}
-	if !IsEqual(expectedVector, multipliedVector) {
-		t.Errorf("Vectors are different: %v %v", expectedVector.Coordinates, multipliedVector.Coordinates)
+	expectedVector := &Vector{coordinates: []float64{20, 40, 60}}
+	if !expectedVector.IsEqual(multipliedVector) {
+		t.Errorf("Vectors are different: %v %v", expectedVector.coordinates, multipliedVector.coordinates)
 	}
 }
 
@@ -32,15 +32,15 @@ func TestScalarMultiplication(t *testing.T) {
 //  none
 //
 func TestSum(t *testing.T) {
-	vect1 := &Vector{Coordinates: []float64{10, 20, 30}}
-	vect2 := &Vector{Coordinates: []float64{5, 10, 20}}
+	vect1 := &Vector{coordinates: []float64{10, 20, 30}}
+	vect2 := &Vector{coordinates: []float64{5, 10, 20}}
 	vectorSum, err := Sum(vect1, vect2, 1, 1)
 	if err != nil {
 		t.Errorf(err.Error())
 	}
-	expectedVector := &Vector{Coordinates: []float64{15, 30, 50}}
-	if !IsEqual(expectedVector, vectorSum) {
-		t.Errorf("Vectors are different: %v %v", expectedVector.Coordinates, vectorSum.Coordinates)
+	expectedVector := &Vector{coordinates: []float64{15, 30, 50}}
+	if !expectedVector.IsEqual(vectorSum) {
+		t.Errorf("Vectors are different: %v %v", expectedVector.coordinates, vectorSum.coordinates)
 	}
 }
 
@@ -53,15 +53,15 @@ func TestSum(t *testing.T) {
 //  none
 //
 func TestSumDifferentDimensions(t *testing.T) {
-	vect1 := &Vector{Coordinates: []float64{10, 20, 30}}
-	vect2 := &Vector{Coordinates: []float64{5, 10}}
+	vect1 := &Vector{coordinates: []float64{10, 20, 30}}
+	vect2 := &Vector{coordinates: []float64{5, 10}}
 	_, err := Sum(vect1, vect2, 1, 1)
 	if err == nil {
 		t.Errorf("Applied sum on vectors with different dimensions: %v %v", vect1, vect2)
 	} else if err.Error() != fmt.Sprintf(
 		"Invalid dimension of vector. Expected: %d and got: %d.\n",
-		len(vect1.Coordinates),
-		len(vect2.Coordinates)) {
+		len(vect1.coordinates),
+		len(vect2.coordinates)) {
 		t.Errorf("Wrong error on vector sum: %v", err.Error())
 	}
 }
@@ -75,15 +75,15 @@ func TestSumDifferentDimensions(t *testing.T) {
 //  none
 //
 func TestSubtraction(t *testing.T) {
-	vect1 := &Vector{Coordinates: []float64{10, 20, 30}}
-	vect2 := &Vector{Coordinates: []float64{5, 10, 20}}
+	vect1 := &Vector{coordinates: []float64{10, 20, 30}}
+	vect2 := &Vector{coordinates: []float64{5, 10, 20}}
 	vectorSum, err := Sum(vect1, vect2, 3, -1)
 	if err != nil {
 		t.Errorf(err.Error())
 	}
-	expectedVector := &Vector{Coordinates: []float64{25, 50, 70}}
-	if !IsEqual(expectedVector, vectorSum) {
-		t.Errorf("Vectors are different: %v %v", expectedVector.Coordinates, vectorSum.Coordinates)
+	expectedVector := &Vector{coordinates: []float64{25, 50, 70}}
+	if !expectedVector.IsEqual(vectorSum) {
+		t.Errorf("Vectors are different: %v %v", expectedVector.coordinates, vectorSum.coordinates)
 	}
 }
 
@@ -96,8 +96,8 @@ func TestSubtraction(t *testing.T) {
 //  none
 //
 func TestDotProduct(t *testing.T) {
-	vect1 := &Vector{Coordinates: []float64{2, 3, 5}}
-	vect2 := &Vector{Coordinates: []float64{1, 2, 2}}
+	vect1 := &Vector{coordinates: []float64{2, 3, 5}}
+	vect2 := &Vector{coordinates: []float64{1, 2, 2}}
 	dotProduct, err := DotProduct(vect1, vect2)
 	if err != nil {
 		t.Errorf(err.Error())
@@ -117,15 +117,15 @@ func TestDotProduct(t *testing.T) {
 //  none
 //
 func TestDotProductDifferentDimensions(t *testing.T) {
-	vect1 := &Vector{Coordinates: []float64{2, 3, 5}}
-	vect2 := &Vector{Coordinates: []float64{1, 2}}
+	vect1 := &Vector{coordinates: []float64{2, 3, 5}}
+	vect2 := &Vector{coordinates: []float64{1, 2}}
 	_, err := DotProduct(vect1, vect2)
 	if err == nil {
 		t.Errorf("Applied sum on vectors with different dimensions: %v %v", vect1, vect2)
 	} else if err.Error() != fmt.Sprintf(
 		"Invalid dimension of vector. Expected: %d and got: %d.\n",
-		len(vect1.Coordinates),
-		len(vect2.Coordinates)) {
+		vect1.Dimension(),
+		vect2.Dimension()) {
 		t.Errorf("Wrong error on vector dot product: %v", err.Error())
 	}
 }
@@ -139,14 +139,14 @@ func TestDotProductDifferentDimensions(t *testing.T) {
 //  none
 //
 func TestCrossProduct(t *testing.T) {
-	vect1 := &Vector{Coordinates: []float64{2, 3, 5}}
-	vect2 := &Vector{Coordinates: []float64{1, 2, 2}}
+	vect1 := &Vector{coordinates: []float64{2, 3, 5}}
+	vect2 := &Vector{coordinates: []float64{1, 2, 2}}
 	crossProduct, err := CrossProduct(vect1, vect2)
 	if err != nil {
 		t.Errorf(err.Error())
 	}
-	expectedCrossProduct := &Vector{Coordinates: []float64{-4, 1, 1}}
-	if !IsEqual(expectedCrossProduct, crossProduct) {
+	expectedCrossProduct := &Vector{coordinates: []float64{-4, 1, 1}}
+	if !expectedCrossProduct.IsEqual(crossProduct) {
 		t.Errorf("Cross product is wrong: %v %v", expectedCrossProduct, crossProduct)
 	}
 }
@@ -160,15 +160,15 @@ func TestCrossProduct(t *testing.T) {
 //  none
 //
 func TestCrossProductDifferentDimensions(t *testing.T) {
-	vect1 := &Vector{Coordinates: []float64{2, 3, 5}}
-	vect2 := &Vector{Coordinates: []float64{1, 2}}
+	vect1 := &Vector{coordinates: []float64{2, 3, 5}}
+	vect2 := &Vector{coordinates: []float64{1, 2}}
 	_, err := CrossProduct(vect1, vect2)
 	if err == nil {
 		t.Errorf("Applied cross product on vectors with different dimensions: %v %v", vect1, vect2)
 	} else if err.Error() != fmt.Sprintf(
 		"Invalid dimension of vector. Expected: %d and got: %d.\n",
-		len(vect1.Coordinates),
-		len(vect2.Coordinates)) {
+		vect1.Dimension(),
+		vect2.Dimension()) {
 		t.Errorf("Wrong error on vector cross product: %v", err.Error())
 	}
 }
@@ -182,14 +182,13 @@ func TestCrossProductDifferentDimensions(t *testing.T) {
 //  none
 //
 func TestCrossProductNon3D(t *testing.T) {
-	vect1 := &Vector{Coordinates: []float64{2, 3}}
-	vect2 := &Vector{Coordinates: []float64{1, 2}}
+	vect1 := &Vector{coordinates: []float64{2, 3}}
+	vect2 := &Vector{coordinates: []float64{1, 2}}
 	_, err := CrossProduct(vect1, vect2)
 	if err == nil {
 		t.Errorf("Applied cross product on vectors with dimensions not equal to 3: %v %v", vect1, vect2)
 	} else if err.Error() !=  fmt.Sprintf(
-		"Invalid dimension of vector. Expected 3D and got %d.",
-		len(vect1.Coordinates)) {
+		"Invalid dimension of vector. Expected 3D and got %d.", vect1.Dimension()) {
 		t.Errorf("Wrong error on vector cross product: %v", err.Error())
 	}
 }
@@ -203,7 +202,7 @@ func TestCrossProductNon3D(t *testing.T) {
 //  none
 //
 func TestNorm(t *testing.T) {
-	vect := &Vector{Coordinates: []float64{3, 4}}
+	vect := &Vector{coordinates: []float64{3, 4}}
 	norm := Norm(vect)
 	expectedNorm := float64(5)
 	if !(expectedNorm == norm) {
@@ -220,10 +219,10 @@ func TestNorm(t *testing.T) {
 //  none
 //
 func TestNormalize(t *testing.T) {
-	vect := &Vector{Coordinates: []float64{2, 1, 2}}
+	vect := &Vector{coordinates: []float64{2, 1, 2}}
 	normalizedVector := Normalize(vect)
-	expectedNormalizedVector := &Vector{Coordinates: []float64{float64(2)/3, float64(1)/3, float64(2)/3}}
-	if !IsEqual(expectedNormalizedVector, normalizedVector) {
+	expectedNormalizedVector := &Vector{coordinates: []float64{float64(2)/3, float64(1)/3, float64(2)/3}}
+	if !expectedNormalizedVector.IsEqual(normalizedVector) {
 		t.Errorf("Normalized vector is wrong: %v %v", expectedNormalizedVector, normalizedVector)
 	}
 }
@@ -237,10 +236,10 @@ func TestNormalize(t *testing.T) {
 //  none
 //
 func TestNormalizeNullVector(t *testing.T) {
-	vector := &Vector{Coordinates: []float64{0, 0, 0}}
+	vector := &Vector{coordinates: []float64{0, 0, 0}}
 	normalizedVector := Normalize(vector)
-	expectedNormalizedVector := &Vector{Coordinates: []float64{0, 0, 0}}
-	if !IsEqual(expectedNormalizedVector, normalizedVector) {
+	expectedNormalizedVector := &Vector{coordinates: []float64{0, 0, 0}}
+	if !expectedNormalizedVector.IsEqual(normalizedVector) {
 		t.Errorf("Normalized vector is wrong: %v %v", expectedNormalizedVector, normalizedVector)
 	}
 }

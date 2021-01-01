@@ -11,7 +11,7 @@ package vector
 //  An error.
 //
 func ProjectOnVector(vect1, vect2 *Vector) (*Vector, error) {
-	if !IsEqualDimension(vect1, vect2) {
+	if !vect1.IsEqualDimension(vect2) {
 		return nil, differentDimensionError(vect1, vect2)
 	}
 	topConstant, _ := DotProduct(vect1, vect2)

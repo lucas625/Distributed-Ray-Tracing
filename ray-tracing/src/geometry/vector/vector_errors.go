@@ -17,8 +17,8 @@ import (
 func differentDimensionError(vect1, vect2 *Vector) error {
 	errorMessage := fmt.Sprintf(
 		"Invalid dimension of vector. Expected: %d and got: %d.\n",
-		len(vect1.Coordinates),
-		len(vect2.Coordinates))
+		vect1.Dimension(),
+		vect2.Dimension())
 	return errors.New(errorMessage)
 }
 
@@ -31,7 +31,7 @@ func differentDimensionError(vect1, vect2 *Vector) error {
 //  An Error.
 //
 func non3DError(vect *Vector) error {
-	errorMessage := fmt.Sprintf("Invalid dimension of vector. Expected 3D and got %d.", len(vect.Coordinates))
+	errorMessage := fmt.Sprintf("Invalid dimension of vector. Expected 3D and got %d.", vect.Dimension())
 	return errors.New(errorMessage)
 }
 

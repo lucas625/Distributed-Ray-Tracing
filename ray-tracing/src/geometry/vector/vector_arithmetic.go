@@ -14,9 +14,9 @@ import (
 // 	The resulting vector.
 //
 func ScalarMultiplication(vect *Vector, scalar float64) *Vector {
-	vectAux, _ := Init(len(vect.Coordinates))
-	for i := 0; i < len(vect.Coordinates); i++ {
-		vectAux.Coordinates[i] = scalar * vect.Coordinates[i]
+	vectAux, _ := Init(vect.Dimension())
+	for i := 0; i < vect.Dimension(); i++ {
+		vectAux.SetCoordinates(i, scalar * vect.GetCoordinate(i))
 	}
 	return vectAux
 }
@@ -34,16 +34,17 @@ func ScalarMultiplication(vect *Vector, scalar float64) *Vector {
 //	An error.
 //
 func Sum(vect1 *Vector, vect2 *Vector, scalar1, scalar2 float64) (*Vector, error) {
-	if !IsEqualDimension(vect1, vect2) {
+	if !vect1.IsEqualDimension(vect2) {
 		return nil, differentDimensionError(vect1, vect2)
 	}
 
 	firstMultipliedVector := ScalarMultiplication(vect1, scalar1)
 	secondMultipliedVector := ScalarMultiplication(vect2, scalar2)
 	
-	resultingVector, _ := Init(len(vect1.Coordinates))
-	for i := 0; i < len(vect1.Coordinates); i++ {
-		resultingVector.Coordinates[i] = firstMultipliedVector.Coordinates[i] + secondMultipliedVector.Coordinates[i]
+	resultingVector, _ := Init(vect1.Dimension())
+	for i := 0; i < vect1.Dimension(); i++ {
+		resultingVector.SetCoordinates(i, firstMultipliedVector.GetCoordinate(i) +
+			secondMultipliedVector.GetCoordinate(i))
 	}
 	return resultingVector, nil
 }
@@ -59,12 +60,12 @@ func Sum(vect1 *Vector, vect2 *Vector, scalar1, scalar2 float64) (*Vector, error
 //	An error.
 //
 func DotProduct(vect1 *Vector, vect2 *Vector) (float64, error) {
-	if !IsEqualDimension(vect1, vect2) {
+	if !vect1.IsEqualDimension(vect2) {
 		return 0, differentDimensionError(vect1, vect2)
 	}
 	var totalSum float64
-	for i := 0; i < len(vect1.Coordinates); i++ {
-		totalSum += vect1.Coordinates[i] * vect2.Coordinates[i]
+	for i := 0; i < vect1.Dimension(); i++ {
+		totalSum += vect1.GetCoordinate(i) * vect2.GetCoordinate(i)
 	}
 	return totalSum, nil
 }
@@ -80,18 +81,26 @@ func DotProduct(vect1 *Vector, vect2 *Vector) (float64, error) {
 //  An error.
 //
 func CrossProduct(vect1, vect2 *Vector) (*Vector, error) {
-	if !IsEqualDimension(vect1, vect2) {
+	if !vect1.IsEqualDimension(vect2) {
 		return nil, differentDimensionError(vect1, vect2)
 	}
-	if len(vect1.Coordinates) != 3 {
+	if vect1.Dimension() != 3 {
 		return nil, non3DError(vect1)
 	}
 
-	i := (vect1.Coordinates[1] * vect2.Coordinates[2]) - (vect1.Coordinates[2] * vect2.Coordinates[1])
-	j := (vect1.Coordinates[2] * vect2.Coordinates[0]) - (vect1.Coordinates[0] * vect2.Coordinates[2])
-	k := (vect1.Coordinates[0] * vect2.Coordinates[1]) - (vect1.Coordinates[1] * vect2.Coordinates[0])
+	i := (vect1.GetCoordinate(1) * vect2.GetCoordinate(2)) -
+		(vect1.GetCoordinate(2) * vect2.GetCoordinate(1))
+	j := (vect1.GetCoordinate(2) * vect2.GetCoordinate(0)) -
+		(vect1.GetCoordinate(0) * vect2.GetCoordinate(2))
+	k := (vect1.GetCoordinate(0) * vect2.GetCoordinate(1)) -
+		(vect1.GetCoordinate(1) * vect2.GetCoordinate(0))
 
-	return &Vector{Coordinates: []float64{i, j, k}}, nil
+	newVector, _ := Init(3)
+	newVector.SetCoordinates(0, i)
+	newVector.SetCoordinates(1, j)
+	newVector.SetCoordinates(2, k)
+
+	return newVector, nil
 }
 
 // Norm is a function to calculate the norm of a Vector.
@@ -121,7 +130,7 @@ func Normalize(vector *Vector) *Vector {
 	if vectorNorm != 0 {
 		normalizedVector = ScalarMultiplication(vector, 1/vectorNorm)
 	} else {
-		normalizedVector, _ = Init(len(vector.Coordinates))
+		normalizedVector, _ = Init(vector.Dimension())
 	}
 
 	return normalizedVector

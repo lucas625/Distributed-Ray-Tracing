@@ -21,12 +21,10 @@ func TestDifferentDimensionError(t *testing.T) {
 	if err == nil {
 		t.Errorf(
 			"No different dimension error return for vectors dimension: %d %d.",
-			len(vect1.Coordinates),
-			len(vect2.Coordinates))
+			len(vect1.coordinates),
+			len(vect2.coordinates))
 	} else if err.Error() != fmt.Sprintf(
-		"Invalid dimension of vector. Expected: %d and got: %d.\n",
-		len(vect1.Coordinates),
-		len(vect2.Coordinates)) {
+		"Invalid dimension of vector. Expected: %d and got: %d.\n", vect1.Dimension(), vect2.Dimension()) {
 		t.Errorf("Wrong error message for vectors with different dimension: \"%s\".", err.Error())
 	}
 }
@@ -43,12 +41,9 @@ func TestNon3DError(t *testing.T) {
 	vect, _ := Init(2)
 	err := non3DError(vect)
 	if err == nil {
-		t.Errorf(
-			"No non 3D error return for vector with dimension: %d.",
-			len(vect.Coordinates))
+		t.Errorf("No non 3D error return for vector with dimension: %d.", vect.Dimension())
 	} else if err.Error() != fmt.Sprintf(
-		"Invalid dimension of vector. Expected 3D and got %d.",
-		len(vect.Coordinates)) {
+		"Invalid dimension of vector. Expected 3D and got %d.", vect.Dimension()) {
 		t.Errorf("Wrong error message for non 3D vector: \"%s\".", err.Error())
 	}
 }

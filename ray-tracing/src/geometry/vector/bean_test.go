@@ -20,8 +20,8 @@ func TestInitPositiveDimension(t *testing.T) {
 	if err != nil {
 		t.Errorf("Vector failed to be instantiated with dimension: %d.", dimension)
 	}
-	if !(len(vect.Coordinates) == dimension) {
-		t.Errorf("Vector instantiated with wrong dimension: %d %d.", dimension, len(vect.Coordinates))
+	if vect.Dimension() != dimension {
+		t.Errorf("Vector instantiated with wrong dimension: %d %d.", dimension, vect.Dimension())
 	}
 }
 
@@ -39,8 +39,8 @@ func TestInitZeroDimension(t *testing.T) {
 	if err != nil {
 		t.Errorf("Vector failed to be Instantiated with dimension: %d.", dimension)
 	}
-	if !(len(vect.Coordinates) == dimension) {
-		t.Errorf("Vector instantiated with wrong dimension: %d %d.", dimension, len(vect.Coordinates))
+	if vect.Dimension() != dimension {
+		t.Errorf("Vector instantiated with wrong dimension: %d %d.", dimension, vect.Dimension())
 	}
 }
 
@@ -77,8 +77,8 @@ func TestIsEqualDimension(t *testing.T) {
 	dimension := 1
 	vector1, _ := Init(dimension)
 	vector2, _ := Init(dimension)
-	if !IsEqualDimension(vector1, vector2) {
-		t.Errorf("Vectors with different dimensions: %d and %d.", len(vector1.Coordinates), len(vector2.Coordinates))
+	if !vector1.IsEqualDimension(vector2) {
+		t.Errorf("Vectors with different dimensions: %d and %d.", vector1.Dimension(), vector2.Dimension())
 	}
 }
 
@@ -93,23 +93,8 @@ func TestIsEqualDimension(t *testing.T) {
 func TestIsDifferentDimension(t *testing.T) {
 	vector1, _ := Init(1)
 	vector2, _ := Init(2)
-	if IsEqualDimension(vector1, vector2) {
+	if vector1.IsEqualDimension(vector2) {
 		t.Errorf("Vectors with equal dimensions.")
-	}
-}
-
-// TestCoordinates tests the coordinates of a vector.
-//
-// Parameters:
-//  t - Test instance.
-//
-// Returns:
-//  none
-//
-func TestCoordinates(t *testing.T) {
-	vect := Vector{Coordinates: []float64{10, 20, 30}}
-	if len(vect.Coordinates) != 3 {
-		t.Errorf("Vector with unexpected coordinates: %v", vect.Coordinates)
 	}
 }
 
@@ -122,10 +107,10 @@ func TestCoordinates(t *testing.T) {
 //  none
 //
 func TestIsEqual(t *testing.T) {
-	vect1 := &Vector{Coordinates: []float64{10, 20, 30}}
-	vect2 := &Vector{Coordinates: []float64{10, 20, 30}}
-	if !IsEqual(vect1, vect2) {
-		t.Errorf("Vectors are different: %v %v", vect1.Coordinates, vect2.Coordinates)
+	vect1 := &Vector{coordinates: []float64{10, 20, 30}}
+	vect2 := &Vector{coordinates: []float64{10, 20, 30}}
+	if !vect1.IsEqual(vect2) {
+		t.Errorf("Vectors are different: %v %v", vect1.coordinates, vect2.coordinates)
 	}
 }
 
@@ -138,10 +123,10 @@ func TestIsEqual(t *testing.T) {
 //  none
 //
 func TestIsEqualDifferent(t *testing.T) {
-	vect1 := &Vector{Coordinates: []float64{10, 20, 30}}
-	vect2 := &Vector{Coordinates: []float64{10, 30, 20}}
-	if IsEqual(vect1, vect2) {
-		t.Errorf("Vectors are equal: %v %v", vect1.Coordinates, vect2.Coordinates)
+	vect1 := &Vector{coordinates: []float64{10, 20, 30}}
+	vect2 := &Vector{coordinates: []float64{10, 30, 20}}
+	if vect1.IsEqual(vect2) {
+		t.Errorf("Vectors are equal: %v %v", vect1.coordinates, vect2.coordinates)
 	}
 }
 
@@ -154,9 +139,9 @@ func TestIsEqualDifferent(t *testing.T) {
 //  none
 //
 func TestIsEqualFailDifferentDimensions(t *testing.T) {
-	firstVector := &Vector{Coordinates: []float64{10, 20, 30, 40}}
-	secondVector := &Vector{Coordinates: []float64{10, 20, 30}}
-	if IsEqual(firstVector, secondVector) {
-		t.Errorf("Vectors are equal: %v %v", firstVector.Coordinates, secondVector.Coordinates)
+	firstVector := &Vector{coordinates: []float64{10, 20, 30, 40}}
+	secondVector := &Vector{coordinates: []float64{10, 20, 30}}
+	if firstVector.IsEqual(secondVector) {
+		t.Errorf("Vectors are equal: %v %v", firstVector.coordinates, secondVector.coordinates)
 	}
 }
