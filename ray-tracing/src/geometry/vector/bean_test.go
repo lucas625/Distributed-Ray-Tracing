@@ -6,7 +6,7 @@ import (
 )
 
 
-// TestInitPositiveDimension tests the instantiation of a vector with positive dimensions.
+// TestVector_Init tests the instantiation of a vector with positive dimensions.
 //
 // Parameters:
 //  t - Test instance.
@@ -14,18 +14,18 @@ import (
 // Returns:
 //  none
 //
-func TestInitPositiveDimension(t *testing.T) {
+func TestVector_Init(t *testing.T) {
 	dimension := 1
-	vect, err := Init(dimension)
+	vector, err := Init(dimension)
 	if err != nil {
 		t.Errorf("Vector failed to be instantiated with dimension: %d.", dimension)
 	}
-	if vect.Dimension() != dimension {
-		t.Errorf("Vector instantiated with wrong dimension: %d %d.", dimension, vect.Dimension())
+	if vector.Dimension() != dimension {
+		t.Errorf("Vector instantiated with wrong dimension: %d %d.", dimension, vector.Dimension())
 	}
 }
 
-// TestInitZeroDimension tests the instantiation of a vector with 0 dimensions.
+// TestVector_Init_ZeroDimension tests the instantiation of a vector with 0 dimensions.
 //
 // Parameters:
 //  t - Test instance.
@@ -33,18 +33,18 @@ func TestInitPositiveDimension(t *testing.T) {
 // Returns:
 //  none
 //
-func TestInitZeroDimension(t *testing.T) {
+func TestVector_Init_ZeroDimension(t *testing.T) {
 	dimension := 0
-	vect, err := Init(dimension)
+	vector, err := Init(dimension)
 	if err != nil {
 		t.Errorf("Vector failed to be Instantiated with dimension: %d.", dimension)
 	}
-	if vect.Dimension() != dimension {
-		t.Errorf("Vector instantiated with wrong dimension: %d %d.", dimension, vect.Dimension())
+	if vector.Dimension() != dimension {
+		t.Errorf("Vector instantiated with wrong dimension: %d %d.", dimension, vector.Dimension())
 	}
 }
 
-// TestInitNegativeDimension tests the instantiation of a vector with negative dimensions.
+// TestVector_Init_NegativeDimension tests the instantiation of a vector with negative dimensions.
 //
 // Parameters:
 //  t - Test instance.
@@ -52,20 +52,20 @@ func TestInitZeroDimension(t *testing.T) {
 // Returns:
 //  none
 //
-func TestInitNegativeDimension(t *testing.T) {
+func TestVector_Init_NegativeDimension(t *testing.T) {
 	dimension := -1
 	_, err := Init(dimension)
+	expectedErrorMessage := fmt.Sprintf("Invalid vector size %d.", dimension)
 	if err == nil {
 		t.Errorf("Vector instantiated with negative dimension: %d.", dimension)
-	} else if err.Error() != fmt.Sprintf("Invalid vector size %d.", dimension) {
+	} else if err.Error() != expectedErrorMessage {
 		t.Errorf(
 			"Vector failed to be instantiated with negative dimension: %d but with wrong error message: \"%s\".",
-			dimension,
-			err.Error())
+			dimension, err.Error())
 	}
 }
 
-// TestIsEqualDimension tests if two vectors have equal dimensions.
+// TestVector_IsEqualDimension tests if two vectors have equal dimensions.
 //
 // Parameters:
 //  t - Test instance.
@@ -73,16 +73,16 @@ func TestInitNegativeDimension(t *testing.T) {
 // Returns:
 //  none
 //
-func TestIsEqualDimension(t *testing.T) {
+func TestVector_IsEqualDimension(t *testing.T) {
 	dimension := 1
-	vector1, _ := Init(dimension)
-	vector2, _ := Init(dimension)
-	if !vector1.IsEqualDimension(vector2) {
-		t.Errorf("Vectors with different dimensions: %d and %d.", vector1.Dimension(), vector2.Dimension())
+	firstVector, _ := Init(dimension)
+	secondVector, _ := Init(dimension)
+	if !firstVector.IsEqualDimension(secondVector) {
+		t.Errorf("Vectors with different dimensions: %d and %d.", firstVector.Dimension(), secondVector.Dimension())
 	}
 }
 
-// TestIsDifferentDimension tests if two vectors have different dimensions.
+// TestVector_IsEqualDimension_DifferentDimension tests if two vectors have different dimensions.
 //
 // Parameters:
 //  t - Test instance.
@@ -90,15 +90,15 @@ func TestIsEqualDimension(t *testing.T) {
 // Returns:
 //  none
 //
-func TestIsDifferentDimension(t *testing.T) {
-	vector1, _ := Init(1)
-	vector2, _ := Init(2)
-	if vector1.IsEqualDimension(vector2) {
-		t.Errorf("Vectors with equal dimensions.")
+func TestVector_IsEqualDimension_DifferentDimension(t *testing.T) {
+	firstVector, _ := Init(1)
+	secondVector, _ := Init(2)
+	if firstVector.IsEqualDimension(secondVector) {
+		t.Errorf("Vectors with equal dimensions: %d and %d.", firstVector.Dimension(), secondVector.Dimension())
 	}
 }
 
-// TestIsEqual tests if two vectors are equal.
+// TestVector_IsEqual tests if two vectors are equal.
 //
 // Parameters:
 //  t - Test instance.
@@ -106,15 +106,15 @@ func TestIsDifferentDimension(t *testing.T) {
 // Returns:
 //  none
 //
-func TestIsEqual(t *testing.T) {
-	vect1 := &Vector{coordinates: []float64{10, 20, 30}}
-	vect2 := &Vector{coordinates: []float64{10, 20, 30}}
-	if !vect1.IsEqual(vect2) {
-		t.Errorf("Vectors are different: %v %v", vect1.coordinates, vect2.coordinates)
+func TestVector_IsEqual(t *testing.T) {
+	firstVector := &Vector{coordinates: []float64{10, 20, 30}}
+	secondVector := &Vector{coordinates: []float64{10, 20, 30}}
+	if !firstVector.IsEqual(secondVector) {
+		t.Errorf("Vectors are different: %v %v", firstVector.coordinates, secondVector.coordinates)
 	}
 }
 
-// TestIsEqualDifferent tests if two vectors are different.
+// TestVector_IsEqual_Different tests if two vectors are different.
 //
 // Parameters:
 //  t - Test instance.
@@ -122,15 +122,15 @@ func TestIsEqual(t *testing.T) {
 // Returns:
 //  none
 //
-func TestIsEqualDifferent(t *testing.T) {
-	vect1 := &Vector{coordinates: []float64{10, 20, 30}}
-	vect2 := &Vector{coordinates: []float64{10, 30, 20}}
-	if vect1.IsEqual(vect2) {
-		t.Errorf("Vectors are equal: %v %v", vect1.coordinates, vect2.coordinates)
+func TestVector_IsEqual_Different(t *testing.T) {
+	firstVector := &Vector{coordinates: []float64{10, 20, 30}}
+	secondVector := &Vector{coordinates: []float64{10, 30, 20}}
+	if firstVector.IsEqual(secondVector) {
+		t.Errorf("Vectors are equal: %v %v", firstVector.coordinates, secondVector.coordinates)
 	}
 }
 
-// TestIsEqualFailDifferentDimensions tests if two vectors are different by their dimension.
+// TestVector_IsEqual_DifferentDimensions tests if two vectors are different by their dimension.
 //
 // Parameters:
 //  t - Test instance.
@@ -138,7 +138,7 @@ func TestIsEqualDifferent(t *testing.T) {
 // Returns:
 //  none
 //
-func TestIsEqualFailDifferentDimensions(t *testing.T) {
+func TestVector_IsEqual_DifferentDimensions(t *testing.T) {
 	firstVector := &Vector{coordinates: []float64{10, 20, 30, 40}}
 	secondVector := &Vector{coordinates: []float64{10, 20, 30}}
 	if firstVector.IsEqual(secondVector) {
