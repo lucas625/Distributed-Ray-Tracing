@@ -6,7 +6,7 @@ import (
 )
 
 
-// TestDifferentDimensionError tests different dimension error.
+// TestVector_DifferentDimensionError tests different dimension error.
 //
 // Parameters:
 //  t - Test instance.
@@ -14,22 +14,22 @@ import (
 // Returns:
 //  none
 //
-func TestDifferentDimensionError(t *testing.T) {
-	vect1, _ := Init(1)
-	vect2, _ := Init(2)
-	err := differentDimensionError(vect1, vect2)
+func TestVector_DifferentDimensionError(t *testing.T) {
+	firstVector, _ := Init(1)
+	secondVector, _ := Init(2)
+	err := differentDimensionError(firstVector, secondVector)
+	expectedErrorMessage := fmt.Sprintf(
+		"Invalid dimension of vector. Expected: %d and got: %d.\n", firstVector.Dimension(), secondVector.Dimension())
 	if err == nil {
 		t.Errorf(
-			"No different dimension error return for vectors dimension: %d %d.",
-			len(vect1.coordinates),
-			len(vect2.coordinates))
-	} else if err.Error() != fmt.Sprintf(
-		"Invalid dimension of vector. Expected: %d and got: %d.\n", vect1.Dimension(), vect2.Dimension()) {
+			"No different dimension error return for vectors dimension: %d %d.", firstVector.Dimension(),
+			secondVector.Dimension())
+	} else if err.Error() != expectedErrorMessage {
 		t.Errorf("Wrong error message for vectors with different dimension: \"%s\".", err.Error())
 	}
 }
 
-// TestNon3DError tests non 3D vector error.
+// TestVector_Non3DError tests non 3D vector error.
 //
 // Parameters:
 //  t - Test instance.
@@ -37,18 +37,18 @@ func TestDifferentDimensionError(t *testing.T) {
 // Returns:
 //  none
 //
-func TestNon3DError(t *testing.T) {
-	vect, _ := Init(2)
-	err := non3DError(vect)
+func TestVector_Non3DError(t *testing.T) {
+	vector, _ := Init(2)
+	err := non3DError(vector)
+	expectedErrorMessage := fmt.Sprintf("Invalid dimension of vector. Expected 3D and got %d.", vector.Dimension())
 	if err == nil {
-		t.Errorf("No non 3D error return for vector with dimension: %d.", vect.Dimension())
-	} else if err.Error() != fmt.Sprintf(
-		"Invalid dimension of vector. Expected 3D and got %d.", vect.Dimension()) {
+		t.Errorf("No non 3D error return for vector with dimension: %d.", vector.Dimension())
+	} else if err.Error() != expectedErrorMessage {
 		t.Errorf("Wrong error message for non 3D vector: \"%s\".", err.Error())
 	}
 }
 
-// TestNegativeDimensionError tests vector with negative dimension error.
+// TestVector_NegativeDimensionError tests vector with negative dimension error.
 //
 // Parameters:
 //  t - Test instance.
@@ -56,12 +56,13 @@ func TestNon3DError(t *testing.T) {
 // Returns:
 //  none
 //
-func TestNegativeDimensionError(t *testing.T) {
+func TestVector_NegativeDimensionError(t *testing.T) {
 	dimension := -1
 	err := negativeDimensionError(dimension)
+	expectedErrorMessage := fmt.Sprintf("Invalid vector size %d.", dimension)
 	if err == nil {
 		t.Errorf("No negative dimension error return for dimension: %d.", dimension)
-	} else if err.Error() != fmt.Sprintf("Invalid vector size %d.", dimension) {
+	} else if err.Error() != expectedErrorMessage {
 		t.Errorf("Wrong error message for negative dimension: \"%s\".", err.Error())
 	}
 }

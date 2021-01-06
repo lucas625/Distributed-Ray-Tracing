@@ -6,7 +6,7 @@ import (
 )
 
 
-// TestVector_Init tests the instantiation of a vector with positive dimensions.
+// TestVector_Init tests the instantiation of a Vector with positive dimensions.
 //
 // Parameters:
 //  t - Test instance.
@@ -25,7 +25,7 @@ func TestVector_Init(t *testing.T) {
 	}
 }
 
-// TestVector_Init_ZeroDimension tests the instantiation of a vector with 0 dimensions.
+// TestVector_Init_ZeroDimension tests the instantiation of a Vector with 0 dimensions.
 //
 // Parameters:
 //  t - Test instance.
@@ -44,7 +44,7 @@ func TestVector_Init_ZeroDimension(t *testing.T) {
 	}
 }
 
-// TestVector_Init_NegativeDimension tests the instantiation of a vector with negative dimensions.
+// TestVector_Init_NegativeDimension tests the instantiation of a Vector with negative dimensions.
 //
 // Parameters:
 //  t - Test instance.
