@@ -1,5 +1,12 @@
 package matrix
 
+// Controller is a class for the matrix is controller.
+//
+// Members:
+// 	none
+//
+type Controller struct {}
+
 // BuildIdentity builds an identity Matrix.
 //
 // Parameters:
@@ -9,7 +16,7 @@ package matrix
 // 	A Matrix.
 //  An error.
 //
-func BuildIdentity(size int) (*Matrix, error) {
+func (_ *Controller) BuildIdentity(size int) (*Matrix, error) {
 	if size < 1 {
 		return nil, invalidSize(size, size)
 	}
@@ -23,12 +30,12 @@ func BuildIdentity(size int) (*Matrix, error) {
 // Transpose transposes a Matrix.
 //
 // Parameters:
-// 	none
+//  matrix - The Matrix.
 //
 // Returns:
 // 	The transposed Matrix.
 //
-func (matrix *Matrix) Transpose() *Matrix {
+func (_ *Controller) Transpose(matrix *Matrix) *Matrix {
 	transposedMatrix, _ := Init(matrix.Columns(), matrix.Lines())
 	for lineIndex := 0; lineIndex < matrix.Lines(); lineIndex++ {
 		for columnIndex := 0; columnIndex < matrix.Columns(); columnIndex++ {
@@ -42,12 +49,13 @@ func (matrix *Matrix) Transpose() *Matrix {
 // ScalarMultiplication multiplies a Matrix by a constant.
 //
 // Parameters:
+//  matrix - The Matrix.
 //  scalar - A number.
 //
 // Returns:
 // 	The resulting matrix.
 //
-func (matrix *Matrix) ScalarMultiplication(scalar float64) *Matrix {
+func (_ *Controller) ScalarMultiplication(matrix *Matrix, scalar float64) *Matrix {
 	newMatrix, _ := Init(matrix.Lines(), matrix.Columns())
 	for lineIndex := 0; lineIndex < matrix.Lines(); lineIndex++ {
 		for columnIndex := 0; columnIndex < matrix.Columns(); columnIndex++ {
@@ -61,21 +69,22 @@ func (matrix *Matrix) ScalarMultiplication(scalar float64) *Matrix {
 // MultiplyMatrix multiplies two Matrices.
 //
 // Parameters:
+//  firstMatrix  - The first Matrix.
 //  secondMatrix - The second Matrix.
 //
 // Returns:
 // 	The resulting matrix
 //
-func (matrix *Matrix) MultiplyMatrix(secondMatrix *Matrix) (*Matrix, error) {
-	if matrix.Columns() != secondMatrix.Lines() {
-		return nil, incompatibleSize(matrix, secondMatrix)
+func (_ *Controller) MultiplyMatrix(firstMatrix *Matrix, secondMatrix *Matrix) (*Matrix, error) {
+	if firstMatrix.Columns() != secondMatrix.Lines() {
+		return nil, incompatibleSize(firstMatrix, secondMatrix)
 	}
-	newMatrix, _ := Init(matrix.Lines(), secondMatrix.Columns())
-	for firstMatrixLineIndex := 0; firstMatrixLineIndex < matrix.Lines(); firstMatrixLineIndex++ {
+	newMatrix, _ := Init(firstMatrix.Lines(), secondMatrix.Columns())
+	for firstMatrixLineIndex := 0; firstMatrixLineIndex < firstMatrix.Lines(); firstMatrixLineIndex++ {
 		for secondMatrixColumnIndex := 0; secondMatrixColumnIndex < secondMatrix.Columns(); secondMatrixColumnIndex++ {
 			totalSlotValue := 0.0
-			for firstMatrixColumnIndex := 0; firstMatrixColumnIndex < matrix.Columns(); firstMatrixColumnIndex++ {
-				firstValue, _ := matrix.GetValue(firstMatrixLineIndex, firstMatrixColumnIndex)
+			for firstMatrixColumnIndex := 0; firstMatrixColumnIndex < firstMatrix.Columns(); firstMatrixColumnIndex++ {
+				firstValue, _ := firstMatrix.GetValue(firstMatrixLineIndex, firstMatrixColumnIndex)
 				secondValue, _ := secondMatrix.GetValue(firstMatrixColumnIndex, secondMatrixColumnIndex)
 				totalSlotValue += firstValue * secondValue
 

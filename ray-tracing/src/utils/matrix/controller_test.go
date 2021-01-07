@@ -2,6 +2,7 @@ package matrix
 
 import (
 	"fmt"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/test_helpers"
 	"testing"
 )
 
@@ -15,22 +16,21 @@ import (
 //
 func TestMatrix_BuildIdentity(t *testing.T) {
 	size := 3
-	matrix, err := BuildIdentity(size)
-	if err != nil {
-		t.Errorf("Identity matrix failed to be instantiated with size: %d.", size)
-	}
-	if matrix.Lines() != size {
-		t.Errorf("Identity matrix instantiated with wrong lines: %d %d.", size, matrix.Lines())
-	}
-	if matrix.Columns() != size {
-		t.Errorf("Identity matrix instantiated with wrong columns: %d %d.", size, matrix.Columns())
-	}
+	controller := Controller{}
+
+	matrix, err := controller.BuildIdentity(size)
+	test_helpers.AssertNilError(t, err)
+	test_helpers.AssertEqual(t, size, matrix.Lines())
+	test_helpers.AssertEqual(t, size, matrix.Columns())
+
 	for line := 0; line < size; line++ {
 		for column := 0; column < size; column++ {
-			matrixValue, _ := matrix.GetValue(line, column)
-			if (line != column && matrixValue != 0) ||
-				(line == column && matrixValue != 1) {
-				t.Errorf("Identity matrix instantiated with invalid values: %v.", matrix.values)
+			matrixValue, err := matrix.GetValue(line, column)
+			test_helpers.AssertNilError(t, err)
+			if line != column {
+				test_helpers.AssertEqual(t, 0.0, matrixValue)
+			} else {
+				test_helpers.AssertEqual(t, 1.0, matrixValue)
 			}
 		}
 	}
@@ -46,17 +46,12 @@ func TestMatrix_BuildIdentity(t *testing.T) {
 //
 func TestMatrix_BuildIdentity_ZeroSize(t *testing.T) {
 	size := 0
-	_, err := BuildIdentity(size)
-
+	controller := Controller{}
 	expectedErrorMessage := fmt.Sprintf("Invalid size for matrix. lines: %d and columns: %d.", size, size)
 
-	if err == nil {
-		t.Errorf("Identity matrix instantiated with zero size: %d.", size)
-	} else if err.Error() != expectedErrorMessage {
-		t.Errorf(
-			"Identity matrix failed to be instantiated with zero size: %d but with wrong error message: \"%s\".",
-			size, err.Error())
-	}
+	_, err := controller.BuildIdentity(size)
+	test_helpers.AssertNotNilError(t, err)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
 
 // TestMatrix_Transpose tests the transposition of a matrix.
@@ -68,21 +63,22 @@ func TestMatrix_BuildIdentity_ZeroSize(t *testing.T) {
 //  none
 //
 func TestMatrix_Transpose(t *testing.T) {
-	matrix, _ := Init(3, 2)
+	matrix, err := Init(3, 2)
+	test_helpers.AssertNilError(t, err)
 	matrix.values[0] = []float64{1, 2}
 	matrix.values[1] = []float64{3, 4}
 	matrix.values[2] = []float64{5, 6}
+	controller := Controller{}
 
-	resultingMatrix := matrix.Transpose()
+	resultingMatrix := controller.Transpose(matrix)
 
-	expectedMatrix, _ := Init(2, 3)
+	expectedMatrix, err := Init(2, 3)
+	test_helpers.AssertNilError(t, err)
 	expectedMatrix.values[0] = []float64{1, 3, 5}
 	expectedMatrix.values[1] = []float64{2, 4, 6}
 
-
-	if !resultingMatrix.IsEqual(expectedMatrix) {
-		t.Errorf("Invalid transposition of matrix %v: %v.", matrix, resultingMatrix)
-	}
+	areEqual := resultingMatrix.IsEqual(expectedMatrix)
+	test_helpers.AssertEqual(t, true, areEqual)
 }
 
 // TestMatrix_ScalarMultiplication tests the multiplication of a matrix by a constant.
@@ -94,22 +90,25 @@ func TestMatrix_Transpose(t *testing.T) {
 //  none
 //
 func TestMatrix_ScalarMultiplication(t *testing.T) {
-	matrix, _ := Init(3, 2)
+	matrix, err := Init(3, 2)
+	test_helpers.AssertNilError(t, err)
 	matrix.values[0] = []float64{1, 2}
 	matrix.values[1] = []float64{3, 4}
 	matrix.values[2] = []float64{5, 6}
 
 	scalar := 3.0
-	resultingMatrix := matrix.ScalarMultiplication(scalar)
+	controller := Controller{}
 
-	expectedMatrix, _ := Init(3, 2)
+	resultingMatrix := controller.ScalarMultiplication(matrix, scalar)
+
+	expectedMatrix, err := Init(3, 2)
+	test_helpers.AssertNilError(t, err)
 	expectedMatrix.values[0] = []float64{3, 6}
 	expectedMatrix.values[1] = []float64{9, 12}
 	expectedMatrix.values[2] = []float64{15, 18}
 
-	if !resultingMatrix.IsEqual(expectedMatrix) {
-		t.Errorf("Invalid multiplication of matrix %v by constant %v: %v.", matrix, scalar, resultingMatrix)
-	}
+	areEqual := resultingMatrix.IsEqual(expectedMatrix)
+	test_helpers.AssertEqual(t, true, areEqual)
 }
 
 // TestMatrix_MultiplyMatrix tests the multiplication of a matrix by another.
@@ -121,28 +120,30 @@ func TestMatrix_ScalarMultiplication(t *testing.T) {
 //  none
 //
 func TestMatrix_MultiplyMatrix(t *testing.T) {
-	matrix1, _ := Init(3, 2)
-	matrix1.values[0] = []float64{1, 2}
-	matrix1.values[1] = []float64{3, 4}
-	matrix1.values[2] = []float64{5, 6}
+	firstMatrix, err := Init(3, 2)
+	test_helpers.AssertNilError(t, err)
+	firstMatrix.values[0] = []float64{1, 2}
+	firstMatrix.values[1] = []float64{3, 4}
+	firstMatrix.values[2] = []float64{5, 6}
 
-	matrix2, _ := Init(2, 3)
-	matrix2.values[0] = []float64{7, 8, 9}
-	matrix2.values[1] = []float64{10, 11, 12}
+	secondMatrix, err := Init(2, 3)
+	test_helpers.AssertNilError(t, err)
+	secondMatrix.values[0] = []float64{7, 8, 9}
+	secondMatrix.values[1] = []float64{10, 11, 12}
 
-	resultingMatrix, err := matrix1.MultiplyMatrix(matrix2)
-	if err != nil {
-		t.Errorf("Failed to multiply matrices %v %v.", matrix1, matrix2)
-	}
+	controller := Controller{}
 
-	expectedMatrix, _ := Init(3, 3)
+	resultingMatrix, err := controller.MultiplyMatrix(firstMatrix, secondMatrix)
+	test_helpers.AssertNilError(t, err)
+
+	expectedMatrix, err := Init(3, 3)
+	test_helpers.AssertNilError(t, err)
 	expectedMatrix.values[0] = []float64{27, 30, 33}
 	expectedMatrix.values[1] = []float64{61, 68, 75}
 	expectedMatrix.values[2] = []float64{95, 106, 117}
 
-	if !resultingMatrix.IsEqual(expectedMatrix) {
-		t.Errorf("Invalid multiplication of matrix %v by matrix %v: %v.", matrix1, matrix2, resultingMatrix)
-	}
+	areEqual := resultingMatrix.IsEqual(expectedMatrix)
+	test_helpers.AssertEqual(t, true, areEqual)
 }
 
 // TestMatrix_MultiplyMatrix_IncompatibleSize tests the multiplication of a matrix by another.
@@ -154,13 +155,14 @@ func TestMatrix_MultiplyMatrix(t *testing.T) {
 //  none
 //
 func TestMatrix_MultiplyMatrix_IncompatibleSize(t *testing.T) {
-	firstMatrix, _ := Init(3, 3)
-	secondMatrix, _ := Init(2, 3)
+	firstMatrix, err := Init(3, 3)
+	test_helpers.AssertNilError(t, err)
 
-	_, err := firstMatrix.MultiplyMatrix(secondMatrix)
-	if err == nil {
-		t.Errorf("It shouldn't be possible to multiply matrices with incompatible size %v %v.",
-			firstMatrix, secondMatrix)
-	}
+	secondMatrix, err := Init(2, 3)
+	test_helpers.AssertNilError(t, err)
 
+	controller := Controller{}
+
+	_, err = controller.MultiplyMatrix(firstMatrix, secondMatrix)
+	test_helpers.AssertNotNilError(t, err)
 }

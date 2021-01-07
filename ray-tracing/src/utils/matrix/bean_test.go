@@ -74,7 +74,8 @@ func TestMatrix_Init_NegativeSize(t *testing.T) {
 //  none
 //
 func TestMatrix_GetValue(t *testing.T) {
-	matrix, _ := Init(2, 3)
+	matrix, err := Init(2, 3)
+	test_helpers.AssertNilError(t, err)
 	matrix.values[0] = []float64{1, 2, 3}
 	matrix.values[1] = []float64{4, 5, 6}
 
@@ -92,14 +93,15 @@ func TestMatrix_GetValue(t *testing.T) {
 //  none
 //
 func TestMatrix_GetValue_NegativeIndex(t *testing.T) {
-	matrix, _ := Init(2, 3)
+	matrix, err := Init(2, 3)
+	test_helpers.AssertNilError(t, err)
 	matrix.values[0] = []float64{1, 2, 3}
 	matrix.values[1] = []float64{4, 5, 6}
 	expectedErrorMessage := fmt.Sprintf(
 		"Index out of limits of the matrix. Expected from 0 0 to: %v %v and got %v %v.", matrix.Lines(),
 		matrix.Columns(), -1, -1)
 
-	_, err := matrix.GetValue(-1, -1)
+	_, err = matrix.GetValue(-1, -1)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
@@ -113,14 +115,15 @@ func TestMatrix_GetValue_NegativeIndex(t *testing.T) {
 //  none
 //
 func TestMatrix_GetValue_IndexError(t *testing.T) {
-	matrix, _ := Init(2, 3)
+	matrix, err := Init(2, 3)
+	test_helpers.AssertNilError(t, err)
 	matrix.values[0] = []float64{1, 2, 3}
 	matrix.values[1] = []float64{4, 5, 6}
 	expectedErrorMessage := fmt.Sprintf(
 		"Index out of limits of the matrix. Expected from 0 0 to: %v %v and got %v %v.", matrix.Lines(),
 		matrix.Columns(), 3, 4)
 
-	_, err := matrix.GetValue(3, 4)
+	_, err = matrix.GetValue(3, 4)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
@@ -134,12 +137,13 @@ func TestMatrix_GetValue_IndexError(t *testing.T) {
 //  none
 //
 func TestMatrix_SetValue(t *testing.T) {
-	matrix, _ := Init(2, 3)
+	matrix, err := Init(2, 3)
+	test_helpers.AssertNilError(t, err)
 	matrix.values[0] = []float64{1, 2, 3}
 	matrix.values[1] = []float64{4, 5, 6}
 	newValue := 10.0
 
-	err := matrix.SetValue(1, 1, newValue)
+	err = matrix.SetValue(1, 1, newValue)
 	test_helpers.AssertNilError(t, err)
 
 	matrixValue, err := matrix.GetValue(1, 1)
@@ -156,14 +160,15 @@ func TestMatrix_SetValue(t *testing.T) {
 //  none
 //
 func TestMatrix_SetValue_IndexError(t *testing.T) {
-	matrix, _ := Init(2, 3)
+	matrix, err := Init(2, 3)
+	test_helpers.AssertNilError(t, err)
 	matrix.values[0] = []float64{1, 2, 3}
 	matrix.values[1] = []float64{4, 5, 6}
 	expectedErrorMessage := fmt.Sprintf(
 		"Index out of limits of the matrix. Expected from 0 0 to: %v %v and got %v %v.", matrix.Lines(),
 		matrix.Columns(), 1, -1)
 
-	err := matrix.SetValue(1, -1, 10)
+	err = matrix.SetValue(1, -1, 10)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
@@ -177,12 +182,14 @@ func TestMatrix_SetValue_IndexError(t *testing.T) {
 //  none
 //
 func TestMatrix_IsEqual(t *testing.T) {
-	firstMatrix, _ := Init(3, 2)
+	firstMatrix, err := Init(3, 2)
+	test_helpers.AssertNilError(t, err)
 	firstMatrix.values[0] = []float64{1, 2}
 	firstMatrix.values[1] = []float64{3, 4}
 	firstMatrix.values[2] = []float64{5, 6}
 
-	secondMatrix, _ := Init(3, 2)
+	secondMatrix, err := Init(3, 2)
+	test_helpers.AssertNilError(t, err)
 	secondMatrix.values[0] = []float64{1, 2}
 	secondMatrix.values[1] = []float64{3, 4}
 	secondMatrix.values[2] = []float64{5, 6}
@@ -200,12 +207,14 @@ func TestMatrix_IsEqual(t *testing.T) {
 //  none
 //
 func TestMatrix_IsEqual_Different(t *testing.T) {
-	firstMatrix, _ := Init(3, 2)
+	firstMatrix, err := Init(3, 2)
+	test_helpers.AssertNilError(t, err)
 	firstMatrix.values[0] = []float64{1, 2}
 	firstMatrix.values[1] = []float64{3, 4}
 	firstMatrix.values[2] = []float64{5, 6}
 
-	secondMatrix, _ := Init(3, 2)
+	secondMatrix, err := Init(3, 2)
+	test_helpers.AssertNilError(t, err)
 	secondMatrix.values[0] = []float64{10, 20}
 	secondMatrix.values[1] = []float64{30, 40}
 	secondMatrix.values[2] = []float64{50, 60}
@@ -223,8 +232,10 @@ func TestMatrix_IsEqual_Different(t *testing.T) {
 //  none
 //
 func TestMatrix_IsEqual_DifferentLines(t *testing.T) {
-	firstMatrix, _ := Init(2, 2)
-	secondMatrix, _ := Init(3, 2)
+	firstMatrix, err := Init(2, 2)
+	test_helpers.AssertNilError(t, err)
+	secondMatrix, err := Init(3, 2)
+	test_helpers.AssertNilError(t, err)
 
 	areMatricesEqual := firstMatrix.IsEqual(secondMatrix)
 	test_helpers.AssertEqual(t, false, areMatricesEqual)
@@ -239,8 +250,10 @@ func TestMatrix_IsEqual_DifferentLines(t *testing.T) {
 //  none
 //
 func TestMatrix_IsEqual_DifferentColumns(t *testing.T) {
-	firstMatrix, _ := Init(3, 3)
-	secondMatrix, _ := Init(3, 2)
+	firstMatrix, err := Init(3, 3)
+	test_helpers.AssertNilError(t, err)
+	secondMatrix, err := Init(3, 2)
+	test_helpers.AssertNilError(t, err)
 
 	areMatricesEqual := firstMatrix.IsEqual(secondMatrix)
 	test_helpers.AssertEqual(t, false, areMatricesEqual)
@@ -255,7 +268,8 @@ func TestMatrix_IsEqual_DifferentColumns(t *testing.T) {
 //  none
 //
 func TestMatrix_CopyAllValues(t *testing.T) {
-	matrix, _ := Init(2, 3)
+	matrix, err := Init(2, 3)
+	test_helpers.AssertNilError(t, err)
 	matrix.values[0] = []float64{1, 2, 3}
 	matrix.values[1] = []float64{4, 5, 6}
 
@@ -264,7 +278,8 @@ func TestMatrix_CopyAllValues(t *testing.T) {
 	areEqual := true
 	for lineIndex := 0; lineIndex < matrix.Lines(); lineIndex++ {
 		for columnIndex := 0; columnIndex < matrix.Columns(); columnIndex++ {
-			expectedValue, _ := matrix.GetValue(lineIndex, columnIndex)
+			expectedValue, err := matrix.GetValue(lineIndex, columnIndex)
+			test_helpers.AssertNilError(t, err)
 			if copiedValues[lineIndex][columnIndex] != expectedValue {
 				areEqual = false
 			}
@@ -283,7 +298,8 @@ func TestMatrix_CopyAllValues(t *testing.T) {
 //  none
 //
 func TestMatrix_ToString(t *testing.T) {
-	matrix, _ := Init(2, 3)
+	matrix, err := Init(2, 3)
+	test_helpers.AssertNilError(t, err)
 	matrix.values[0] = []float64{1, 2, 3}
 	matrix.values[1] = []float64{4, 5, 6}
 	expectedMatrixAsString := fmt.Sprintf(
