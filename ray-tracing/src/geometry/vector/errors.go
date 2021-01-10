@@ -8,30 +8,30 @@ import (
 // differentDimensionError is a function to get the error where two vectors do not have the same dimension.
 //
 // Parameters:
-//	vect1 - The first vector.
-//	vect2 - The second vector.
+//	firstVector  - The first vector.
+//	secondVector - The second vector.
 //
 // Returns:
 //  An Error
 //
-func differentDimensionError(vect1, vect2 *Vector) error {
+func differentDimensionError(firstVector, secondVector *Vector) error {
 	errorMessage := fmt.Sprintf(
 		"Invalid dimension of vector. Expected: %d and got: %d.\n",
-		len(vect1.Coordinates),
-		len(vect2.Coordinates))
+		firstVector.Dimension(),
+		secondVector.Dimension())
 	return errors.New(errorMessage)
 }
 
 // non3DError is a function to get the error where a vector is not 3D.
 //
 // Parameters:
-//  vect - The first vector.
+//  vector - The vector.
 //
 // Returns:
 //  An Error.
 //
-func non3DError(vect *Vector) error {
-	errorMessage := fmt.Sprintf("Invalid dimension of vector. Expected 3D and got %d.", len(vect.Coordinates))
+func non3DError(vector *Vector) error {
+	errorMessage := fmt.Sprintf("Invalid dimension of vector. Expected 3D and got %d.", vector.Dimension())
 	return errors.New(errorMessage)
 }
 
@@ -45,5 +45,20 @@ func non3DError(vect *Vector) error {
 //
 func negativeDimensionError(dimension int) error {
 	errorMessage := fmt.Sprintf("Invalid vector size %d.", dimension)
+	return errors.New(errorMessage)
+}
+
+// indexError is the error where we try to access an index out of the limits of the Vector.
+//
+// Parameters:
+//	vector - The Vector.
+//	index  - The index.
+//
+// Returns:
+//  An Error.
+//
+func indexError(vector *Vector, index int) error {
+	errorMessage := fmt.Sprintf(
+		"Index out of limits of the vector. Expected from 0 to: %v and got %v.", vector.Dimension(), index)
 	return errors.New(errorMessage)
 }

@@ -6,13 +6,9 @@ import "fmt"
 //
 // Members:
 // 	values  - Values of the matrix.
-// 	lines   - Number of Lines of the matrix.
-// 	columns - Number of Columns of the matrix.
 //
 type Matrix struct {
 	values  [][]float64
-	lines   int
-	columns int
 }
 
 // GetValue is a getter for the Matrix's values.
@@ -41,7 +37,7 @@ func (matrix *Matrix) GetValue(lineIndex, columnIndex int) (float64, error) {
 // 	The lines of the Matrix.
 //
 func (matrix *Matrix) Lines() int {
-	return matrix.lines
+	return len(matrix.values)
 }
 
 // Columns is a getter for the Matrix's columns.
@@ -53,7 +49,7 @@ func (matrix *Matrix) Lines() int {
 // 	The columns of the Matrix.
 //
 func (matrix *Matrix) Columns() int {
-	return matrix.columns
+	return len(matrix.values[0])
 }
 
 // SetValue is a setter for the Matrix's values.
@@ -119,15 +115,15 @@ func (matrix *Matrix) ToString() string {
 // 	All the values of the matrix.
 //
 func (matrix *Matrix) CopyAllValues() [][]float64 {
-	copiedMatrix := make([][]float64, matrix.Lines())
+	copiedMatrixValues := make([][]float64, matrix.Lines())
 	for lineIndex := 0; lineIndex < matrix.Lines(); lineIndex++ {
-		copiedMatrix[lineIndex] = make([]float64, matrix.Columns())
+		copiedMatrixValues[lineIndex] = make([]float64, matrix.Columns())
 		for columnIndex := 0; columnIndex < matrix.Columns(); columnIndex++ {
 			matrixValue, _ := matrix.GetValue(lineIndex, columnIndex)
-			copiedMatrix[lineIndex][columnIndex] = matrixValue
+			copiedMatrixValues[lineIndex][columnIndex] = matrixValue
 		}
 	}
-	return copiedMatrix
+	return copiedMatrixValues
 }
 
 // Init is the constructor.
@@ -144,7 +140,7 @@ func Init(lines, columns int) (*Matrix, error) {
 	if lines <= 0 || columns <= 0 {
 		return nil, invalidSize(lines, columns)
 	}
-	matrix := Matrix{values: make([][]float64, lines), lines: lines, columns: columns}
+	matrix := Matrix{values: make([][]float64, lines)}
 	for lineIndex := 0; lineIndex < lines; lineIndex++ {
 		matrix.values[lineIndex] = make([]float64, columns)
 	}
