@@ -16,7 +16,7 @@ type Controller struct {}
 // 	A Matrix.
 //  An error.
 //
-func (_ *Controller) BuildIdentity(size int) (*Matrix, error) {
+func (*Controller) BuildIdentity(size int) (*Matrix, error) {
 	if size < 1 {
 		return nil, invalidSize(size, size)
 	}
@@ -35,7 +35,7 @@ func (_ *Controller) BuildIdentity(size int) (*Matrix, error) {
 // Returns:
 // 	The transposed Matrix.
 //
-func (_ *Controller) Transpose(matrix *Matrix) *Matrix {
+func (*Controller) Transpose(matrix *Matrix) *Matrix {
 	transposedMatrix, _ := Init(matrix.Columns(), matrix.Lines())
 	for lineIndex := 0; lineIndex < matrix.Lines(); lineIndex++ {
 		for columnIndex := 0; columnIndex < matrix.Columns(); columnIndex++ {
@@ -55,7 +55,7 @@ func (_ *Controller) Transpose(matrix *Matrix) *Matrix {
 // Returns:
 // 	The resulting matrix.
 //
-func (_ *Controller) ScalarMultiplication(matrix *Matrix, scalar float64) *Matrix {
+func (*Controller) ScalarMultiplication(matrix *Matrix, scalar float64) *Matrix {
 	newMatrix, _ := Init(matrix.Lines(), matrix.Columns())
 	for lineIndex := 0; lineIndex < matrix.Lines(); lineIndex++ {
 		for columnIndex := 0; columnIndex < matrix.Columns(); columnIndex++ {
@@ -75,7 +75,7 @@ func (_ *Controller) ScalarMultiplication(matrix *Matrix, scalar float64) *Matri
 // Returns:
 // 	The resulting matrix
 //
-func (_ *Controller) MultiplyMatrix(firstMatrix *Matrix, secondMatrix *Matrix) (*Matrix, error) {
+func (*Controller) MultiplyMatrix(firstMatrix *Matrix, secondMatrix *Matrix) (*Matrix, error) {
 	if firstMatrix.Columns() != secondMatrix.Lines() {
 		return nil, incompatibleSize(firstMatrix, secondMatrix)
 	}

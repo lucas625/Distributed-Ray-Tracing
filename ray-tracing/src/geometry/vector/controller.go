@@ -4,6 +4,11 @@ import (
 	"math"
 )
 
+// Controller is a class for the vector is controller.
+//
+// Members:
+// 	none
+//
 type Controller struct {}
 
 // ScalarMultiplication is a function for Scalar Multiplication.
@@ -15,7 +20,7 @@ type Controller struct {}
 // Returns:
 // 	The resulting Vector.
 //
-func (_ *Controller) ScalarMultiplication(vector *Vector, scalar float64) *Vector {
+func (*Controller) ScalarMultiplication(vector *Vector, scalar float64) *Vector {
 	newVector, _ := Init(vector.Dimension())
 	for i := 0; i < vector.Dimension(); i++ {
 		vectorCoordinate, _ := vector.GetCoordinate(i)
@@ -63,7 +68,7 @@ func (controller *Controller) Sum(firstVector *Vector, secondVector *Vector, fir
 // 	The resulting sum.
 //	An error.
 //
-func (_ *Controller) DotProduct(firstVector *Vector, secondVector *Vector) (float64, error) {
+func (*Controller) DotProduct(firstVector *Vector, secondVector *Vector) (float64, error) {
 	if !firstVector.IsEqualDimension(secondVector) {
 		return 0, differentDimensionError(firstVector, secondVector)
 	}
@@ -86,7 +91,7 @@ func (_ *Controller) DotProduct(firstVector *Vector, secondVector *Vector) (floa
 // 	The resulting Vector.
 //  An error.
 //
-func (_ *Controller) CrossProduct(firstVector, secondVector *Vector) (*Vector, error) {
+func (*Controller) CrossProduct(firstVector, secondVector *Vector) (*Vector, error) {
 	if !firstVector.IsEqualDimension(secondVector) {
 		return nil, differentDimensionError(firstVector, secondVector)
 	}

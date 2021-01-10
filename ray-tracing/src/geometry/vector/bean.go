@@ -9,7 +9,7 @@ type Vector struct {
 	coordinates []float64
 }
 
-// Coordinates gets a coordinate of a Vector.
+// GetCoordinate gets a coordinate of a Vector.
 //
 // Parameters:
 // 	index - The index of the coordinate.
