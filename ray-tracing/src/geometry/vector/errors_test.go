@@ -2,6 +2,7 @@ package vector
 
 import (
 	"fmt"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/test_helpers"
 	"testing"
 )
 
@@ -15,18 +16,16 @@ import (
 //  none
 //
 func TestVector_DifferentDimensionError(t *testing.T) {
-	firstVector, _ := Init(1)
-	secondVector, _ := Init(2)
-	err := differentDimensionError(firstVector, secondVector)
+	firstVector, err := Init(1)
+	test_helpers.AssertNilError(t, err)
+	secondVector, err := Init(2)
+	test_helpers.AssertNilError(t, err)
 	expectedErrorMessage := fmt.Sprintf(
 		"Invalid dimension of vector. Expected: %d and got: %d.\n", firstVector.Dimension(), secondVector.Dimension())
-	if err == nil {
-		t.Errorf(
-			"No different dimension error return for vectors dimension: %d %d.", firstVector.Dimension(),
-			secondVector.Dimension())
-	} else if err.Error() != expectedErrorMessage {
-		t.Errorf("Wrong error message for vectors with different dimension: \"%s\".", err.Error())
-	}
+
+	err = differentDimensionError(firstVector, secondVector)
+	test_helpers.AssertNotNilError(t, err)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
 
 // TestVector_Non3DError tests non 3D vector error.
@@ -38,14 +37,13 @@ func TestVector_DifferentDimensionError(t *testing.T) {
 //  none
 //
 func TestVector_Non3DError(t *testing.T) {
-	vector, _ := Init(2)
-	err := non3DError(vector)
+	vector, err := Init(2)
+	test_helpers.AssertNilError(t, err)
 	expectedErrorMessage := fmt.Sprintf("Invalid dimension of vector. Expected 3D and got %d.", vector.Dimension())
-	if err == nil {
-		t.Errorf("No non 3D error return for vector with dimension: %d.", vector.Dimension())
-	} else if err.Error() != expectedErrorMessage {
-		t.Errorf("Wrong error message for non 3D vector: \"%s\".", err.Error())
-	}
+
+	err = non3DError(vector)
+	test_helpers.AssertNotNilError(t, err)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
 
 // TestVector_NegativeDimensionError tests vector with negative dimension error.
@@ -58,11 +56,9 @@ func TestVector_Non3DError(t *testing.T) {
 //
 func TestVector_NegativeDimensionError(t *testing.T) {
 	dimension := -1
-	err := negativeDimensionError(dimension)
 	expectedErrorMessage := fmt.Sprintf("Invalid vector size %d.", dimension)
-	if err == nil {
-		t.Errorf("No negative dimension error return for dimension: %d.", dimension)
-	} else if err.Error() != expectedErrorMessage {
-		t.Errorf("Wrong error message for negative dimension: \"%s\".", err.Error())
-	}
+
+	err := negativeDimensionError(dimension)
+	test_helpers.AssertNotNilError(t, err)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
