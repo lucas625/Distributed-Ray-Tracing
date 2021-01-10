@@ -21,7 +21,7 @@ func (vector *Vector) GetCoordinate(index int) float64 {
 	return vector.coordinates[index]
 }
 
-// SetCoordinates is the setter for a Vector's coordinates.
+// SetCoordinate is the setter for a Vector's coordinates.
 //
 // Parameters:
 // 	index          - the index of the new coordinate.
@@ -30,7 +30,7 @@ func (vector *Vector) GetCoordinate(index int) float64 {
 // Returns:
 // 	none
 //
-func (vector *Vector) SetCoordinates(index int, newCoordinate float64) {
+func (vector *Vector) SetCoordinate(index int, newCoordinate float64) {
 	vector.coordinates[index] = newCoordinate
 }
 
@@ -40,7 +40,7 @@ func (vector *Vector) SetCoordinates(index int, newCoordinate float64) {
 // 	none
 //
 // Returns:
-// 	none
+// 	the number of dimensions of the vector.
 //
 func (vector *Vector) Dimension() int {
 	return len(vector.coordinates)
