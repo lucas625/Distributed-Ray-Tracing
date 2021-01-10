@@ -115,15 +115,15 @@ func (matrix *Matrix) ToString() string {
 // 	All the values of the matrix.
 //
 func (matrix *Matrix) CopyAllValues() [][]float64 {
-	copiedMatrix := make([][]float64, matrix.Lines())
+	copiedMatrixValues := make([][]float64, matrix.Lines())
 	for lineIndex := 0; lineIndex < matrix.Lines(); lineIndex++ {
-		copiedMatrix[lineIndex] = make([]float64, matrix.Columns())
+		copiedMatrixValues[lineIndex] = make([]float64, matrix.Columns())
 		for columnIndex := 0; columnIndex < matrix.Columns(); columnIndex++ {
 			matrixValue, _ := matrix.GetValue(lineIndex, columnIndex)
-			copiedMatrix[lineIndex][columnIndex] = matrixValue
+			copiedMatrixValues[lineIndex][columnIndex] = matrixValue
 		}
 	}
-	return copiedMatrix
+	return copiedMatrixValues
 }
 
 // Init is the constructor.

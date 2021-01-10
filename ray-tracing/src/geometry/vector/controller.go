@@ -18,7 +18,8 @@ type Controller struct {}
 func (_ *Controller) ScalarMultiplication(vector *Vector, scalar float64) *Vector {
 	newVector, _ := Init(vector.Dimension())
 	for i := 0; i < vector.Dimension(); i++ {
-		newVector.SetCoordinate(i, scalar * vector.GetCoordinate(i))
+		vectorCoordinate, _ := vector.GetCoordinate(i)
+		newVector.SetCoordinate(i, scalar * vectorCoordinate)
 	}
 	return newVector
 }
@@ -45,8 +46,9 @@ func (controller *Controller) Sum(firstVector *Vector, secondVector *Vector, fir
 	
 	resultingVector, _ := Init(firstVector.Dimension())
 	for i := 0; i < firstVector.Dimension(); i++ {
-		resultingVector.SetCoordinate(i, firstMultipliedVector.GetCoordinate(i) +
-			secondMultipliedVector.GetCoordinate(i))
+		firstMultipliedVectorCoordinate, _ := firstMultipliedVector.GetCoordinate(i)
+		secondMultipliedVectorCoordinate, _ := secondMultipliedVector.GetCoordinate(i)
+		resultingVector.SetCoordinate(i, firstMultipliedVectorCoordinate + secondMultipliedVectorCoordinate)
 	}
 	return resultingVector, nil
 }
@@ -67,7 +69,9 @@ func (_ *Controller) DotProduct(firstVector *Vector, secondVector *Vector) (floa
 	}
 	var totalSum float64
 	for i := 0; i < firstVector.Dimension(); i++ {
-		totalSum += firstVector.GetCoordinate(i) * secondVector.GetCoordinate(i)
+		firstVectorCoordinate, _ := firstVector.GetCoordinate(i)
+		secondVectorCoordinate, _ := secondVector.GetCoordinate(i)
+		totalSum += firstVectorCoordinate * secondVectorCoordinate
 	}
 	return totalSum, nil
 }
@@ -90,12 +94,15 @@ func (_ *Controller) CrossProduct(firstVector, secondVector *Vector) (*Vector, e
 		return nil, non3DError(firstVector)
 	}
 
-	i := (firstVector.GetCoordinate(1) * secondVector.GetCoordinate(2)) -
-		(firstVector.GetCoordinate(2) * secondVector.GetCoordinate(1))
-	j := (firstVector.GetCoordinate(2) * secondVector.GetCoordinate(0)) -
-		(firstVector.GetCoordinate(0) * secondVector.GetCoordinate(2))
-	k := (firstVector.GetCoordinate(0) * secondVector.GetCoordinate(1)) -
-		(firstVector.GetCoordinate(1) * secondVector.GetCoordinate(0))
+	firstVectorCoordinates := firstVector.CopyAllCoordinates()
+	secondVectorCoordinates := secondVector.CopyAllCoordinates()
+
+	i := (firstVectorCoordinates[1] * secondVectorCoordinates[2]) -
+		(firstVectorCoordinates[2] * secondVectorCoordinates[1])
+	j := (firstVectorCoordinates[2] * secondVectorCoordinates[0]) -
+		(firstVectorCoordinates[0] * secondVectorCoordinates[2])
+	k := (firstVectorCoordinates[0] * secondVectorCoordinates[1]) -
+		(firstVectorCoordinates[1] * secondVectorCoordinates[0])
 
 	newVector, _ := Init(3)
 	newVector.SetCoordinate(0, i)

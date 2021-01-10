@@ -17,8 +17,11 @@ type Vector struct {
 // Returns:
 // 	The coordinates of the vector.
 //
-func (vector *Vector) GetCoordinate(index int) float64 {
-	return vector.coordinates[index]
+func (vector *Vector) GetCoordinate(index int) (float64, error) {
+	if index < 0 || index >= vector.Dimension() {
+		return 0, indexError(vector, index)
+	}
+	return vector.coordinates[index], nil
 }
 
 // SetCoordinate is the setter for a Vector's coordinates.
@@ -30,8 +33,12 @@ func (vector *Vector) GetCoordinate(index int) float64 {
 // Returns:
 // 	none
 //
-func (vector *Vector) SetCoordinate(index int, newCoordinate float64) {
+func (vector *Vector) SetCoordinate(index int, newCoordinate float64) error {
+	if index < 0 || index >= vector.Dimension() {
+		return indexError(vector, index)
+	}
 	vector.coordinates[index] = newCoordinate
+	return nil
 }
 
 // Dimension gets the dimension of the vector.
@@ -71,12 +78,32 @@ func (vector *Vector) IsEqual(other *Vector) bool {
 		return false
 	}
 	for index := 0; index < vector.Dimension(); index++ {
-		if vector.GetCoordinate(index) != other.GetCoordinate(index) {
+		vectorCoordinate, _ := vector.GetCoordinate(index)
+		otherCoordinate, _ := other.GetCoordinate(index)
+		if vectorCoordinate != otherCoordinate {
 			return false
 		}
 	}
 	return true
 }
+
+// CopyAllCoordinates gets all values of the Vector as a copy.
+//
+// Parameters:
+// 	none
+//
+// Returns:
+// 	All the values of the vector.
+//
+func (vector *Vector) CopyAllCoordinates() []float64 {
+	copiedVectorValues := make([]float64, vector.Dimension())
+	for index := 0; index < vector.Dimension(); index++ {
+		vectorValue, _ := vector.GetCoordinate(index)
+		copiedVectorValues[index] = vectorValue
+	}
+	return copiedVectorValues
+}
+
 // Init is a function to initialize a Vector.
 //
 // Parameters:

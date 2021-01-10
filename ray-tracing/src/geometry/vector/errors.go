@@ -47,3 +47,18 @@ func negativeDimensionError(dimension int) error {
 	errorMessage := fmt.Sprintf("Invalid vector size %d.", dimension)
 	return errors.New(errorMessage)
 }
+
+// indexError is the error where we try to access an index out of the limits of the Vector.
+//
+// Parameters:
+//	vector - The Vector.
+//	index  - The index.
+//
+// Returns:
+//  An Error.
+//
+func indexError(vector *Vector, index int) error {
+	errorMessage := fmt.Sprintf(
+		"Index out of limits of the vector. Expected from 0 to: %v and got %v.", vector.Dimension(), index)
+	return errors.New(errorMessage)
+}
