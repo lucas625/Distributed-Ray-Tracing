@@ -4,6 +4,8 @@ import (
 	"math"
 )
 
+type Controller struct {}
+
 // ScalarMultiplication is a function for Scalar Multiplication.
 //
 // Parameters:
@@ -13,7 +15,7 @@ import (
 // Returns:
 // 	The resulting Vector.
 //
-func ScalarMultiplication(vector *Vector, scalar float64) *Vector {
+func (_ *Controller) ScalarMultiplication(vector *Vector, scalar float64) *Vector {
 	newVector, _ := Init(vector.Dimension())
 	for i := 0; i < vector.Dimension(); i++ {
 		newVector.SetCoordinate(i, scalar * vector.GetCoordinate(i))
@@ -33,13 +35,13 @@ func ScalarMultiplication(vector *Vector, scalar float64) *Vector {
 // 	The resulting Vector.
 //	An error.
 //
-func Sum(firstVector *Vector, secondVector *Vector, firstScalar, secondScalar float64) (*Vector, error) {
+func (controller *Controller) Sum(firstVector *Vector, secondVector *Vector, firstScalar, secondScalar float64) (*Vector, error) {
 	if !firstVector.IsEqualDimension(secondVector) {
 		return nil, differentDimensionError(firstVector, secondVector)
 	}
 
-	firstMultipliedVector := ScalarMultiplication(firstVector, firstScalar)
-	secondMultipliedVector := ScalarMultiplication(secondVector, secondScalar)
+	firstMultipliedVector := controller.ScalarMultiplication(firstVector, firstScalar)
+	secondMultipliedVector := controller.ScalarMultiplication(secondVector, secondScalar)
 	
 	resultingVector, _ := Init(firstVector.Dimension())
 	for i := 0; i < firstVector.Dimension(); i++ {
@@ -59,7 +61,7 @@ func Sum(firstVector *Vector, secondVector *Vector, firstScalar, secondScalar fl
 // 	The resulting sum.
 //	An error.
 //
-func DotProduct(firstVector *Vector, secondVector *Vector) (float64, error) {
+func (_ *Controller) DotProduct(firstVector *Vector, secondVector *Vector) (float64, error) {
 	if !firstVector.IsEqualDimension(secondVector) {
 		return 0, differentDimensionError(firstVector, secondVector)
 	}
@@ -80,7 +82,7 @@ func DotProduct(firstVector *Vector, secondVector *Vector) (float64, error) {
 // 	The resulting Vector.
 //  An error.
 //
-func CrossProduct(firstVector, secondVector *Vector) (*Vector, error) {
+func (_ *Controller) CrossProduct(firstVector, secondVector *Vector) (*Vector, error) {
 	if !firstVector.IsEqualDimension(secondVector) {
 		return nil, differentDimensionError(firstVector, secondVector)
 	}
@@ -111,8 +113,8 @@ func CrossProduct(firstVector, secondVector *Vector) (*Vector, error) {
 // Returns:
 // 	The norm of the Vector.
 //
-func Norm(vector *Vector) float64 {
-	dotProduct, _ := DotProduct(vector, vector)
+func (controller *Controller) Norm(vector *Vector) float64 {
+	dotProduct, _ := controller.DotProduct(vector, vector)
 	return math.Sqrt(dotProduct)
 }
 
@@ -124,11 +126,11 @@ func Norm(vector *Vector) float64 {
 // Returns:
 // 	The normalized Vector.
 //
-func Normalize(vector *Vector) *Vector {
-	vectorNorm := Norm(vector)
+func (controller *Controller) Normalize(vector *Vector) *Vector {
+	vectorNorm := controller.Norm(vector)
 	var normalizedVector *Vector
 	if vectorNorm != 0 {
-		normalizedVector = ScalarMultiplication(vector, 1/vectorNorm)
+		normalizedVector = controller.ScalarMultiplication(vector, 1/vectorNorm)
 	} else {
 		normalizedVector, _ = Init(vector.Dimension())
 	}
@@ -146,13 +148,13 @@ func Normalize(vector *Vector) *Vector {
 // 	The resulting Vector.
 //  An error.
 //
-func ProjectOnVector(firstVector, secondVector *Vector) (*Vector, error) {
+func (controller *Controller) ProjectOnVector(firstVector, secondVector *Vector) (*Vector, error) {
 	if !firstVector.IsEqualDimension(secondVector) {
 		return nil, differentDimensionError(firstVector, secondVector)
 	}
-	topConstant, _ := DotProduct(firstVector, secondVector)
-	bottomConstant, _ := DotProduct(secondVector, secondVector)
-	return ScalarMultiplication(secondVector, topConstant/bottomConstant), nil
+	topConstant, _ := controller.DotProduct(firstVector, secondVector)
+	bottomConstant, _ := controller.DotProduct(secondVector, secondVector)
+	return controller.ScalarMultiplication(secondVector, topConstant/bottomConstant), nil
 }
 
 // Orthogonalize is a function to orthogonalize two vectors.
@@ -165,12 +167,12 @@ func ProjectOnVector(firstVector, secondVector *Vector) (*Vector, error) {
 // 	The resulting Vector.
 //  An error.
 //
-func Orthogonalize(firstVector, secondVector *Vector) (*Vector, error) {
-	newVector, err := ProjectOnVector(firstVector, secondVector)
+func (controller *Controller) Orthogonalize(firstVector, secondVector *Vector) (*Vector, error) {
+	newVector, err := controller.ProjectOnVector(firstVector, secondVector)
 	if err != nil {
 		return nil, err
 	}
-	return Sum(firstVector, newVector, 1, -1)
+	return controller.Sum(firstVector, newVector, 1, -1)
 }
 
 // IsOrthogonalVector is a function to check if two vectors are orthogonal to each other.
@@ -183,8 +185,8 @@ func Orthogonalize(firstVector, secondVector *Vector) (*Vector, error) {
 // 	If the vectors are orthogonal to each other.
 //  An error.
 //
-func IsOrthogonalVector(firstVector, secondVector *Vector) (bool, error) {
-	dotProduct, err := DotProduct(firstVector, secondVector)
+func (controller *Controller) IsOrthogonalVector(firstVector, secondVector *Vector) (bool, error) {
+	dotProduct, err := controller.DotProduct(firstVector, secondVector)
 	if err != nil {
 		return false, err
 	}

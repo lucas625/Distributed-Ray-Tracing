@@ -18,8 +18,9 @@ import (
 func TestVector_ScalarMultiplication(t *testing.T) {
 	vector := &Vector{coordinates: []float64{10, 20, 30}}
 	expectedVector := &Vector{coordinates: []float64{20, 40, 60}}
+	controller := Controller{}
 
-	multipliedVector := ScalarMultiplication(vector, 2)
+	multipliedVector := controller.ScalarMultiplication(vector, 2)
 
 	areVectorsEqual := expectedVector.IsEqual(multipliedVector)
 	test_helpers.AssertEqual(t, true, areVectorsEqual)
@@ -37,8 +38,9 @@ func TestVector_Sum(t *testing.T) {
 	firstVector := &Vector{coordinates: []float64{10, 20, 30}}
 	secondVector := &Vector{coordinates: []float64{5, 10, 20}}
 	expectedVector := &Vector{coordinates: []float64{15, 30, 50}}
+	controller := Controller{}
 
-	vectorSum, err := Sum(firstVector, secondVector, 1, 1)
+	vectorSum, err := controller.Sum(firstVector, secondVector, 1, 1)
 	test_helpers.AssertNilError(t, err)
 
 	areVectorsEqual := expectedVector.IsEqual(vectorSum)
@@ -58,8 +60,9 @@ func TestVector_Sum_DifferentDimensions(t *testing.T) {
 	secondVector := &Vector{coordinates: []float64{5, 10}}
 	expectedErrorMessage := fmt.Sprintf(
 		"Invalid dimension of vector. Expected: %d and got: %d.\n", firstVector.Dimension(), secondVector.Dimension())
+	controller := Controller{}
 
-	_, err := Sum(firstVector, secondVector, 1, 1)
+	_, err := controller.Sum(firstVector, secondVector, 1, 1)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
@@ -76,8 +79,9 @@ func TestVector_Sum_Subtraction(t *testing.T) {
 	firstVector := &Vector{coordinates: []float64{10, 20, 30}}
 	secondVector := &Vector{coordinates: []float64{5, 10, 20}}
 	expectedVector := &Vector{coordinates: []float64{25, 50, 70}}
+	controller := Controller{}
 
-	vectorSum, err := Sum(firstVector, secondVector, 3, -1)
+	vectorSum, err := controller.Sum(firstVector, secondVector, 3, -1)
 	test_helpers.AssertNilError(t, err)
 
 	areVectorsEqual := expectedVector.IsEqual(vectorSum)
@@ -96,8 +100,9 @@ func TestVector_DotProduct(t *testing.T) {
 	firstVector := &Vector{coordinates: []float64{2, 3, 5}}
 	secondVector := &Vector{coordinates: []float64{1, 2, 2}}
 	expectedDotProduct := float64(18)
+	controller := Controller{}
 
-	dotProduct, err := DotProduct(firstVector, secondVector)
+	dotProduct, err := controller.DotProduct(firstVector, secondVector)
 	test_helpers.AssertNilError(t, err)
 	test_helpers.AssertEqual(t, expectedDotProduct, dotProduct)
 }
@@ -116,8 +121,9 @@ func TestVector_DotProduct_DifferentDimensions(t *testing.T) {
 	expectedErrorMessage := fmt.Sprintf(
 		"Invalid dimension of vector. Expected: %d and got: %d.\n", firstVector.Dimension(),
 		secondVector.Dimension())
+	controller := Controller{}
 
-	_, err := DotProduct(firstVector, secondVector)
+	_, err := controller.DotProduct(firstVector, secondVector)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
@@ -134,8 +140,9 @@ func TestVector_CrossProduct(t *testing.T) {
 	firstVector := &Vector{coordinates: []float64{2, 3, 5}}
 	secondVector := &Vector{coordinates: []float64{1, 2, 2}}
 	expectedCrossProduct := &Vector{coordinates: []float64{-4, 1, 1}}
+	controller := Controller{}
 
-	crossProduct, err := CrossProduct(firstVector, secondVector)
+	crossProduct, err := controller.CrossProduct(firstVector, secondVector)
 
 	areVectorsEqual := expectedCrossProduct.IsEqual(crossProduct)
 	test_helpers.AssertNilError(t, err)
@@ -156,8 +163,9 @@ func TestVector_CrossProduct_DifferentDimensions(t *testing.T) {
 	expectedErrorMessage := fmt.Sprintf(
 		"Invalid dimension of vector. Expected: %d and got: %d.\n", firstVector.Dimension(),
 		secondVector.Dimension())
+	controller := Controller{}
 
-	_, err := CrossProduct(firstVector, secondVector)
+	_, err := controller.CrossProduct(firstVector, secondVector)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
@@ -174,8 +182,9 @@ func TestVector_CrossProduct_Non3D(t *testing.T) {
 	firstVector := &Vector{coordinates: []float64{2, 3}}
 	secondVector := &Vector{coordinates: []float64{1, 2}}
 	expectedErrorMessage := fmt.Sprintf("Invalid dimension of vector. Expected 3D and got %d.", firstVector.Dimension())
+	controller := Controller{}
 
-	_, err := CrossProduct(firstVector, secondVector)
+	_, err := controller.CrossProduct(firstVector, secondVector)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
@@ -191,8 +200,9 @@ func TestVector_CrossProduct_Non3D(t *testing.T) {
 func TestVector_Norm(t *testing.T) {
 	vector := &Vector{coordinates: []float64{3, 4}}
 	expectedVectorNorm := float64(5)
+	controller := Controller{}
 
-	vectorNorm := Norm(vector)
+	vectorNorm := controller.Norm(vector)
 	test_helpers.AssertEqual(t, expectedVectorNorm, vectorNorm)
 }
 
@@ -207,8 +217,9 @@ func TestVector_Norm(t *testing.T) {
 func TestVector_Normalize(t *testing.T) {
 	vector := &Vector{coordinates: []float64{2, 1, 2}}
 	expectedNormalizedVector := &Vector{coordinates: []float64{float64(2)/3, float64(1)/3, float64(2)/3}}
+	controller := Controller{}
 
-	normalizedVector := Normalize(vector)
+	normalizedVector := controller.Normalize(vector)
 	areVectorsEqual := expectedNormalizedVector.IsEqual(normalizedVector)
 	test_helpers.AssertEqual(t, true, areVectorsEqual)
 }
@@ -224,8 +235,9 @@ func TestVector_Normalize(t *testing.T) {
 func TestVector_Normalize_NullVector(t *testing.T) {
 	vector := &Vector{coordinates: []float64{0, 0, 0}}
 	expectedNormalizedVector := &Vector{coordinates: []float64{0, 0, 0}}
+	controller := Controller{}
 
-	normalizedVector := Normalize(vector)
+	normalizedVector := controller.Normalize(vector)
 	areVectorsEqual := expectedNormalizedVector.IsEqual(normalizedVector)
 	test_helpers.AssertEqual(t, true, areVectorsEqual)
 }
@@ -242,8 +254,9 @@ func TestVector_ProjectOnVector(t *testing.T) {
 	firstVector := &Vector{coordinates: []float64{2, 1, 1}}
 	secondVector := &Vector{coordinates: []float64{1, -1, 0}}
 	expectedProjection := &Vector{coordinates: []float64{float64(1)/2, float64(-1)/2, 0}}
+	controller := Controller{}
 
-	projection, err := ProjectOnVector(firstVector, secondVector)
+	projection, err := controller.ProjectOnVector(firstVector, secondVector)
 	test_helpers.AssertNilError(t, err)
 
 	areVectorsEqual := expectedProjection.IsEqual(projection)
@@ -263,8 +276,9 @@ func TestVector_ProjectOnVector_DifferentDimensions(t *testing.T) {
 	secondVector := &Vector{coordinates: []float64{1, -1}}
 	expectedErrorMessage := fmt.Sprintf(
 		"Invalid dimension of vector. Expected: %d and got: %d.\n", firstVector.Dimension(), secondVector.Dimension())
+	controller := Controller{}
 
-	_, err := ProjectOnVector(firstVector, secondVector)
+	_, err := controller.ProjectOnVector(firstVector, secondVector)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
@@ -281,8 +295,9 @@ func TestVector_Orthogonalize(t *testing.T) {
 	firstVector := &Vector{coordinates: []float64{2, 1, 1}}
 	secondVector := &Vector{coordinates: []float64{1, -1, 0}}
 	expectedOrthogonalizedVector := &Vector{coordinates: []float64{float64(3)/2, float64(3)/2, 1}}
+	controller := Controller{}
 
-	orthogonalizedVector, err := Orthogonalize(firstVector, secondVector)
+	orthogonalizedVector, err := controller.Orthogonalize(firstVector, secondVector)
 	test_helpers.AssertNilError(t, err)
 
 	areVectorsEqual := expectedOrthogonalizedVector.IsEqual(orthogonalizedVector)
@@ -303,8 +318,9 @@ func TestVector_Orthogonalize_DifferentDimensions(t *testing.T) {
 	secondVector := &Vector{coordinates: []float64{1, -1}}
 	expectedErrorMessage := fmt.Sprintf(
 		"Invalid dimension of vector. Expected: %d and got: %d.\n", firstVector.Dimension(), secondVector.Dimension())
+	controller := Controller{}
 
-	_, err := Orthogonalize(firstVector, secondVector)
+	_, err := controller.Orthogonalize(firstVector, secondVector)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
@@ -320,8 +336,9 @@ func TestVector_Orthogonalize_DifferentDimensions(t *testing.T) {
 func TestVector_IsOrthogonalVector(t *testing.T) {
 	firstVector := &Vector{coordinates: []float64{1, 1, 1}}
 	secondVector := &Vector{coordinates: []float64{1, -1, 0}}
+	controller := Controller{}
 
-	isOrthogonal, err := IsOrthogonalVector(firstVector, secondVector)
+	isOrthogonal, err := controller.IsOrthogonalVector(firstVector, secondVector)
 	test_helpers.AssertNilError(t, err)
 	test_helpers.AssertEqual(t, true, isOrthogonal)
 }
@@ -337,8 +354,9 @@ func TestVector_IsOrthogonalVector(t *testing.T) {
 func TestVector_IsOrthogonalVector_NotOrthogonal(t *testing.T) {
 	firstVector := &Vector{coordinates: []float64{2, 1, 1}}
 	secondVector := &Vector{coordinates: []float64{1, -1, 0}}
+	controller := Controller{}
 
-	isOrthogonal, err := IsOrthogonalVector(firstVector, secondVector)
+	isOrthogonal, err := controller.IsOrthogonalVector(firstVector, secondVector)
 	test_helpers.AssertNilError(t, err)
 	test_helpers.AssertEqual(t, false, isOrthogonal)
 }
@@ -357,8 +375,9 @@ func TestVector_IsOrthogonal_DifferentDimensions(t *testing.T) {
 	secondVector := &Vector{coordinates: []float64{1, -1}}
 	expectedErrorMessage := fmt.Sprintf(
 		"Invalid dimension of vector. Expected: %d and got: %d.\n", firstVector.Dimension(), secondVector.Dimension())
+	controller := Controller{}
 
-	_, err := IsOrthogonalVector(firstVector, secondVector)
+	_, err := controller.IsOrthogonalVector(firstVector, secondVector)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
