@@ -27,6 +27,23 @@ func (*Controller) BuildIdentity(size int) (*Matrix, error) {
 	return matrix, nil
 }
 
+// BuildHomogeneousCoordinates builds a Matrix for homogeneous coordinates.
+//
+// Parameters:
+// 	size - The number of lines and columns of the identity Matrix.
+//
+// Returns:
+// 	A Matrix.
+//  An error.
+//
+func (controller *Controller) BuildHomogeneousCoordinates(dimension int) (*Matrix, error) {
+	if dimension > 3 || dimension < 2 {
+		return nil, invalidDimensionForHomogeneousCoordinates(dimension)
+	}
+	matrix, _ := controller.BuildIdentity(dimension + 1)
+	return matrix, nil
+}
+
 // Transpose transposes a Matrix.
 //
 // Parameters:
