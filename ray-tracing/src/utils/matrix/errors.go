@@ -5,6 +5,20 @@ import (
 "fmt"
 )
 
+// invalidDimensionForHomogeneousCoordinates is the error where a Matrix has a invalid dimension for homogeneous
+// coordinates.
+//
+// Parameters:
+//	dimension - The dimension of the Matrix.
+//
+// Returns:
+//  An Error.
+//
+func invalidDimensionForHomogeneousCoordinates(dimension int) error {
+	errorMessage := fmt.Sprintf("Invalid dimension for homogeneous coodinates matrix: %d.", dimension)
+	return errors.New(errorMessage)
+}
+
 // invalidSize is the error where a Matrix has a invalid size for lines or columns.
 //
 // Parameters:

@@ -6,6 +6,26 @@ import (
 	"testing"
 )
 
+
+// TestMatrix_InvalidDimensionForHomogeneousCoordinates tests the invalid dimension for homogeneous coordinates error
+// for matrix.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestMatrix_InvalidDimensionForHomogeneousCoordinates(t *testing.T) {
+	dimension := 1
+	expectedErrorMessage := fmt.Sprintf("Invalid dimension for homogeneous coodinates matrix: %d.", dimension)
+
+	err := invalidDimensionForHomogeneousCoordinates(dimension)
+	test_helpers.AssertNotNilError(t, err)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
+}
+
+
 // TestMatrix_InvalidSizeError tests the invalid size error for matrix.
 //
 // Parameters:

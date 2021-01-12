@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-// TestMatrix_BuildIdentity tests the build identity Matrix.
+// TestMatrixController_BuildIdentity tests the build identity Matrix.
 //
 // Parameters:
 //  t - Test instance.
@@ -14,7 +14,7 @@ import (
 // Returns:
 //  none
 //
-func TestMatrix_BuildIdentity(t *testing.T) {
+func TestMatrixController_BuildIdentity(t *testing.T) {
 	size := 3
 	controller := Controller{}
 
@@ -36,7 +36,7 @@ func TestMatrix_BuildIdentity(t *testing.T) {
 	}
 }
 
-// TestMatrix_BuildIdentity_ZeroSize tests the build identity matrix with zero size.
+// TestMatrixController_BuildIdentity_ZeroSize tests the build identity matrix with zero size.
 //
 // Parameters:
 //  t - Test instance.
@@ -44,7 +44,7 @@ func TestMatrix_BuildIdentity(t *testing.T) {
 // Returns:
 //  none
 //
-func TestMatrix_BuildIdentity_ZeroSize(t *testing.T) {
+func TestMatrixController_BuildIdentity_ZeroSize(t *testing.T) {
 	size := 0
 	controller := Controller{}
 	expectedErrorMessage := fmt.Sprintf("Invalid size for matrix. lines: %d and columns: %d.", size, size)
@@ -54,7 +54,7 @@ func TestMatrix_BuildIdentity_ZeroSize(t *testing.T) {
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
 
-// TestMatrix_Transpose tests the transposition of a matrix.
+// TestMatrixController_BuildHomogeneousCoordinates_3D tests the build homogeneous coordinates Matrix.
 //
 // Parameters:
 //  t - Test instance.
@@ -62,7 +62,91 @@ func TestMatrix_BuildIdentity_ZeroSize(t *testing.T) {
 // Returns:
 //  none
 //
-func TestMatrix_Transpose(t *testing.T) {
+func TestMatrixController_BuildHomogeneousCoordinates_3D(t *testing.T) {
+	dimension := 3
+	controller := Controller{}
+
+	matrix, err := controller.BuildHomogeneousCoordinates(dimension)
+	test_helpers.AssertNilError(t, err)
+	test_helpers.AssertEqual(t, dimension + 1, matrix.Lines())
+	test_helpers.AssertEqual(t, dimension + 1, matrix.Columns())
+
+	expectedMatrix, err := controller.BuildIdentity(dimension + 1)
+	test_helpers.AssertNilError(t, err)
+	areEqual := expectedMatrix.IsEqual(matrix)
+
+	test_helpers.AssertEqual(t, true, areEqual)
+}
+
+// TestMatrixController_BuildHomogeneousCoordinates_2D tests the build homogeneous coordinates Matrix.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestMatrixController_BuildHomogeneousCoordinates_2D(t *testing.T) {
+	dimension := 2
+	controller := Controller{}
+
+	matrix, err := controller.BuildHomogeneousCoordinates(dimension)
+	test_helpers.AssertNilError(t, err)
+	test_helpers.AssertEqual(t, dimension + 1, matrix.Lines())
+	test_helpers.AssertEqual(t, dimension + 1, matrix.Columns())
+
+	expectedMatrix, err := controller.BuildIdentity(dimension + 1)
+	test_helpers.AssertNilError(t, err)
+	areEqual := expectedMatrix.IsEqual(matrix)
+
+	test_helpers.AssertEqual(t, true, areEqual)
+}
+
+// TestMatrixController_BuildHomogeneousCoordinates_1D tests the build homogeneous coordinates Matrix.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestMatrixController_BuildHomogeneousCoordinates_1D(t *testing.T) {
+	dimension := 1
+	controller := Controller{}
+	expectedErrorMessage := fmt.Sprintf("Invalid dimension for homogeneous coodinates matrix: %d.", dimension)
+
+	_, err := controller.BuildHomogeneousCoordinates(dimension)
+	test_helpers.AssertNotNilError(t, err)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
+}
+
+// TestMatrixController_BuildHomogeneousCoordinates_4D tests the build homogeneous coordinates Matrix.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestMatrixController_BuildHomogeneousCoordinates_4D(t *testing.T) {
+	dimension := 4
+	controller := Controller{}
+	expectedErrorMessage := fmt.Sprintf("Invalid dimension for homogeneous coodinates matrix: %d.", dimension)
+
+	_, err := controller.BuildHomogeneousCoordinates(dimension)
+	test_helpers.AssertNotNilError(t, err)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
+}
+
+// TestMatrixController_Transpose tests the transposition of a matrix.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestMatrixController_Transpose(t *testing.T) {
 	matrix, err := Init(3, 2)
 	test_helpers.AssertNilError(t, err)
 	matrix.values[0] = []float64{1, 2}
@@ -81,7 +165,7 @@ func TestMatrix_Transpose(t *testing.T) {
 	test_helpers.AssertEqual(t, true, areEqual)
 }
 
-// TestMatrix_ScalarMultiplication tests the multiplication of a matrix by a constant.
+// TestMatrixController_ScalarMultiplication tests the multiplication of a matrix by a constant.
 //
 // Parameters:
 //  t - Test instance.
@@ -89,7 +173,7 @@ func TestMatrix_Transpose(t *testing.T) {
 // Returns:
 //  none
 //
-func TestMatrix_ScalarMultiplication(t *testing.T) {
+func TestMatrixController_ScalarMultiplication(t *testing.T) {
 	matrix, err := Init(3, 2)
 	test_helpers.AssertNilError(t, err)
 	matrix.values[0] = []float64{1, 2}
@@ -111,7 +195,7 @@ func TestMatrix_ScalarMultiplication(t *testing.T) {
 	test_helpers.AssertEqual(t, true, areEqual)
 }
 
-// TestMatrix_MultiplyMatrix tests the multiplication of a matrix by another.
+// TestMatrixController_MultiplyMatrix tests the multiplication of a matrix by another.
 //
 // Parameters:
 //  t - Test instance.
@@ -119,7 +203,7 @@ func TestMatrix_ScalarMultiplication(t *testing.T) {
 // Returns:
 //  none
 //
-func TestMatrix_MultiplyMatrix(t *testing.T) {
+func TestMatrixController_MultiplyMatrix(t *testing.T) {
 	firstMatrix, err := Init(3, 2)
 	test_helpers.AssertNilError(t, err)
 	firstMatrix.values[0] = []float64{1, 2}
@@ -146,7 +230,7 @@ func TestMatrix_MultiplyMatrix(t *testing.T) {
 	test_helpers.AssertEqual(t, true, areEqual)
 }
 
-// TestMatrix_MultiplyMatrix_IncompatibleSize tests the multiplication of a matrix by another.
+// TestMatrixController_MultiplyMatrix_IncompatibleSize tests the multiplication of a matrix by another.
 //
 // Parameters:
 //  t - Test instance.
@@ -154,7 +238,7 @@ func TestMatrix_MultiplyMatrix(t *testing.T) {
 // Returns:
 //  none
 //
-func TestMatrix_MultiplyMatrix_IncompatibleSize(t *testing.T) {
+func TestMatrixController_MultiplyMatrix_IncompatibleSize(t *testing.T) {
 	firstMatrix, err := Init(3, 3)
 	test_helpers.AssertNilError(t, err)
 
