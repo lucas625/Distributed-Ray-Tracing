@@ -27,8 +27,8 @@ func (vector *Vector) GetCoordinate(index int) (float64, error) {
 // SetCoordinate is the setter for a Vector's coordinates.
 //
 // Parameters:
-// 	index          - the index of the new coordinate.
-// 	newCoordinates - the new coordinate.
+// 	index         - the index of the new coordinate.
+// 	newCoordinate - the new coordinate.
 //
 // Returns:
 // 	none

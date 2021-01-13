@@ -98,7 +98,7 @@ func TestMatrix_GetValue_NegativeIndex(t *testing.T) {
 	matrix.values[0] = []float64{1, 2, 3}
 	matrix.values[1] = []float64{4, 5, 6}
 	expectedErrorMessage := fmt.Sprintf(
-		"Index out of limits of the matrix. Expected from 0 0 to: %v %v and got %v %v.", matrix.Lines(),
+		"Index out of limits of the matrix. Expected from 0 0 to %v %v and got %v %v.", matrix.Lines(),
 		matrix.Columns(), -1, -1)
 
 	_, err = matrix.GetValue(-1, -1)
@@ -120,7 +120,7 @@ func TestMatrix_GetValue_IndexError(t *testing.T) {
 	matrix.values[0] = []float64{1, 2, 3}
 	matrix.values[1] = []float64{4, 5, 6}
 	expectedErrorMessage := fmt.Sprintf(
-		"Index out of limits of the matrix. Expected from 0 0 to: %v %v and got %v %v.", matrix.Lines(),
+		"Index out of limits of the matrix. Expected from 0 0 to %v %v and got %v %v.", matrix.Lines(),
 		matrix.Columns(), 3, 4)
 
 	_, err = matrix.GetValue(3, 4)
@@ -165,7 +165,7 @@ func TestMatrix_SetValue_IndexError(t *testing.T) {
 	matrix.values[0] = []float64{1, 2, 3}
 	matrix.values[1] = []float64{4, 5, 6}
 	expectedErrorMessage := fmt.Sprintf(
-		"Index out of limits of the matrix. Expected from 0 0 to: %v %v and got %v %v.", matrix.Lines(),
+		"Index out of limits of the matrix. Expected from 0 0 to %v %v and got %v %v.", matrix.Lines(),
 		matrix.Columns(), 1, -1)
 
 	err = matrix.SetValue(1, -1, 10)

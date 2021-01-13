@@ -59,6 +59,6 @@ func negativeDimensionError(dimension int) error {
 //
 func indexError(vector *Vector, index int) error {
 	errorMessage := fmt.Sprintf(
-		"Index out of limits of the vector. Expected from 0 to: %v and got %v.", vector.Dimension(), index)
+		"Index out of limits of the vector. Expected from 0 to %v and got %v.", vector.Dimension(), index)
 	return errors.New(errorMessage)
 }
