@@ -195,7 +195,7 @@ func TestVector_GetCoordinate_NegativeIndex(t *testing.T) {
 	vector := &Vector{coordinates: []float64{10, 20, 30}}
 	index := -1
 	expectedErrorMessage := fmt.Sprintf(
-		"Index out of limits of the vector. Expected from 0 to: %v and got %v.", vector.Dimension(), index)
+		"Index out of limits of the vector. Expected from 0 to %v and got %v.", vector.Dimension(), index)
 
 	_, err := vector.GetCoordinate(index)
 	test_helpers.AssertNotNilError(t, err)
@@ -215,7 +215,7 @@ func TestVector_GetCoordinate_BiggerIndex(t *testing.T) {
 	vector := &Vector{coordinates: []float64{10, 20, 30}}
 	index := 3
 	expectedErrorMessage := fmt.Sprintf(
-		"Index out of limits of the vector. Expected from 0 to: %v and got %v.", vector.Dimension(), index)
+		"Index out of limits of the vector. Expected from 0 to %v and got %v.", vector.Dimension(), index)
 
 	_, err := vector.GetCoordinate(index)
 	test_helpers.AssertNotNilError(t, err)
@@ -252,7 +252,7 @@ func TestVector_SetCoordinate(t *testing.T) {
 func TestVector_SetCoordinate_NegativeIndex(t *testing.T) {
 	vector := &Vector{coordinates: []float64{10, 20, 30}}
 	expectedErrorMessage := fmt.Sprintf(
-		"Index out of limits of the vector. Expected from 0 to: %v and got %v.", vector.Dimension(), -1)
+		"Index out of limits of the vector. Expected from 0 to %v and got %v.", vector.Dimension(), -1)
 
 	err := vector.SetCoordinate(-1, 50)
 	test_helpers.AssertNotNilError(t, err)
@@ -271,7 +271,7 @@ func TestVector_SetCoordinate_NegativeIndex(t *testing.T) {
 func TestVector_SetCoordinate_BiggerIndex(t *testing.T) {
 	vector := &Vector{coordinates: []float64{10, 20, 30}}
 	expectedErrorMessage := fmt.Sprintf(
-		"Index out of limits of the vector. Expected from 0 to: %v and got %v.", vector.Dimension(), 3)
+		"Index out of limits of the vector. Expected from 0 to %v and got %v.", vector.Dimension(), 3)
 
 	err := vector.SetCoordinate(3, 50)
 	test_helpers.AssertNotNilError(t, err)

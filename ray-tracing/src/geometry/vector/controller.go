@@ -43,7 +43,7 @@ func (*Controller) ScalarMultiplication(vector *Vector, scalar float64) *Vector 
 //
 func (controller *Controller) Sum(firstVector *Vector, secondVector *Vector, firstScalar, secondScalar float64) (*Vector, error) {
 	if !firstVector.IsEqualDimension(secondVector) {
-		return nil, differentDimensionError(firstVector, secondVector)
+		return nil, differentDimensionsError(firstVector, secondVector)
 	}
 
 	firstMultipliedVector := controller.ScalarMultiplication(firstVector, firstScalar)
@@ -70,7 +70,7 @@ func (controller *Controller) Sum(firstVector *Vector, secondVector *Vector, fir
 //
 func (*Controller) DotProduct(firstVector *Vector, secondVector *Vector) (float64, error) {
 	if !firstVector.IsEqualDimension(secondVector) {
-		return 0, differentDimensionError(firstVector, secondVector)
+		return 0, differentDimensionsError(firstVector, secondVector)
 	}
 	var totalSum float64
 	for i := 0; i < firstVector.Dimension(); i++ {
@@ -93,7 +93,7 @@ func (*Controller) DotProduct(firstVector *Vector, secondVector *Vector) (float6
 //
 func (*Controller) CrossProduct(firstVector, secondVector *Vector) (*Vector, error) {
 	if !firstVector.IsEqualDimension(secondVector) {
-		return nil, differentDimensionError(firstVector, secondVector)
+		return nil, differentDimensionsError(firstVector, secondVector)
 	}
 	if firstVector.Dimension() != 3 {
 		return nil, non3DError(firstVector)
@@ -162,7 +162,7 @@ func (controller *Controller) Normalize(vector *Vector) *Vector {
 //
 func (controller *Controller) ProjectOnVector(firstVector, secondVector *Vector) (*Vector, error) {
 	if !firstVector.IsEqualDimension(secondVector) {
-		return nil, differentDimensionError(firstVector, secondVector)
+		return nil, differentDimensionsError(firstVector, secondVector)
 	}
 	topConstant, _ := controller.DotProduct(firstVector, secondVector)
 	bottomConstant, _ := controller.DotProduct(secondVector, secondVector)

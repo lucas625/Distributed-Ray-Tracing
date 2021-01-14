@@ -65,7 +65,7 @@ func incompatibleSize(firstMatrix, secondMatrix *Matrix) error {
 //
 func indexError(matrix *Matrix, lineIndex, columnIndex int) error {
 	errorMessage := fmt.Sprintf(
-		"Index out of limits of the matrix. Expected from 0 0 to: %v %v and got %v %v.",
+		"Index out of limits of the matrix. Expected from 0 0 to %v %v and got %v %v.",
 		matrix.Lines(), matrix.Columns(), lineIndex, columnIndex)
 	return errors.New(errorMessage)
 }

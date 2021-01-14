@@ -78,7 +78,7 @@ func TestMatrix_IndexError(t *testing.T) {
 	matrix, err := Init(1, 1)
 	test_helpers.AssertNilError(t, err)
 	expectedErrorMessage := fmt.Sprintf(
-		"Index out of limits of the matrix. Expected from 0 0 to: %v %v and got %v %v.",
+		"Index out of limits of the matrix. Expected from 0 0 to %v %v and got %v %v.",
 		matrix.Lines(), matrix.Columns(), -1, -1)
 
 	err = indexError(matrix, -1, -1)

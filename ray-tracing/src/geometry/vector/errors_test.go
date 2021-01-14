@@ -23,7 +23,7 @@ func TestVector_DifferentDimensionError(t *testing.T) {
 	expectedErrorMessage := fmt.Sprintf(
 		"Invalid dimension of vector. Expected: %d and got: %d.\n", firstVector.Dimension(), secondVector.Dimension())
 
-	err = differentDimensionError(firstVector, secondVector)
+	err = differentDimensionsError(firstVector, secondVector)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
@@ -76,7 +76,7 @@ func TestVector_IndexError(t *testing.T) {
 	test_helpers.AssertNilError(t, err)
 	index := 3
 	expectedErrorMessage := fmt.Sprintf(
-		"Index out of limits of the vector. Expected from 0 to: %v and got %v.", vector.Dimension(), index)
+		"Index out of limits of the vector. Expected from 0 to %v and got %v.", vector.Dimension(), index)
 
 	err = indexError(vector, index)
 	test_helpers.AssertNotNilError(t, err)
