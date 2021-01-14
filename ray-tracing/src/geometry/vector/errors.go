@@ -5,16 +5,16 @@ import (
 	"fmt"
 )
 
-// differentDimensionError is a function to get the error where two vectors do not have the same dimension.
+// differentDimensionsError is a function to get the error where two vectors do not have the same dimension.
 //
 // Parameters:
-//	firstVector  - The first vector.
-//	secondVector - The second vector.
+//	firstVector  - The first Vector.
+//	secondVector - The second Vector.
 //
 // Returns:
 //  An Error
 //
-func differentDimensionError(firstVector, secondVector *Vector) error {
+func differentDimensionsError(firstVector, secondVector *Vector) error {
 	errorMessage := fmt.Sprintf(
 		"Invalid dimension of vector. Expected: %d and got: %d.\n",
 		firstVector.Dimension(),
@@ -22,10 +22,10 @@ func differentDimensionError(firstVector, secondVector *Vector) error {
 	return errors.New(errorMessage)
 }
 
-// non3DError is a function to get the error where a vector is not 3D.
+// non3DError is a function to get the error where a Vector is not 3D.
 //
 // Parameters:
-//  vector - The vector.
+//  vector - The Vector.
 //
 // Returns:
 //  An Error.
@@ -38,7 +38,7 @@ func non3DError(vector *Vector) error {
 // negativeDimensionError is a function to get the error where a vector has negative dimension.
 //
 // Parameters:
-// 	dimension - The dimension of the vector.
+// 	dimension - The dimension of the Vector.
 //
 // Returns:
 //  An Error.

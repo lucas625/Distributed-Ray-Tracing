@@ -43,3 +43,25 @@ func TestPoint_indexError(t *testing.T) {
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
+
+// TestPoint_differentDimensionError tests the different dimension error of a points.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestPoint_differentDimensionError(t *testing.T) {
+	dimension := 3
+	firstPoint, err := Init(dimension)
+	test_helpers.AssertNilError(t, err)
+	secondPoint, err := Init(dimension)
+	test_helpers.AssertNilError(t, err)
+	expectedErrorMessage := fmt.Sprintf(
+		"Invalid dimension of point. Expected: %d and got: %d.\n", firstPoint.Dimension(), secondPoint.Dimension())
+
+	err = differentDimensionsError(firstPoint, secondPoint)
+	test_helpers.AssertNotNilError(t, err)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
+}

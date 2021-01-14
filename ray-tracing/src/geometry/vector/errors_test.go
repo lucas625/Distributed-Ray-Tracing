@@ -23,7 +23,7 @@ func TestVector_DifferentDimensionError(t *testing.T) {
 	expectedErrorMessage := fmt.Sprintf(
 		"Invalid dimension of vector. Expected: %d and got: %d.\n", firstVector.Dimension(), secondVector.Dimension())
 
-	err = differentDimensionError(firstVector, secondVector)
+	err = differentDimensionsError(firstVector, secondVector)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
