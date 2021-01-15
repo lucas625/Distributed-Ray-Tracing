@@ -1,6 +1,7 @@
 package vector
 
 import (
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/utils/matrix"
 	"math"
 )
 
@@ -203,4 +204,21 @@ func (controller *Controller) IsOrthogonalVector(firstVector, secondVector *Vect
 		return false, err
 	}
 	return dotProduct == 0, nil
+}
+
+// ToHomogeneousCoordinates adds the extra 0 coordinate and transpose the Vector converting it to a column Matrix.
+//
+// Parameters:
+// 	vector - The Vector.
+//
+// Returns:
+// 	The vector as homogeneous coordinates Matrix.
+//
+func (*Controller) ToHomogeneousCoordinates(vector *Vector) *matrix.Matrix {
+	vectorAsMatrix, _ := matrix.Init(vector.Dimension() + 1, 1)
+	for index := 0; index < vector.Dimension(); index++ {
+		vectorCoordinate, _ := vector.GetCoordinate(index)
+		vectorAsMatrix.SetValue(index, 0, vectorCoordinate)
+	}
+	return vectorAsMatrix
 }
