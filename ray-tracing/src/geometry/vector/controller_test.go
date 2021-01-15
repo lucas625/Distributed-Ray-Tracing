@@ -3,6 +3,7 @@ package vector
 import (
 	"fmt"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/test_helpers"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/utils/matrix"
 	"testing"
 )
 
@@ -380,4 +381,33 @@ func TestVectorController_IsOrthogonal_DifferentDimensions(t *testing.T) {
 	_, err := controller.IsOrthogonalVector(firstVector, secondVector)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
+}
+
+// TestVectorController_ToHomogeneousCoordinates tests the conversion of a vector to homogeneous coordinates.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestVectorController_ToHomogeneousCoordinates(t *testing.T) {
+	vector := &Vector{coordinates: []float64{12, 15, 22}}
+	controller := Controller{}
+	expectedMatrix, err := matrix.Init(4, 1)
+	test_helpers.AssertNilError(t, err)
+
+	err = expectedMatrix.SetValue(0, 0, 12)
+	test_helpers.AssertNilError(t, err)
+	err = expectedMatrix.SetValue(1, 0, 15)
+	test_helpers.AssertNilError(t, err)
+	err = expectedMatrix.SetValue(2, 0, 22)
+	test_helpers.AssertNilError(t, err)
+	err = expectedMatrix.SetValue(3, 0, 0)
+	test_helpers.AssertNilError(t, err)
+
+	vectorAsMatrix := controller.ToHomogeneousCoordinates(vector)
+
+	isEqual := expectedMatrix.IsEqual(vectorAsMatrix)
+	test_helpers.AssertEqual(t, true, isEqual)
 }
