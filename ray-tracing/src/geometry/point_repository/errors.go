@@ -36,3 +36,16 @@ func incompatibleDimensionError(points []*point.Point, dimension int) error {
 	errorMessage := fmt.Sprintf("Not all points have %v dimensions. Points: %v.", dimension, points)
 	return errors.New(errorMessage)
 }
+
+// invalidSizeError is the error where we try to instantiate a PointRepository without points.
+//
+// Parameters:
+//  points    - The list of points.
+//
+// Returns:
+//  An Error.
+//
+func invalidSizeError(points []*point.Point) error {
+	errorMessage := fmt.Sprintf("Invalid points list: %v. There must be at least one point.", points)
+	return errors.New(errorMessage)
+}

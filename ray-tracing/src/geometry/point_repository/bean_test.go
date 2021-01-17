@@ -25,7 +25,7 @@ func TestPointRepository_Init(t *testing.T) {
 	test_helpers.AssertEqual(t, true, isEqual)
 }
 
-// TestPointRepository_IncompatibleDimensionError tests the instantiation of a PointRepository with incompatible
+// TestPointRepository_Init_IncompatibleDimensionError tests the instantiation of a PointRepository with incompatible
 // dimensions.
 //
 // Parameters:
@@ -34,7 +34,7 @@ func TestPointRepository_Init(t *testing.T) {
 // Returns:
 //  none
 //
-func TestPointRepository_IncompatibleDimensionError(t *testing.T) {
+func TestPointRepository_Init_IncompatibleDimensionError(t *testing.T) {
 	dimension := 3
 	firstPoint, err := point.Init(3)
 	test_helpers.AssertNilError(t, err)
@@ -44,6 +44,23 @@ func TestPointRepository_IncompatibleDimensionError(t *testing.T) {
 	expectedErrorMessage := fmt.Sprintf("Not all points have %v dimensions. Points: %v.", dimension, points)
 
 	_, err = Init(points, dimension)
+	test_helpers.AssertNotNilError(t, err)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
+}
+
+// TestPointRepository_Init_InvalidSizeError tests the instantiation of a PointRepository with 0 points.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestPointRepository_Init_InvalidSizeError(t *testing.T) {
+	var points []*point.Point
+	expectedErrorMessage := fmt.Sprintf("Invalid points list: %v. There must be at least one point.", points)
+
+	_, err := Init(points, 3)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
@@ -141,4 +158,23 @@ func TestPointRepository_NumberOfPoints(t *testing.T) {
 	test_helpers.AssertNilError(t, err)
 
 	test_helpers.AssertEqual(t, 2, pointRepository.NumberOfPoints())
+}
+
+// TestPointRepository_PointsDimension tests the points dimension of a PointRepository.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestPointRepository_PointsDimension(t *testing.T) {
+	firstPoint, err := point.Init(3)
+	test_helpers.AssertNilError(t, err)
+	secondPoint, err := point.Init(3)
+	test_helpers.AssertNilError(t, err)
+	pointRepository, err := Init([]*point.Point{firstPoint, secondPoint}, 3)
+	test_helpers.AssertNilError(t, err)
+
+	test_helpers.AssertEqual(t, 3, pointRepository.PointsDimension())
 }

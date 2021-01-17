@@ -39,6 +39,18 @@ func (pointRepository *PointRepository) NumberOfPoints() int {
 	return len(pointRepository.points)
 }
 
+// NumberOfPoints gets the number of points on PointRepository.
+//
+// Parameters:
+// 	none
+//
+// Returns:
+// 	The number of points.
+//
+func (pointRepository *PointRepository) PointsDimension() int {
+	return pointRepository.points[0].Dimension()
+}
+
 // Init initializes a PointRepository.
 //
 // Parameters:
@@ -50,6 +62,9 @@ func (pointRepository *PointRepository) NumberOfPoints() int {
 //  An Error.
 //
 func Init(points []*point.Point, dimension int) (*PointRepository, error) {
+	if len(points) == 0 {
+		return nil, invalidSizeError(points)
+	}
 	for index := 0; index < len(points); index++ {
 		if points[index].Dimension() != dimension {
 			return nil, incompatibleDimensionError(points, dimension)
