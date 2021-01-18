@@ -15,10 +15,10 @@ type Controller struct {}
 // ToHomogeneousCoordinates creates a matrix with all points in homogeneous coordinates.
 //
 // Parameters:
-// 	vertices - a Vertices.
+// 	pointRepository - The target points repository.
 //
 // Returns:
-//  the corresponding matrix.
+//  The corresponding matrix.
 //
 func (*Controller) ToHomogeneousCoordinates(pointRepository *PointRepository) *matrix.Matrix {
 	homogenousCoordinatesPointsMatrix, _ := matrix.Init(pointRepository.PointsDimension() + 1,
@@ -37,25 +37,29 @@ func (*Controller) ToHomogeneousCoordinates(pointRepository *PointRepository) *m
 	return homogenousCoordinatesPointsMatrix
 }
 
-//// MatrixToVertices is a function to parse a Matrix into a Vertices (a point is a column, removes the homogeneous coord).
-////
-//// Parameters:
-//// 	matrix - a Matrix.
-////
-//// Returns:
-////  the corresponding Vertices.
-////
-//func MatrixToVertices(matrix *utils.Matrix) Vertices {
-//	points := make([]Point, len(matrix.Values[0]))
-//	for j := 0; j < len(matrix.Values[0]); j++ {
-//		pointAux := InitPoint(len(matrix.Values) - 1)
-//		for i := 0; i < len(matrix.Values)-1; i++ {
-//			pointAux.Coordinates[i] = matrix.Values[i][j]
-//		}
-//		points[j] = pointAux
-//	}
-//	return InitVertices(points)
-//}
+// FromMatrix parses e a Matrix into a PointRepository (a point is a column, removes the homogeneous coordinate).
+//
+// Parameters:
+// 	matrix - A matrix in homogeneous coordinates.
+//
+// Returns:
+//  The points on the matrix as a PointRepository.
+//  An error.
+//
+func (*Controller) FromMatrix(pointsAsMatrix *matrix.Matrix) (*PointRepository, error) {
+	points := make([]*point.Point, pointsAsMatrix.Columns())
+	dimension := pointsAsMatrix.Lines() - 1
+
+	for pointIndex := 0; pointIndex < pointsAsMatrix.Columns(); pointIndex++ {
+		currentPoint, _ := point.Init(dimension)
+		for coordinateIndex := 0; coordinateIndex < dimension; coordinateIndex++ {
+			coordinate, _ := pointsAsMatrix.GetValue(coordinateIndex, pointIndex)
+			currentPoint.SetCoordinate(coordinateIndex, coordinate)
+		}
+		points[pointIndex] = currentPoint
+	}
+	return Init(points, dimension)
+}
 //
 //// MultVertices is a function to multiply all Vertices by a matrix.
 ////
