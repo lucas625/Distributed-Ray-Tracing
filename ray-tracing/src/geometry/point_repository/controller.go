@@ -60,19 +60,23 @@ func (*Controller) FromMatrix(pointsAsMatrix *matrix.Matrix) (*PointRepository, 
 	}
 	return Init(points, dimension)
 }
+
+// MultiplyByMatrix multiplies all points on the PointRepository by a matrix.
 //
-//// MultVertices is a function to multiply all Vertices by a matrix.
-////
-//// Parameters:
-//// 	vertices - a Vertices.
-////  matrix   - the multiplying matrix.
-////
-//// Returns:
-//// 	the Vertices multiplied by the matrix.
-////
-//func MultVertices(vertices *Vertices, matrix *utils.Matrix) Vertices {
-//	pointMatrix := VerticesToHomogeneousCoord(vertices)
-//	maux := utils.MultMatrix(matrix, &pointMatrix)
-//	vertAux := MatrixToVertices(&maux)
-//	return vertAux
-//}
+// Parameters:
+// 	pointRepository   - The PointRepository..
+//  multiplyingMatrix - The multiplying matrix.
+//
+// Returns:
+// 	The multiplied points as a PointRepository.
+//
+func (controller *Controller) MultiplyByMatrix(pointRepository *PointRepository, multiplyingMatrix *matrix.Matrix) (
+	*PointRepository, error) {
+	pointMatrix := controller.ToHomogeneousCoordinates(pointRepository)
+	matrixController := matrix.Controller{}
+	resultingMatrix, err := matrixController.MultiplyMatrix(multiplyingMatrix, pointMatrix)
+	if err != nil {
+		return nil, err
+	}
+	return controller.FromMatrix(resultingMatrix)
+}

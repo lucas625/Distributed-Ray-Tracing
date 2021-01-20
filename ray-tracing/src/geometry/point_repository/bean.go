@@ -1,6 +1,8 @@
 package point_repository
 
-import "github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point"
+import (
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point"
+)
 
 // PointRepository is a class for a list of points.
 //
@@ -39,16 +41,39 @@ func (pointRepository *PointRepository) NumberOfPoints() int {
 	return len(pointRepository.points)
 }
 
-// NumberOfPoints gets the number of points on PointRepository.
+// PointsDimension gets the dimension of the points on PointRepository.
 //
 // Parameters:
 // 	none
 //
 // Returns:
-// 	The number of points.
+// 	The dimension of the points.
 //
 func (pointRepository *PointRepository) PointsDimension() int {
 	return pointRepository.points[0].Dimension()
+}
+
+// IsEqual checks if one PointRepository is equal to another PointRepository.
+//
+// Parameters:
+// 	other - The other PointRepository.
+//
+// Returns:
+// 	If the point repositories are equal.
+//
+func (pointRepository *PointRepository) IsEqual(other *PointRepository) bool {
+	if pointRepository.NumberOfPoints() != other.NumberOfPoints() {
+		return false
+	}
+
+	for pointIndex := 0; pointIndex < pointRepository.NumberOfPoints(); pointIndex++ {
+		expectedPoint, _ := pointRepository.GetPoint(pointIndex)
+		otherPoint, _ := other.GetPoint(pointIndex)
+		if !expectedPoint.IsEqual(otherPoint) {
+			return false
+		}
+	}
+	return true
 }
 
 // Init initializes a PointRepository.

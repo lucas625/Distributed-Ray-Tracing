@@ -113,15 +113,66 @@ func TestPointRepositoryController_FromMatrix(t *testing.T) {
 	resultingPointRepository, err := controller.FromMatrix(sampleMatrix)
 	test_helpers.AssertNilError(t, err)
 
-	isEqual := expectedPointRepository.NumberOfPoints() == resultingPointRepository.NumberOfPoints()
+	isEqual := expectedPointRepository.IsEqual(resultingPointRepository)
 	test_helpers.AssertEqual(t, true, isEqual)
-
-	for pointIndex := 0; pointIndex < expectedPointRepository.NumberOfPoints(); pointIndex++ {
-		expectedPoint, err := expectedPointRepository.GetPoint(pointIndex)
-		test_helpers.AssertNilError(t, err)
-		receivedPoint, err := resultingPointRepository.GetPoint(pointIndex)
-		test_helpers.AssertNilError(t, err)
-		isEqual = expectedPoint.IsEqual(receivedPoint)
-		test_helpers.AssertEqual(t, true, isEqual)
-	}
 }
+
+// TestPointRepositoryController_MultiplyByMatrix tests the multiply by matrix of a PointRepository.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestPointRepositoryController_MultiplyByMatrix(t *testing.T) {
+	controller := Controller{}
+	pointRepository := setUpPointRepository(t)
+	multiplyingMatrix := setUpMatrix(t, 3)
+
+	expectedPointRepository := setUpPointRepository()
+
+	resultingPointRepository, err := controller.MultiplyByMatrix(pointRepository, multiplyingMatrix)
+	test_helpers.AssertNilError(t, err)
+
+	isEqual := expectedPointRepository.IsEqual(resultingPointRepository)
+	test_helpers.AssertEqual(t, true, isEqual)
+}
+
+// setUpMatrix builds a sample matrix.
+//
+// Parameters:
+// 	t         - The testing instance.
+//  dimension - The dimension of the sample matrix (2 or 3).
+//
+// Returns:
+//  A sample matrix.
+//
+func setUpMatrix(t *testing.T, dimension int) *matrix.Matrix {
+	matrixController := matrix.Controller{}
+
+	multiplyingMatrix, err := matrixController.BuildHomogeneousCoordinates(dimension)
+	test_helpers.AssertNilError(t, err)
+
+	err = multiplyingMatrix.SetValue(0, 0, 1)
+	test_helpers.AssertNilError(t, err)
+	err = multiplyingMatrix.SetValue(0, 1, 2)
+	test_helpers.AssertNilError(t, err)
+	err = multiplyingMatrix.SetValue(0, 2, 2)
+	test_helpers.AssertNilError(t, err)
+
+	err = multiplyingMatrix.SetValue(1, 0, 4)
+	test_helpers.AssertNilError(t, err)
+	err = multiplyingMatrix.SetValue(1, 1, 1)
+	test_helpers.AssertNilError(t, err)
+	err = multiplyingMatrix.SetValue(1, 2, 3)
+	test_helpers.AssertNilError(t, err)
+
+	err = multiplyingMatrix.SetValue(2, 0, 0)
+	test_helpers.AssertNilError(t, err)
+	err = multiplyingMatrix.SetValue(2, 1, 10)
+	test_helpers.AssertNilError(t, err)
+	err = multiplyingMatrix.SetValue(2, 2, 2)
+	test_helpers.AssertNilError(t, err)
+}
+

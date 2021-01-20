@@ -178,3 +178,83 @@ func TestPointRepository_PointsDimension(t *testing.T) {
 
 	test_helpers.AssertEqual(t, 3, pointRepository.PointsDimension())
 }
+
+// TestPointRepository_IsEqual tests the is equal of a PointRepository.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestPointRepository_IsEqual(t *testing.T) {
+	firstPointRepository := setUpPointRepository(t)
+	secondPointRepository := setUpPointRepository(t)
+	isEqual := firstPointRepository.IsEqual(secondPointRepository)
+	test_helpers.AssertEqual(t, true, isEqual)
+}
+
+// TestPointRepository_IsEqual_Different tests the is equal of a PointRepository when the repositories are not equal.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestPointRepository_IsEqual_Different(t *testing.T) {
+	firstPointRepository := setUpPointRepository(t)
+	secondPointRepository := setUpPointRepository(t)
+	changingPoint, err := secondPointRepository.GetPoint(0)
+	test_helpers.AssertNilError(t, err)
+	err = changingPoint.SetCoordinate(0, -1)
+	test_helpers.AssertNilError(t, err)
+	isEqual := firstPointRepository.IsEqual(secondPointRepository)
+	test_helpers.AssertEqual(t, true, isEqual)
+}
+
+// setUpPointRepository builds a sample PointRepository.
+//
+// Parameters:
+// 	t - The testing instance.
+//
+// Returns:
+//  A sample PointRepository.
+//
+func setUpPointRepository(t *testing.T) *PointRepository {
+	dimension := 3
+
+	firstPoint, err := point.Init(dimension)
+	test_helpers.AssertNilError(t, err)
+
+	err = firstPoint.SetCoordinate(0, 1)
+	test_helpers.AssertNilError(t, err)
+	err = firstPoint.SetCoordinate(0, 2)
+	test_helpers.AssertNilError(t, err)
+	err = firstPoint.SetCoordinate(0, 1)
+	test_helpers.AssertNilError(t, err)
+
+	secondPoint, err := point.Init(dimension)
+	test_helpers.AssertNilError(t, err)
+
+	err = secondPoint.SetCoordinate(0, 0)
+	test_helpers.AssertNilError(t, err)
+	err = secondPoint.SetCoordinate(0, 1)
+	test_helpers.AssertNilError(t, err)
+	err = secondPoint.SetCoordinate(0, 2)
+	test_helpers.AssertNilError(t, err)
+
+	thirdPoint, err := point.Init(dimension)
+	test_helpers.AssertNilError(t, err)
+
+	err = thirdPoint.SetCoordinate(0, 1)
+	test_helpers.AssertNilError(t, err)
+	err = thirdPoint.SetCoordinate(0, 0)
+	test_helpers.AssertNilError(t, err)
+	err = thirdPoint.SetCoordinate(0, 1)
+	test_helpers.AssertNilError(t, err)
+
+	pointRepository, err := Init([]*point.Point{firstPoint, secondPoint, thirdPoint}, dimension)
+	test_helpers.AssertNilError(t, err)
+	return pointRepository
+}
