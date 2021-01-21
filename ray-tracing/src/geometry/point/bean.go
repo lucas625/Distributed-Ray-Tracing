@@ -54,6 +54,28 @@ func (point *Point) Dimension() int {
 	return len(point.coordinates)
 }
 
+// IsEqual checks if two points are equal.
+//
+// Parameters:
+// 	other - The second Point.
+//
+// Returns:
+// 	If the points are equal.
+//
+func (point *Point) IsEqual(other *Point) bool {
+	if point.Dimension() != other.Dimension() {
+		return false
+	}
+	for coordinateIndex := 0; coordinateIndex < point.Dimension(); coordinateIndex++ {
+		pointCoordinate, _ := point.GetCoordinate(coordinateIndex)
+		otherPointCoordinate, _ := other.GetCoordinate(coordinateIndex)
+		if pointCoordinate != otherPointCoordinate {
+			return false
+		}
+	}
+	return true
+}
+
 // Init initializes a Point.
 //
 // Parameters:

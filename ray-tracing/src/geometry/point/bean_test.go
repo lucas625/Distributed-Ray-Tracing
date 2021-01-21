@@ -174,3 +174,51 @@ func TestPoint_SetCoordinate_BiggerIndex(t *testing.T) {
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
+
+// TestPoint_IsEqual tests the is equal of a Point.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestPoint_IsEqual(t *testing.T) {
+	firstPoint := &Point{coordinates: []float64{10, 20, 30}}
+	secondPoint := &Point{coordinates: []float64{10, 20, 30}}
+
+	isEqual := firstPoint.IsEqual(secondPoint)
+	test_helpers.AssertEqual(t, true, isEqual)
+}
+
+// TestPoint_IsEqual_Different tests the is equal of a Point when the points are different.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestPoint_IsEqual_Different(t *testing.T) {
+	firstPoint := &Point{coordinates: []float64{10, 20, 30}}
+	secondPoint := &Point{coordinates: []float64{10, 20, 50}}
+
+	isEqual := firstPoint.IsEqual(secondPoint)
+	test_helpers.AssertEqual(t, false, isEqual)
+}
+
+// TestPoint_IsEqual_DifferentDimension tests the is equal of a Point when the points have different dimensions.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestPoint_IsEqual_DifferentDimension(t *testing.T) {
+	firstPoint := &Point{coordinates: []float64{10, 20, 30}}
+	secondPoint := &Point{coordinates: []float64{10, 20, 30, 40}}
+
+	isEqual := firstPoint.IsEqual(secondPoint)
+	test_helpers.AssertEqual(t, false, isEqual)
+}
