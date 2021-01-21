@@ -1,6 +1,7 @@
 package point_repository
 
 import (
+	"fmt"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/test_helpers"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/utils/matrix"
@@ -130,13 +131,47 @@ func TestPointRepositoryController_MultiplyByMatrix(t *testing.T) {
 	pointRepository := setUpPointRepository(t)
 	multiplyingMatrix := setUpMatrix(t, 3)
 
-	expectedPointRepository := setUpPointRepository()
+	expectedPointRepository := setUpPointRepository(t)
+
+	expectedValues := [][]float64{{8, 9, 4}, {8, 7, 5}, {4, 7, 2}}
+
+	for pointIndex := 0; pointIndex < expectedPointRepository.NumberOfPoints(); pointIndex++ {
+		currentPoint, err := expectedPointRepository.GetPoint(pointIndex)
+		test_helpers.AssertNilError(t, err)
+		for coordinateIndex := 0; coordinateIndex < currentPoint.Dimension(); coordinateIndex++ {
+			err = currentPoint.SetCoordinate(coordinateIndex, expectedValues[pointIndex][coordinateIndex])
+			test_helpers.AssertNilError(t, err)
+		}
+	}
 
 	resultingPointRepository, err := controller.MultiplyByMatrix(pointRepository, multiplyingMatrix)
 	test_helpers.AssertNilError(t, err)
 
 	isEqual := expectedPointRepository.IsEqual(resultingPointRepository)
 	test_helpers.AssertEqual(t, true, isEqual)
+}
+
+// TestPointRepositoryController_MultiplyByMatrix_InvalidMultiplication tests the multiply by matrix of a
+// PointRepository with an invalid multiplication.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestPointRepositoryController_MultiplyByMatrix_InvalidMultiplication(t *testing.T) {
+	controller := Controller{}
+	pointRepository := setUpPointRepository(t)
+	multiplyingMatrix := setUpMatrix(t, 2)
+	expectedErrorMessage := fmt.Sprintf(
+		"Incompatible size for matrices:\nFirst matrix: lines: %d and columns: %d." +
+			"\nSecond matrix: lines: %d and columns: %d.",
+		multiplyingMatrix.Lines(), multiplyingMatrix.Columns(), 4, 3)
+
+	_, err := controller.MultiplyByMatrix(pointRepository, multiplyingMatrix)
+	test_helpers.AssertNotNilError(t, err)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
 
 // setUpMatrix builds a sample matrix.
@@ -151,28 +186,29 @@ func TestPointRepositoryController_MultiplyByMatrix(t *testing.T) {
 func setUpMatrix(t *testing.T, dimension int) *matrix.Matrix {
 	matrixController := matrix.Controller{}
 
-	multiplyingMatrix, err := matrixController.BuildHomogeneousCoordinates(dimension)
+	sampleMatrix, err := matrixController.BuildHomogeneousCoordinates(dimension)
 	test_helpers.AssertNilError(t, err)
 
-	err = multiplyingMatrix.SetValue(0, 0, 1)
+	err = sampleMatrix.SetValue(0, 0, 1)
 	test_helpers.AssertNilError(t, err)
-	err = multiplyingMatrix.SetValue(0, 1, 2)
+	err = sampleMatrix.SetValue(0, 1, 2)
 	test_helpers.AssertNilError(t, err)
-	err = multiplyingMatrix.SetValue(0, 2, 2)
-	test_helpers.AssertNilError(t, err)
-
-	err = multiplyingMatrix.SetValue(1, 0, 4)
-	test_helpers.AssertNilError(t, err)
-	err = multiplyingMatrix.SetValue(1, 1, 1)
-	test_helpers.AssertNilError(t, err)
-	err = multiplyingMatrix.SetValue(1, 2, 3)
+	err = sampleMatrix.SetValue(0, 2, 3)
 	test_helpers.AssertNilError(t, err)
 
-	err = multiplyingMatrix.SetValue(2, 0, 0)
+	err = sampleMatrix.SetValue(1, 0, 4)
 	test_helpers.AssertNilError(t, err)
-	err = multiplyingMatrix.SetValue(2, 1, 10)
+	err = sampleMatrix.SetValue(1, 1, 1)
 	test_helpers.AssertNilError(t, err)
-	err = multiplyingMatrix.SetValue(2, 2, 2)
+	err = sampleMatrix.SetValue(1, 2, 3)
 	test_helpers.AssertNilError(t, err)
+
+	err = sampleMatrix.SetValue(2, 0, 0)
+	test_helpers.AssertNilError(t, err)
+	err = sampleMatrix.SetValue(2, 1, 1)
+	test_helpers.AssertNilError(t, err)
+	err = sampleMatrix.SetValue(2, 2, 2)
+	test_helpers.AssertNilError(t, err)
+	return sampleMatrix
 }
 
