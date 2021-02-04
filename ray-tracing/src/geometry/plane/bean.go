@@ -15,7 +15,20 @@ type Plane struct {
 	isolatedTerm float64
 }
 
-// GetXCoefficient gets the x coefficient of the plane is cartesian equation.
+// IsEqual checks if a plane is equal to another, without trying equivalency.
+//
+// Parameters:
+// 	other - The other Plane.
+//
+// Returns:
+// 	If the planes are equal.
+//
+func (plane *Plane) IsEqual(other *Plane) bool {
+	return plane.xCoefficient == other.xCoefficient && plane.yCoefficient == other.yCoefficient &&
+		plane.zCoefficient == other.zCoefficient && plane.isolatedTerm == other.isolatedTerm
+}
+
+// GetXCoefficient gets the x coefficient of the Plane is cartesian equation.
 //
 // Parameters:
 // 	none
@@ -27,7 +40,7 @@ func (plane *Plane) GetXCoefficient() float64 {
 	return plane.xCoefficient
 }
 
-// GetYCoefficient gets the y coefficient of the plane is cartesian equation.
+// GetYCoefficient gets the y coefficient of the Plane is cartesian equation.
 //
 // Parameters:
 // 	none
@@ -39,7 +52,7 @@ func (plane *Plane) GetYCoefficient() float64 {
 	return plane.yCoefficient
 }
 
-// GetZCoefficient gets the z coefficient of the plane is cartesian equation.
+// GetZCoefficient gets the z coefficient of the Plane is cartesian equation.
 //
 // Parameters:
 // 	none
@@ -51,7 +64,7 @@ func (plane *Plane) GetZCoefficient() float64 {
 	return plane.zCoefficient
 }
 
-// GetIsolatedTerm gets isolated term of the plane is cartesian equation.
+// GetIsolatedTerm gets isolated term of the Plane is cartesian equation.
 //
 // Parameters:
 // 	none
