@@ -21,22 +21,14 @@ type Controller struct {}
 //
 // Returns:
 // 	The normal vector.
-// 	An Error.
+// 	An error.
 //
 func (*Controller) extractPlaneNormalVectorFromR3Points(firstPoint, secondPoint, thirdPoint *point.Point) (
 	*vector.Vector, error) {
 	pointController := point.Controller{}
 
-	if firstPoint.Dimension() != 3 {
-		return nil, non3DPointError(firstPoint)
-	}
-
-	if secondPoint.Dimension() != 3 {
-		return nil, non3DPointError(secondPoint)
-	}
-
-	if thirdPoint.Dimension() != 3 {
-		return nil, non3DPointError(thirdPoint)
+	if firstPoint.Dimension() != 3 || secondPoint.Dimension() != 3 || thirdPoint.Dimension() != 3{
+		return nil, non3DPointsError(firstPoint, secondPoint, thirdPoint)
 	}
 
 	firstVector, _ := pointController.ExtractVector(firstPoint, secondPoint)
@@ -57,7 +49,7 @@ func (*Controller) extractPlaneNormalVectorFromR3Points(firstPoint, secondPoint,
 //
 // Returns:
 // 	A Plane.
-// 	An Error.
+// 	An error.
 //
 func (controller *Controller) ExtractPlaneFromR3Points(firstPoint, secondPoint, thirdPoint *point.Point) (
 	*Plane, error) {
