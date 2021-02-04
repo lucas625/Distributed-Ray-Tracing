@@ -82,8 +82,8 @@ func (point *Point) IsEqual(other *Point) bool {
 // 	dimension - The dimension of the Point.
 //
 // Returns:
-// 	A Point
-//  An error
+// 	A Point.
+//  An error.
 //
 func Init(dimension int) (*Point, error) {
 	if dimension < 0 {
