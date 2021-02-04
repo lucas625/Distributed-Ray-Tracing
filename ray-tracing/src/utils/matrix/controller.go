@@ -1,6 +1,6 @@
 package matrix
 
-// Controller is a class for the matrix is controller.
+// Controller is a class for the Matrix is controller.
 //
 // Members:
 // 	none
