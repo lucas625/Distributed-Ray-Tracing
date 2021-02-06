@@ -3,6 +3,7 @@ package triangle
 import (
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point_repository"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
 )
 
 // Controller is a class for controlling triangles.
@@ -12,9 +13,42 @@ import (
 //
 type Controller struct {}
 
-// ADD HERE A FUNCTION TO CALCULATE A TRIANGLE AREA
+// AreaByTrianglePoints calculates the area of a Triangle by its 3 points.
+//
+// Parameters:
+// 	firstPoint  - The first point of the Triangle.
+// 	secondPoint - The second point of the Triangle.
+// 	thirdPoint  - The third point of the Triangle.
+//
+// Returns:
+//  The area of the Triangle
+//  An error.
+//
+func (*Controller) AreaByTrianglePoints(firstPoint, secondPoint, thirdPoint *point.Point) (float64, error){
+	pointController := point.Controller{}
+	vectorFirstToSecondPoint, err := pointController.ExtractVector(firstPoint, secondPoint)
+	if err != nil {
+		return 0, err
+	}
 
-// FindBarycentricCoordinatesByPoint is a function to find the barycentric coordinates of a point based on a Triangle.
+	vectorFirstToThirdPoint, err := pointController.ExtractVector(firstPoint, thirdPoint)
+	if err != nil {
+		return 0, err
+	}
+
+	vectorController := vector.Controller{}
+
+	normalVector, err := vectorController.CrossProduct(vectorFirstToSecondPoint, vectorFirstToThirdPoint)
+	if err != nil {
+		return 0, err
+	}
+
+	triangleArea := vectorController.Norm(normalVector) / 2
+	return triangleArea, nil
+}
+
+// FindBarycentricCoordinatesByPoint finds the barycentric coordinates of a point based on a Triangle.
+// https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/barycentric-coordinates
 //
 // Parameters:
 // 	triangle    - The Triangle.
@@ -25,52 +59,47 @@ type Controller struct {}
 //  The 3 barycentric coordinates.
 //  An error.
 //
-func (*Controller) FindBarycentricCoordinatesByPoint(triangle *Triangle, targetPoint *point.Point,
+func (controller *Controller) FindBarycentricCoordinatesByPoint(triangle *Triangle, targetPoint *point.Point,
 	repository *point_repository.PointRepository) (float64, float64, float64, error) {
 	triangleFirstPointIndex, _ := triangle.GetVertexIndex(0)
 	triangleSecondPointIndex, _ := triangle.GetVertexIndex(1)
 	triangleThirdPointIndex, _ := triangle.GetVertexIndex(2)
 
 	triangleFirstPoint, err := repository.GetPoint(triangleFirstPointIndex)
-
 	if err != nil {
 		return 0, 0, 0, err
 	}
 
 	triangleSecondPoint, err := repository.GetPoint(triangleSecondPointIndex)
-
 	if err != nil {
 		return 0, 0, 0, err
 	}
 
 	triangleThirdPoint, err := repository.GetPoint(triangleThirdPointIndex)
-
 	if err != nil {
 		return 0, 0, 0, err
 	}
 
-	pointController := point.Controller{}
+	triangleArea, err := controller.AreaByTrianglePoints(triangleFirstPoint, triangleSecondPoint, triangleThirdPoint)
+	if err != nil {
+		return 0, 0, 0, err
+	}
 
-	vectorFirstToSecondPoint := pointController.ExtractVector(triangleFirstPoint, triangleSecondPoint)
-	vectorFirstToThirdPoint := pointController.ExtractVector(triangleFirstPoint, triangleThirdPoint)
+	triangleTargetSecondThirdArea, err := controller.AreaByTrianglePoints(
+		targetPoint, triangleSecondPoint, triangleThirdPoint)
+	if err != nil {
+		return 0, 0, 0, err
+	}
 
-	vectorTargetToFirstPoint := pointController.ExtractVector(targetPoint, triangleFirstPoint)
-	vectorTargetToSecondPoint := pointController.ExtractVector(targetPoint, triangleSecondPoint)
-	ectorTargetToThirdPoint := pointController.ExtractVector(targetPoint, triangleThirdPoint)
+	triangleTargetThirdFirstArea, err := controller.AreaByTrianglePoints(
+		targetPoint, triangleThirdPoint, triangleFirstPoint)
+	if err != nil {
+		return 0, 0, 0, err
+	}
 
-	normal := utils.VectorCrossProduct(&AB, &AC)
-	AreaABC := utils.VectorNorm(&normal) / 2
-
-	normalA := utils.VectorCrossProduct(&PB, &PC)
-	normalB := utils.VectorCrossProduct(&PC, &PA)
-
-	AreaA := utils.VectorNorm(&normalA) / 2
-	AreaB := utils.VectorNorm(&normalB) / 2
-
-	alpha := AreaA / AreaABC
-	beta := AreaB / AreaABC
+	alpha := triangleTargetSecondThirdArea / triangleArea
+	beta := triangleTargetThirdFirstArea / triangleArea
 	gama := (1 - alpha) - beta
 
-	coordinates := []float64{alpha, beta, gama}
-	return coordinates
+	return alpha, beta, gama, nil
 }
