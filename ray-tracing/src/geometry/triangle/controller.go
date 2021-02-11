@@ -3,7 +3,6 @@ package triangle
 import (
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point_repository"
-	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
 )
 
 // Controller is a class for controlling triangles.
@@ -13,93 +12,52 @@ import (
 //
 type Controller struct {}
 
-// AreaByTrianglePoints calculates the area of a Triangle by its 3 points.
+// getActualPoint gets the actual point of a Triangle.
 //
 // Parameters:
-// 	firstPoint  - The first point of the Triangle.
-// 	secondPoint - The second point of the Triangle.
-// 	thirdPoint  - The third point of the Triangle.
+// 	triangle   - The target Triangle.
+// 	repository - The point repository.
+// 	index      - The index of the vertex on the Triangle vertices indexes.
 //
 // Returns:
-//  The area of the Triangle
+// 	The point.
 //  An error.
 //
-func (*Controller) AreaByTrianglePoints(firstPoint, secondPoint, thirdPoint *point.Point) (float64, error){
-	pointController := point.Controller{}
-	vectorFirstToSecondPoint, err := pointController.ExtractVector(firstPoint, secondPoint)
+func (*Controller) getActualPoint(triangle *Triangle, repository *point_repository.PointRepository, index int) (
+	*point.Point, error) {
+	pointIndex, err := triangle.GetVertexIndex(index)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
-
-	vectorFirstToThirdPoint, err := pointController.ExtractVector(firstPoint, thirdPoint)
-	if err != nil {
-		return 0, err
-	}
-
-	vectorController := vector.Controller{}
-
-	normalVector, err := vectorController.CrossProduct(vectorFirstToSecondPoint, vectorFirstToThirdPoint)
-	if err != nil {
-		return 0, err
-	}
-
-	triangleArea := vectorController.Norm(normalVector) / 2
-	return triangleArea, nil
+	return repository.GetPoint(pointIndex)
 }
 
-// FindBarycentricCoordinatesByPoint finds the barycentric coordinates of a point based on a Triangle.
-// https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/barycentric-coordinates
+// GetActualPoints gets the actual points of a Triangle.
 //
 // Parameters:
-// 	triangle    - The Triangle.
-//  targetPoint - The target point.
-//  repository  - The point repository.
+// 	triangle   - The target Triangle.
+// 	repository - The point repository.
 //
 // Returns:
-//  The 3 barycentric coordinates.
+// 	The points.
 //  An error.
 //
-func (controller *Controller) FindBarycentricCoordinatesByPoint(triangle *Triangle, targetPoint *point.Point,
-	repository *point_repository.PointRepository) (float64, float64, float64, error) {
-	triangleFirstPointIndex, _ := triangle.GetVertexIndex(0)
-	triangleSecondPointIndex, _ := triangle.GetVertexIndex(1)
-	triangleThirdPointIndex, _ := triangle.GetVertexIndex(2)
-
-	triangleFirstPoint, err := repository.GetPoint(triangleFirstPointIndex)
+func (controller *Controller) GetActualPoints(triangle *Triangle, repository *point_repository.PointRepository) (
+	[]*point.Point, error) {
+	firstPoint, err := controller.getActualPoint(triangle, repository, 0)
 	if err != nil {
-		return 0, 0, 0, err
+		return nil, err
 	}
 
-	triangleSecondPoint, err := repository.GetPoint(triangleSecondPointIndex)
+	secondPoint, err := controller.getActualPoint(triangle, repository, 1)
 	if err != nil {
-		return 0, 0, 0, err
+		return nil, err
 	}
 
-	triangleThirdPoint, err := repository.GetPoint(triangleThirdPointIndex)
+	thirdPoint, err := controller.getActualPoint(triangle, repository, 2)
 	if err != nil {
-		return 0, 0, 0, err
+		return nil, err
 	}
 
-	triangleArea, err := controller.AreaByTrianglePoints(triangleFirstPoint, triangleSecondPoint, triangleThirdPoint)
-	if err != nil {
-		return 0, 0, 0, err
-	}
-
-	triangleTargetSecondThirdArea, err := controller.AreaByTrianglePoints(
-		targetPoint, triangleSecondPoint, triangleThirdPoint)
-	if err != nil {
-		return 0, 0, 0, err
-	}
-
-	triangleTargetThirdFirstArea, err := controller.AreaByTrianglePoints(
-		targetPoint, triangleThirdPoint, triangleFirstPoint)
-	if err != nil {
-		return 0, 0, 0, err
-	}
-
-	alpha := triangleTargetSecondThirdArea / triangleArea
-	beta := triangleTargetThirdFirstArea / triangleArea
-	gama := (1 - alpha) - beta
-
-	return alpha, beta, gama, nil
+	return []*point.Point{firstPoint, secondPoint, thirdPoint}, nil
 }
