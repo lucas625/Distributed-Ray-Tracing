@@ -9,11 +9,11 @@ package line
 // Returns:
 // 	the Line.
 //
-func ExtractLine(p0, p1 Point) Line {
-	v := ExtractVector(&p0, &p1)
-	line := Line{Start: p0, Director: v}
-	return line
-}
+//func ExtractLine(p0, p1 Point) Line {
+//	v := ExtractVector(&p0, &p1)
+//	line := Line{Start: p0, Director: v}
+//	return line
+//}
 
 // FindPos is a function to get the position of a line at a given t.
 //
@@ -23,11 +23,11 @@ func ExtractLine(p0, p1 Point) Line {
 // Returns:
 // 	the Point.
 //
-func (line Line) FindPos(t float64) Point {
-	v := utils.CMultVector(&line.Director, t)
-	pos := InitPoint(3)
-	for i := 0; i < 3; i++ {
-		pos.Coordinates[i] = line.Start.Coordinates[i] + v.Coordinates[i]
-	}
-	return pos
-}
+//func (line Line) FindPos(t float64) Point {
+//	v := utils.CMultVector(&line.Director, t)
+//	pos := InitPoint(3)
+//	for i := 0; i < 3; i++ {
+//		pos.Coordinates[i] = line.Start.Coordinates[i] + v.Coordinates[i]
+//	}
+//	return pos
+//}

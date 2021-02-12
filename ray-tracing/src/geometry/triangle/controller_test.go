@@ -107,3 +107,97 @@ func TestController_GetActualPoint_OutOfPointRepository(t *testing.T) {
 		repository.NumberOfPoints(), 4)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
+
+// TestController_GetActualPoints tests the get actual points of a Triangle.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestController_GetActualPoints(t *testing.T) {
+	points := buildSamplePoints(t)
+	repository, err := point_repository.Init(points, 3)
+	test_helpers.AssertNilError(t, err)
+	triangle, err := Init([]int{0, 1, 2}, []int{0, 1, 2})
+	test_helpers.AssertNilError(t, err)
+	triangleController := Controller{}
+	receivedPoints, err := triangleController.GetActualPoints(triangle, repository)
+	test_helpers.AssertNilError(t, err)
+	for index := 0; index < len(points); index++ {
+		test_helpers.AssertEqual(t, true, points[index].IsEqual(receivedPoints[index]))
+	}
+}
+
+// TestController_GetActualPoints_FirstPointOutOfRepository tests the get actual points of a Triangle when the first
+// point is out of the repository.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestController_GetActualPoints_FirstPointOutOfRepository(t *testing.T) {
+	points := buildSamplePoints(t)
+	repository, err := point_repository.Init(points, 3)
+	test_helpers.AssertNilError(t, err)
+	triangle, err := Init([]int{4, 1, 2}, []int{0, 1, 2})
+	test_helpers.AssertNilError(t, err)
+	triangleController := Controller{}
+	_, err = triangleController.GetActualPoints(triangle, repository)
+	test_helpers.AssertNotNilError(t, err)
+	expectedErrorMessage := fmt.Sprintf(
+		"Index out of limits of the point repository. Expected from 0 to %v and got %v.",
+		repository.NumberOfPoints(), 4)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
+}
+
+// TestController_GetActualPoints_SecondPointOutOfRepository tests the get actual points of a Triangle when the second
+// point is out of the repository.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestController_GetActualPoints_SecondPointOutOfRepository(t *testing.T) {
+	points := buildSamplePoints(t)
+	repository, err := point_repository.Init(points, 3)
+	test_helpers.AssertNilError(t, err)
+	triangle, err := Init([]int{0, 5, 2}, []int{0, 1, 2})
+	test_helpers.AssertNilError(t, err)
+	triangleController := Controller{}
+	_, err = triangleController.GetActualPoints(triangle, repository)
+	test_helpers.AssertNotNilError(t, err)
+	expectedErrorMessage := fmt.Sprintf(
+		"Index out of limits of the point repository. Expected from 0 to %v and got %v.",
+		repository.NumberOfPoints(), 5)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
+}
+
+// TestController_GetActualPoints_ThirdPointOutOfRepository tests the get actual points of a Triangle when the third
+// point is out of the repository.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestController_GetActualPoints_ThirdPointOutOfRepository(t *testing.T) {
+	points := buildSamplePoints(t)
+	repository, err := point_repository.Init(points, 3)
+	test_helpers.AssertNilError(t, err)
+	triangle, err := Init([]int{0, 1, 3}, []int{0, 1, 2})
+	test_helpers.AssertNilError(t, err)
+	triangleController := Controller{}
+	_, err = triangleController.GetActualPoints(triangle, repository)
+	test_helpers.AssertNotNilError(t, err)
+	expectedErrorMessage := fmt.Sprintf(
+		"Index out of limits of the point repository. Expected from 0 to %v and got %v.",
+		repository.NumberOfPoints(), 3)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
+}
