@@ -1,33 +1,49 @@
 package line
 
+import (
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
+)
+
+// Controller is a class for controlling lines.
+//
+// Members:
+// 	none
+//
+type Controller struct {}
+
 // ExtractLine is a function to extract a line from 2 points.
 //
 // Parameters:
-// 	p0 - the starting point.
-//  p1 - the target point.
+// 	startingPoint - The starting point.
+//  targetPoint   - The target point.
 //
 // Returns:
-// 	the Line.
+// 	A Line.
+//  An error.
 //
-//func ExtractLine(p0, p1 Point) Line {
-//	v := ExtractVector(&p0, &p1)
-//	line := Line{Start: p0, Director: v}
-//	return line
-//}
+func (*Controller) ExtractLine(startingPoint, targetPoint *point.Point) (*Line, error) {
+	pointController := point.Controller{}
+	vectorDirector, err := pointController.ExtractVector(startingPoint, targetPoint)
+	if err != nil {
+		return nil, err
+	}
+	return Init(startingPoint, vectorDirector)
+}
 
-// FindPos is a function to get the position of a line at a given t.
+// FindPoint calculates the point on a line at a given parametric parameter.
 //
 // Parameters:
-// 	t - the t parameter.
+// 	line                - The Line.
+// 	parametricParameter - The parametric parameter of the Line.
 //
 // Returns:
-// 	the Point.
+// 	The Point.
+//  An error.
 //
-//func (line Line) FindPos(t float64) Point {
-//	v := utils.CMultVector(&line.Director, t)
-//	pos := InitPoint(3)
-//	for i := 0; i < 3; i++ {
-//		pos.Coordinates[i] = line.Start.Coordinates[i] + v.Coordinates[i]
-//	}
-//	return pos
-//}
+func (*Controller) FindPoint(line *Line, parametricParameter float64) (*point.Point, error) {
+	vectorController := vector.Controller{}
+	multipliedVector := vectorController.ScalarMultiplication(line.GetVectorDirector(), parametricParameter)
+	pointController := point.Controller{}
+	return pointController.SumWithVector(line.GetStartingPoint(), multipliedVector)
+}

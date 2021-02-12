@@ -30,7 +30,7 @@ func (*Controller) ExtractVector(startingPoint, targetPoint *Point) (*vector.Vec
 	for index := 0; index < startingPoint.Dimension(); index++ {
 		startingPointCoordinate, _ := startingPoint.GetCoordinate(index)
 		targetPointCoordinate, _ := targetPoint.GetCoordinate(index)
-		extractedVector.SetCoordinate(index, targetPointCoordinate - startingPointCoordinate)
+		_ = extractedVector.SetCoordinate(index, targetPointCoordinate - startingPointCoordinate)
 	}
 	return extractedVector, nil
 }
@@ -47,8 +47,31 @@ func (*Controller) ToHomogeneousCoordinates(point *Point) *matrix.Matrix {
 	pointAsMatrix, _ := matrix.Init(point.Dimension() + 1, 1)
 	for index := 0; index < point.Dimension(); index++ {
 		pointCoordinate, _ := point.GetCoordinate(index)
-		pointAsMatrix.SetValue(index, 0, pointCoordinate)
+		_ = pointAsMatrix.SetValue(index, 0, pointCoordinate)
 	}
-	pointAsMatrix.SetValue(point.Dimension(), 0, 1)
+	_ = pointAsMatrix.SetValue(point.Dimension(), 0, 1)
 	return pointAsMatrix
+}
+
+// SumWithVector calculates the new point after a sum with a vector.
+//
+// Parameters:
+// 	startingPoint - The starting Point.
+//  sumVector     - The vector to sum with the Point.
+//
+// Returns:
+// 	A Vector.
+//  An Error.
+//
+func (*Controller) SumWithVector(startingPoint *Point, sumVector *vector.Vector) (*Point, error) {
+	if startingPoint.Dimension() != sumVector.Dimension() {
+		return nil, pointAndVectorIncompatibleDimensionError(startingPoint, sumVector)
+	}
+	newPoint, _ := Init(startingPoint.Dimension())
+	for coordinateIndex := 0; coordinateIndex < startingPoint.Dimension(); coordinateIndex++ {
+		pointCoordinateValue, _ := startingPoint.GetCoordinate(coordinateIndex)
+		vectorCoordinateValue, _ := sumVector.GetCoordinate(coordinateIndex)
+		_ = newPoint.SetCoordinate(coordinateIndex, pointCoordinateValue+vectorCoordinateValue)
+	}
+	return newPoint, nil
 }

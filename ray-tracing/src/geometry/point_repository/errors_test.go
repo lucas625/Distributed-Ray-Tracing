@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-// TestPoint_IndexError tests the index error of a PointRepository.
+// TestPointRepository_IndexError tests the index error of a PointRepository.
 //
 // Parameters:
 //  t - Test instance.
@@ -15,7 +15,7 @@ import (
 // Returns:
 //  none
 //
-func TestPoint_IndexError(t *testing.T) {
+func TestPointRepository_IndexError(t *testing.T) {
 	firstPoint, err := point.Init(3)
 	test_helpers.AssertNilError(t, err)
 	index := -1
@@ -30,7 +30,7 @@ func TestPoint_IndexError(t *testing.T) {
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
 
-// TestPoint_IncompatibleDimensionError tests the incompatible dimension error of a PointRepository.
+// TestPointRepository_IncompatibleDimensionError tests the incompatible dimension error of a PointRepository.
 //
 // Parameters:
 //  t - Test instance.
@@ -38,7 +38,7 @@ func TestPoint_IndexError(t *testing.T) {
 // Returns:
 //  none
 //
-func TestPoint_IncompatibleDimensionError(t *testing.T) {
+func TestPointRepository_IncompatibleDimensionError(t *testing.T) {
 	firstPoint, err := point.Init(3)
 	test_helpers.AssertNilError(t, err)
 	points := []*point.Point{firstPoint}
@@ -50,7 +50,7 @@ func TestPoint_IncompatibleDimensionError(t *testing.T) {
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
 
-// TestPoint_InvalidSizeError tests the invalid size error of a PointRepository.
+// TestPointRepository_InvalidSizeError tests the invalid size error of a PointRepository.
 //
 // Parameters:
 //  t - Test instance.
@@ -58,7 +58,7 @@ func TestPoint_IncompatibleDimensionError(t *testing.T) {
 // Returns:
 //  none
 //
-func TestPoint_InvalidSizeError(t *testing.T) {
+func TestPointRepository_InvalidSizeError(t *testing.T) {
 	var points []*point.Point
 	expectedErrorMessage := fmt.Sprintf("Invalid points list: %v. There must be at least one point.", points)
 

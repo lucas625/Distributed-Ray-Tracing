@@ -2,6 +2,7 @@ package point
 
 import (
 	"fmt"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/test_helpers"
 	"testing"
 )
@@ -62,6 +63,25 @@ func TestPoint_differentDimensionError(t *testing.T) {
 		"Invalid dimension of point. Expected: %d and got: %d.\n", firstPoint.Dimension(), secondPoint.Dimension())
 
 	err = differentDimensionsError(firstPoint, secondPoint)
+	test_helpers.AssertNotNilError(t, err)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
+}
+
+// TestPoint_PointAndVectorIncompatibleDimensionError tests the point and vector incompatible dimension error.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestPoint_PointAndVectorIncompatibleDimensionError(t *testing.T) {
+	samplePoint, err := Init(3)
+	test_helpers.AssertNilError(t, err)
+	sampleVector, err := vector.Init(2)
+	expectedErrorMessage := fmt.Sprintf(
+		"Incompatible dimension for point: %d and vector: %d.", samplePoint.Dimension(), sampleVector.Dimension())
+	err = pointAndVectorIncompatibleDimensionError(samplePoint, sampleVector)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
