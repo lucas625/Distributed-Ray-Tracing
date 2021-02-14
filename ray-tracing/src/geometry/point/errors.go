@@ -3,6 +3,7 @@ package point
 import (
 	"errors"
 	"fmt"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
 )
 
 // invalidDimensionError is the error where a Point has an invalid dimension.
@@ -45,5 +46,20 @@ func indexError(point *Point, index int) error {
 func differentDimensionsError(firstPoint, secondPoint *Point) error {
 	errorMessage := fmt.Sprintf(
 		"Invalid dimension of point. Expected: %d and got: %d.\n", firstPoint.Dimension(), secondPoint.Dimension())
+	return errors.New(errorMessage)
+}
+
+// pointAndVectorIncompatibleDimensionError is the error where a point has an incompatible dimension to a vector.
+//
+// Parameters:
+//	startingPoint - The starting Point.
+//  targetVector  - The vector to sum with the Point.
+//
+// Returns:
+//  An Error
+//
+func pointAndVectorIncompatibleDimensionError(startingPoint *Point, targetVector *vector.Vector) error {
+	errorMessage := fmt.Sprintf(
+		"Incompatible dimension for point: %d and vector: %d.", startingPoint.Dimension(), targetVector.Dimension())
 	return errors.New(errorMessage)
 }
