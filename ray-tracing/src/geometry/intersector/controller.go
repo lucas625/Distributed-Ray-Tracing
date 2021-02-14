@@ -31,6 +31,11 @@ type Controller struct {}
 //
 func (*Controller) IntersectRayTriangle(ray *line.Line, targetTriangle *triangle.Triangle,
 	repository *point_repository.PointRepository) (float64, []float64, bool, error) {
+
+	if ray.Dimension() != 3 || repository.PointsDimension() != 3 {
+		return 0, nil, false, non3DRayPointsError(ray, repository)
+	}
+
 	rayOrigin := ray.GetStartingPoint()
 	rayVector := ray.GetVectorDirector()
 
@@ -47,10 +52,7 @@ func (*Controller) IntersectRayTriangle(ray *line.Line, targetTriangle *triangle
 
 	vectorController := vector.Controller{}
 
-	h, err := vectorController.CrossProduct(rayVector, secondEdge)
-	if err != nil {
-		return 0, nil, false, err
-	}
+	h, _ := vectorController.CrossProduct(rayVector, secondEdge)
 
 	a, _ := vectorController.DotProduct(firstEdge, h)
 
@@ -63,8 +65,8 @@ func (*Controller) IntersectRayTriangle(ray *line.Line, targetTriangle *triangle
 
 	dotProductSH, _ := vectorController.DotProduct(s, h)
 
-	u := f * dotProductSH
-	if u < 0.0 || u > 1.0 {
+	secondBarycentricCoordinate := f * dotProductSH
+	if secondBarycentricCoordinate < 0.0 || secondBarycentricCoordinate > 1.0 {
 		return 0, nil, false, nil
 	}
 
@@ -72,20 +74,20 @@ func (*Controller) IntersectRayTriangle(ray *line.Line, targetTriangle *triangle
 
 	dotProductRayVectorQ, _ := vectorController.DotProduct(rayVector, q)
 
-	v := f * dotProductRayVectorQ
-
-	if v < 0.0 || u + v > 1.0 {
+	thirdBarycentricCoordinate := f * dotProductRayVectorQ
+	if thirdBarycentricCoordinate < 0.0 || secondBarycentricCoordinate+thirdBarycentricCoordinate > 1.0 {
 		return 0, nil, false, nil
 	}
 
-	// At this stage we can compute t to find out where the intersection point is on the line.
+	// At this stage we can compute lineParametricParameter to find out where the intersection point is on the line.
 	dotProductSecondEdgeQ, _ := vectorController.DotProduct(secondEdge, q)
 
-	t := f * dotProductSecondEdgeQ
-	if t > EPSILON && t < 1/EPSILON {
-		// outIntersectionPoint = rayOrigin + rayVector * t
-		barycentricCoordinates := []float64{1-u-v, u, v}
-		return t, barycentricCoordinates, true, nil
+	lineParametricParameter := f * dotProductSecondEdgeQ
+	if lineParametricParameter > EPSILON && lineParametricParameter < 1/EPSILON {
+		firstBarycentricCoordinate := 1.0 - secondBarycentricCoordinate - thirdBarycentricCoordinate
+		barycentricCoordinates := []float64{
+			firstBarycentricCoordinate, secondBarycentricCoordinate, thirdBarycentricCoordinate}
+		return lineParametricParameter, barycentricCoordinates, true, nil
 	}
 
 	return 0, nil, false, nil

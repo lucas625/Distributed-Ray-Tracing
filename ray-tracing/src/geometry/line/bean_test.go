@@ -54,3 +54,32 @@ func TestLine_Init_PointAndVectorIncompatibleDimensionError(t *testing.T) {
 		"Incompatible dimension for point: %d and vector: %d.", startingPoint.Dimension(), vectorDirector.Dimension())
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
+
+// TestLine_IsEqual_DifferentDimensions tests the instantiation of a Line.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestLine_IsEqual_DifferentDimensions(t *testing.T) {
+	firstLineStartingPoint, err := point.Init(3)
+	test_helpers.AssertNilError(t, err)
+
+	firstLineVectorDirector, err := vector.Init(3)
+	test_helpers.AssertNilError(t, err)
+
+	firstLine, err := Init(firstLineStartingPoint, firstLineVectorDirector)
+	test_helpers.AssertNilError(t, err)
+
+	secondLineStartingPoint, err := point.Init(2)
+	test_helpers.AssertNilError(t, err)
+
+	secondLineVectorDirector, err := vector.Init(2)
+	test_helpers.AssertNilError(t, err)
+
+	secondLine, err := Init(secondLineStartingPoint, secondLineVectorDirector)
+	test_helpers.AssertNilError(t, err)
+	test_helpers.AssertEqual(t, false, firstLine.IsEqual(secondLine))
+}

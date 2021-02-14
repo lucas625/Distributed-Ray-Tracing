@@ -49,8 +49,23 @@ func (line *Line) GetVectorDirector() *vector.Vector {
 // 	If the lines are equal.
 //
 func (line *Line) IsEqual(other *Line) bool {
+	if line.Dimension() != other.Dimension() {
+		return false
+	}
 	return line.GetVectorDirector().IsEqual(other.GetVectorDirector()) &&
 		line.GetStartingPoint().IsEqual(other.GetStartingPoint())
+}
+
+// Dimension gets the dimension of the Line.
+//
+// Parameters:
+// 	none
+//
+// Returns:
+// 	The dimension of the line.
+//
+func (line *Line) Dimension() int {
+	return line.GetStartingPoint().Dimension()
 }
 
 // Init checks if a Line object is equal to another.
