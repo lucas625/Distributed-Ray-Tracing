@@ -15,13 +15,13 @@ import (
 //
 type Controller struct {}
 
-// IntersectLineTriangle is a function to intersect triangles.
+// IntersectRayTriangle calculates the intersection between a ray and a triangle.
 // https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/moller-trumbore-ray-triangle-intersection
 //
 // Parameters:
-// 	intersectingLine - The line.
-//  targetTriangle   - The target triangle.
-//  repository       - The point repository.
+// 	ray            - The line.
+//  targetTriangle - The target triangle.
+//  repository     - The point repository.
 //
 // Returns:
 //  The line t parameter (A + tV).
@@ -29,10 +29,10 @@ type Controller struct {}
 //  A flag checking if has intersection.
 //  An error.
 //
-func (*Controller) IntersectLineTriangle(intersectingLine *line.Line, targetTriangle *triangle.Triangle,
+func (*Controller) IntersectRayTriangle(ray *line.Line, targetTriangle *triangle.Triangle,
 	repository *point_repository.PointRepository) (float64, []float64, bool, error) {
-	rayOrigin := intersectingLine.GetStartingPoint()
-	rayVector := intersectingLine.GetVectorDirector()
+	rayOrigin := ray.GetStartingPoint()
+	rayVector := ray.GetVectorDirector()
 
 	EPSILON := 0.0000001
 
