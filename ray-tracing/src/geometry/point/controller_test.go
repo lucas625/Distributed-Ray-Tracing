@@ -85,3 +85,53 @@ func TestPointController_ToHomogeneousCoordinates(t *testing.T) {
 	areMatricesEqual := expectedMatrix.IsEqual(pointAsMatrix)
 	test_helpers.AssertEqual(t, true, areMatricesEqual)
 }
+
+// TestPointController_SumWithVector tests the sum with vector of a Point.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestPointController_SumWithVector(t *testing.T) {
+	expectedPoint := &Point{coordinates: []float64{3, -1, 20}}
+	startingPoint := &Point{coordinates: []float64{1, 4, 8}}
+	controller := &Controller{}
+	sumVector, err := vector.Init(3)
+	test_helpers.AssertNilError(t, err)
+
+	err = sumVector.SetCoordinate(0, 2)
+	test_helpers.AssertNilError(t, err)
+	err = sumVector.SetCoordinate(1, -5)
+	test_helpers.AssertNilError(t, err)
+	err = sumVector.SetCoordinate(2, 12)
+	test_helpers.AssertNilError(t, err)
+
+	newPoint, err := controller.SumWithVector(startingPoint, sumVector)
+	test_helpers.AssertNilError(t, err)
+
+	test_helpers.AssertEqual(t, true, expectedPoint.IsEqual(newPoint))
+}
+
+// TestPointController_SumWithVector_PointAndVectorIncompatibleDimensionError tests the sum with vector of a Point when
+// the dimension of the Point is incompatible with the dimension of the vector.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestPointController_SumWithVector_PointAndVectorIncompatibleDimensionError(t *testing.T) {
+	startingPoint := &Point{coordinates: []float64{1, 4, 8}}
+	controller := &Controller{}
+	sumVector, err := vector.Init(2)
+	test_helpers.AssertNilError(t, err)
+	expectedErrorMessage := fmt.Sprintf(
+		"Incompatible dimension for point: %d and vector: %d.", startingPoint.Dimension(), sumVector.Dimension())
+
+	_, err = controller.SumWithVector(startingPoint, sumVector)
+	test_helpers.AssertNotNilError(t, err)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
+}
