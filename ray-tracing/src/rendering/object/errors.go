@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-// nonRGBColorError is the error where the color of the object does not have 3 values.
+// nonRGBColorError is the error where the color of the Object does not have 3 values.
 //
 // Parameters:
 //	color - The color values.

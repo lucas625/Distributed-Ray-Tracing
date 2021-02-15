@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-// TestObject_NonRGBColorError tests the error where the color of the object does not have 3 values.
+// TestObject_NonRGBColorError tests the error where the color of the Object does not have 3 values.
 //
 // Parameters:
 //  t - Test instance.
@@ -38,7 +38,7 @@ func TestObject_ColorOutOfBoundsError(t *testing.T) {
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
 
-// TestObject_InvalidReflectionCoefficientsError tests the error where an Object is ambient, diffuse, specular or
+// TestObject_InvalidReflectionCoefficientsError tests the error where an Object is diffuse, specular or
 // transmission reflections are not valid.
 //
 // Parameters:
