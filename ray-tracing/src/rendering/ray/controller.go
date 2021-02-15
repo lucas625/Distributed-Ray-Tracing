@@ -1,4 +1,4 @@
-package intersector
+package ray
 
 import (
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/line"
@@ -8,7 +8,7 @@ import (
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
 )
 
-// Controller is a class for controlling intersections.
+// Controller is a class for controlling ray intersections.
 //
 // Members:
 // 	none

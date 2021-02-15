@@ -1,4 +1,4 @@
-package intersector
+package ray
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-// TestIntersector_Non3DRayPointsError tests the non 3D ray or point repository error.
+// TestRay_Non3DRayPointsError tests the non 3D ray or point repository error.
 //
 // Parameters:
 //  t - Test instance.
@@ -18,7 +18,7 @@ import (
 // Returns:
 //  none
 //
-func TestIntersector_Non3DRayPointsError(t *testing.T) {
+func TestRay_Non3DRayPointsError(t *testing.T) {
 	samplePoint, err := point.Init(3)
 	test_helpers.AssertNilError(t, err)
 	sampleVector, err := vector.Init(3)

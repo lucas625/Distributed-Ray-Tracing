@@ -1,4 +1,4 @@
-package intersector
+package ray
 
 import (
 	"fmt"
@@ -12,13 +12,13 @@ import (
 	"testing"
 )
 
-// TestController_IntersectRayTriangle tests the intersection between a ray and a triangle.
+// buildSamplePointRepository builds a sample point repository for testing.
 //
 // Parameters:
 //  t - Test instance.
 //
 // Returns:
-//  none
+//  A sample point repository.
 //
 func buildSamplePointRepository(t *testing.T) *point_repository.PointRepository {
 	dimension := 3
@@ -76,8 +76,8 @@ func TestController_IntersectRayTriangle(t *testing.T) {
 	ray, err := line.Init(rayStartingPoint, rayVectorDirector)
 	test_helpers.AssertNilError(t, err)
 
-	intersectorController := Controller{}
-	parametricParameter, barycentricCoordinates, hasIntersection, err := intersectorController.IntersectRayTriangle(
+	rayController := Controller{}
+	parametricParameter, barycentricCoordinates, hasIntersection, err := rayController.IntersectRayTriangle(
 		ray, targetTriangle, repository)
 	test_helpers.AssertNilError(t, err)
 	test_helpers.AssertEqual(t, 2.0, parametricParameter)
@@ -117,8 +117,8 @@ func TestController_IntersectRayTriangle_NegativeParametricParameter(t *testing.
 	ray, err := line.Init(rayStartingPoint, rayVectorDirector)
 	test_helpers.AssertNilError(t, err)
 
-	intersectorController := Controller{}
-	parametricParameter, barycentricCoordinates, hasIntersection, err := intersectorController.IntersectRayTriangle(
+	rayController := Controller{}
+	parametricParameter, barycentricCoordinates, hasIntersection, err := rayController.IntersectRayTriangle(
 		ray, targetTriangle, repository)
 	test_helpers.AssertNilError(t, err)
 	test_helpers.AssertEqual(t, 0.0, parametricParameter)
@@ -154,8 +154,8 @@ func TestController_IntersectRayTriangle_Non3D(t *testing.T) {
 	ray, err := line.Init(rayStartingPoint, rayVectorDirector)
 	test_helpers.AssertNilError(t, err)
 
-	intersectorController := Controller{}
-	_, _, _, err = intersectorController.IntersectRayTriangle(ray, targetTriangle, repository)
+	rayController := Controller{}
+	_, _, _, err = rayController.IntersectRayTriangle(ray, targetTriangle, repository)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
@@ -192,8 +192,8 @@ func TestController_IntersectRayTriangle_NegativeSecondBarycentricCoordinate(t *
 	ray, err := line.Init(rayStartingPoint, rayVectorDirector)
 	test_helpers.AssertNilError(t, err)
 
-	intersectorController := Controller{}
-	parametricParameter, barycentricCoordinates, hasIntersection, err := intersectorController.IntersectRayTriangle(
+	rayController := Controller{}
+	parametricParameter, barycentricCoordinates, hasIntersection, err := rayController.IntersectRayTriangle(
 		ray, targetTriangle, repository)
 	test_helpers.AssertNilError(t, err)
 	test_helpers.AssertEqual(t, 0.0, parametricParameter)
@@ -233,8 +233,8 @@ func TestController_IntersectRayTriangle_BiggerThan1ThirdBarycentricCoordinate(t
 	ray, err := line.Init(rayStartingPoint, rayVectorDirector)
 	test_helpers.AssertNilError(t, err)
 
-	intersectorController := Controller{}
-	parametricParameter, barycentricCoordinates, hasIntersection, err := intersectorController.IntersectRayTriangle(
+	rayController := Controller{}
+	parametricParameter, barycentricCoordinates, hasIntersection, err := rayController.IntersectRayTriangle(
 		ray, targetTriangle, repository)
 	test_helpers.AssertNilError(t, err)
 	test_helpers.AssertEqual(t, 0.0, parametricParameter)
@@ -273,8 +273,8 @@ func TestController_IntersectRayTriangle_RayParallelToTriangle(t *testing.T) {
 	ray, err := line.Init(rayStartingPoint, rayVectorDirector)
 	test_helpers.AssertNilError(t, err)
 
-	intersectorController := Controller{}
-	parametricParameter, barycentricCoordinates, hasIntersection, err := intersectorController.IntersectRayTriangle(
+	rayController := Controller{}
+	parametricParameter, barycentricCoordinates, hasIntersection, err := rayController.IntersectRayTriangle(
 		ray, targetTriangle, repository)
 	test_helpers.AssertNilError(t, err)
 	test_helpers.AssertEqual(t, 0.0, parametricParameter)
