@@ -1,6 +1,7 @@
 package light
 
 import (
+	"fmt"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point_repository"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/triangle"
@@ -95,6 +96,80 @@ func TestObject_Init(t *testing.T) {
 	expectedLight := &Light{lightIntensity: lightIntensity, lightObject: lightObject, color: lightColor}
 
 	receivedLight, err := Init(lightIntensity, lightObject, lightColor)
-
+	test_helpers.AssertNilError(t, err)
 	test_helpers.AssertEqual(t, true, expectedLight.IsEqual(receivedLight))
+}
+
+// TestObject_Init_NonRGBColorError tests the instantiation of a Light.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestObject_Init_NonRGBColorError(t *testing.T) {
+	repository := buildSamplePointRepository(t)
+	normals := buildNormals(t)
+	firstTriangle, err := triangle.Init([]int{0, 1, 2}, []int{0, 1, 2})
+	test_helpers.AssertNilError(t, err)
+	triangles := []*triangle.Triangle{firstTriangle}
+
+	name := "my light"
+	color := []float64{0, 0, 0}
+	specularDecay := 0.0
+	specularReflection := 1.0
+	roughNess := 0.0
+	transmissionReflection := 0.0
+	diffuseReflection := 0.0
+
+	lightObject, err := object.Init(name, repository, triangles, normals, color, specularDecay, specularReflection, roughNess,
+		transmissionReflection, diffuseReflection)
+	test_helpers.AssertNilError(t, err)
+
+	lightIntensity := 5.0
+	lightColor := []float64{1, 0.5}
+
+	expectedErrorMessage := fmt.Sprintf("There are not 3 color values: %d.", len(lightColor))
+
+	_, err = Init(lightIntensity, lightObject, lightColor)
+	test_helpers.AssertNotNilError(t, err)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
+}
+
+// TestObject_Init_ColorOutOfBoundsError tests the instantiation of a Light.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestObject_Init_ColorOutOfBoundsError(t *testing.T) {
+	repository := buildSamplePointRepository(t)
+	normals := buildNormals(t)
+	firstTriangle, err := triangle.Init([]int{0, 1, 2}, []int{0, 1, 2})
+	test_helpers.AssertNilError(t, err)
+	triangles := []*triangle.Triangle{firstTriangle}
+
+	name := "my light"
+	color := []float64{0, 0, 0}
+	specularDecay := 0.0
+	specularReflection := 1.0
+	roughNess := 0.0
+	transmissionReflection := 0.0
+	diffuseReflection := 0.0
+
+	lightObject, err := object.Init(name, repository, triangles, normals, color, specularDecay, specularReflection, roughNess,
+		transmissionReflection, diffuseReflection)
+	test_helpers.AssertNilError(t, err)
+
+	lightIntensity := 5.0
+	lightColor := []float64{255, 0.5, 1}
+
+	expectedErrorMessage := fmt.Sprintf("Color values out of interval [0,1]: %v.", lightColor)
+
+	_, err = Init(lightIntensity, lightObject, lightColor)
+	test_helpers.AssertNotNilError(t, err)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
