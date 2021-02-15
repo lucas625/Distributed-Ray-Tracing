@@ -182,6 +182,7 @@ func TestObject_IsEqual_DifferentNormalsLength(t *testing.T) {
 	test_helpers.AssertNilError(t, err)
 	otherNormals := append(buildNormals(t), otherVector)
 	firstTriangle, err := triangle.Init([]int{0, 1, 2}, []int{0, 1, 2})
+	test_helpers.AssertNilError(t, err)
 	secondTriangle, err := triangle.Init([]int{1, 1, 2}, []int{1, 1, 2})
 	test_helpers.AssertNilError(t, err)
 	firstTriangles := []*triangle.Triangle{firstTriangle, secondTriangle}
@@ -258,6 +259,7 @@ func TestObject_IsEqual_DifferentNormals(t *testing.T) {
 	otherNormals := buildNormals(t)
 	otherNormals[0] = otherVector
 	firstTriangle, err := triangle.Init([]int{0, 1, 2}, []int{0, 1, 2})
+	test_helpers.AssertNilError(t, err)
 	secondTriangle, err := triangle.Init([]int{1, 1, 2}, []int{1, 1, 2})
 	test_helpers.AssertNilError(t, err)
 	firstTriangles := []*triangle.Triangle{firstTriangle, secondTriangle}
