@@ -1,4 +1,4 @@
-package intersector
+package ray
 
 import (
 	"errors"

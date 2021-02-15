@@ -203,3 +203,23 @@ func TestTriangle_GetVertexNormalIndex_BiggerIndex(t *testing.T) {
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
+
+// TestTriangle_IsEqual tests the is equal of a Triangle.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestTriangle_IsEqual(t *testing.T) {
+	verticesIndexes := []int{1, 2, 3}
+	verticesNormalsIndexes := []int{11, 15, 33}
+
+	triangle, err := Init(verticesIndexes, verticesNormalsIndexes)
+	test_helpers.AssertNilError(t, err)
+	otherTriangle, err := Init(verticesIndexes, verticesNormalsIndexes)
+	test_helpers.AssertNilError(t, err)
+
+	test_helpers.AssertEqual(t, true, triangle.IsEqual(otherTriangle))
+}

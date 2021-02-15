@@ -1,5 +1,7 @@
 package triangle
 
+import "reflect"
+
 // Triangle is a class for triangles.
 //
 // Members:
@@ -41,6 +43,19 @@ func (triangle *Triangle) GetVertexNormalIndex(index int) (int, error) {
 		return 0, indexError(index)
 	}
 	return triangle.verticesNormalsIndexes[index], nil
+}
+
+// IsEqual checks if a Triangle is equal to another.
+//
+// Parameters:
+// 	other - The other Triangle.
+//
+// Returns:
+// 	If the triangles are equal.
+//
+func (triangle *Triangle) IsEqual(other *Triangle) bool {
+	return reflect.DeepEqual(triangle.verticesIndexes, other.verticesIndexes) &&
+		reflect.DeepEqual(triangle.verticesNormalsIndexes, other.verticesNormalsIndexes)
 }
 
 // Init initializes a Triangle.
