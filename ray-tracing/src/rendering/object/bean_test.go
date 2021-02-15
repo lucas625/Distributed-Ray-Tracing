@@ -82,16 +82,15 @@ func TestObject_Init(t *testing.T) {
 	specularReflection := 0.5
 	roughNess := 0.0
 	transmissionReflection := 0.25
-	ambientReflection := 0.0
 	diffuseReflection := 0.25
 
 	object, err := Init(name, repository, triangles, normals, color, specularDecay, specularReflection, roughNess,
-		transmissionReflection, ambientReflection, diffuseReflection)
+		transmissionReflection, diffuseReflection)
 	test_helpers.AssertNilError(t, err)
 
 	expectedLightCharacteristics := &lightCharacteristics{color: color, specularDecay: specularDecay,
 		specularReflection: specularReflection, roughNess: roughNess, transmissionReflection: transmissionReflection,
-		ambientReflection: ambientReflection, diffuseReflection: diffuseReflection}
+		diffuseReflection: diffuseReflection}
 
 	expectedObject := &Object{
 		name: name, repository: repository, triangles: triangles, normals: normals,

@@ -49,14 +49,12 @@ func TestObject_ColorOutOfBoundsError(t *testing.T) {
 //
 func TestObject_InvalidReflectionCoefficientsError(t *testing.T) {
 	specularReflection := 0.5
-	transmissionReflection := 0.25
-	ambientReflection := -0.25
+	transmissionReflection := -0.25
 	diffuseReflection := 0.25
-	expectedErrorMessage := fmt.Sprintf("At least one of the reflections is smaller than 0 or they do not sum" +
-		" 1: ambient %v, diffuse %v, specular %v, transmission %v.", ambientReflection, diffuseReflection,
-		specularReflection, transmissionReflection)
-	err := invalidReflectionCoefficientsError(specularReflection, transmissionReflection, ambientReflection,
-		diffuseReflection)
+	expectedErrorMessage := fmt.Sprintf("At least one of the reflections is smaller than 0 or they do not " +
+		"sum 1: diffuse %v, specular %v, transmission %v.",
+		diffuseReflection, specularReflection, transmissionReflection)
+	err := invalidReflectionCoefficientsError(specularReflection, transmissionReflection, diffuseReflection)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }

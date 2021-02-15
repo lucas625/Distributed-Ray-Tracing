@@ -12,7 +12,6 @@ import (
 //  specularReflection     - Percentage of specular rays.
 //  roughNess              - How much reflections rays get distorted.
 //  transmissionReflection - Percentage of transmission rays.
-//  ambientReflection      - Percentage of ambient rays.
 //  diffuseReflection      - Percentage of diffuse rays.
 //
 type lightCharacteristics struct {
@@ -21,7 +20,6 @@ type lightCharacteristics struct {
 	specularReflection float64
 	roughNess          float64
 	transmissionReflection float64
-	ambientReflection  float64
 	diffuseReflection  float64
 }
 
@@ -85,18 +83,6 @@ func (characteristics *lightCharacteristics) GetTransmissionReflection() float64
 	return characteristics.transmissionReflection
 }
 
-// GetAmbientReflection gets the ambient reflection.
-//
-// Parameters:
-// 	none
-//
-// Returns:
-// 	The ambient reflection.
-//
-func (characteristics *lightCharacteristics) GetAmbientReflection() float64 {
-	return characteristics.ambientReflection
-}
-
 // GetDiffuseReflection gets the diffuse reflection.
 //
 // Parameters:
@@ -123,7 +109,6 @@ func (characteristics *lightCharacteristics) IsEqual(other *lightCharacteristics
 		characteristics.GetSpecularReflection() == other.GetSpecularReflection() &&
 		characteristics.GetRoughNess() == other.GetRoughNess() &&
 		characteristics.GetTransmissionReflection() == other.GetTransmissionReflection() &&
-		characteristics.GetAmbientReflection() == other.GetAmbientReflection() &&
 		characteristics.GetDiffuseReflection() == other.GetDiffuseReflection()
 }
 
@@ -135,7 +120,6 @@ func (characteristics *lightCharacteristics) IsEqual(other *lightCharacteristics
 //  specularReflection     - Percentage of specular rays.
 //  roughNess              - How much reflections rays get distorted.
 //  transmissionReflection - Percentage of transmission rays.
-//  ambientReflection      - Percentage of ambient rays.
 //  diffuseReflection      - Percentage of diffuse rays.
 //
 // Returns:
@@ -143,7 +127,7 @@ func (characteristics *lightCharacteristics) IsEqual(other *lightCharacteristics
 // 	An error.
 //
 func initLightCharacteristics(color []float64, specularDecay, specularReflection, roughNess, transmissionReflection,
-	ambientReflection, diffuseReflection float64) (*lightCharacteristics, error) {
+	diffuseReflection float64) (*lightCharacteristics, error) {
 	if len(color) != 3 {
 		return nil, nonRGBColorError(color)
 	}
@@ -152,12 +136,11 @@ func initLightCharacteristics(color []float64, specularDecay, specularReflection
 			return nil, colorOutOfBoundsError(color)
 		}
 	}
-	if specularReflection + transmissionReflection + diffuseReflection + ambientReflection != 1 ||
-		specularReflection < 0 || transmissionReflection < 0 || diffuseReflection < 0 || ambientReflection < 0 {
+	if specularReflection + transmissionReflection + diffuseReflection != 1 ||
+		specularReflection < 0 || transmissionReflection < 0 || diffuseReflection < 0 {
 		return nil, invalidReflectionCoefficientsError(
-			specularReflection, transmissionReflection, ambientReflection, diffuseReflection)
+			specularReflection, transmissionReflection, diffuseReflection)
 	}
 	return &lightCharacteristics{color: color, specularDecay: specularDecay, specularReflection: specularReflection,
-		roughNess: roughNess, transmissionReflection: transmissionReflection, ambientReflection: ambientReflection,
-		diffuseReflection: diffuseReflection}, nil
+		roughNess: roughNess, transmissionReflection: transmissionReflection, diffuseReflection: diffuseReflection}, nil
 }

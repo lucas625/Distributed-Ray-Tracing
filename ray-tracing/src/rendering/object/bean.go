@@ -125,7 +125,6 @@ func (object *Object) IsEqual(other *Object) bool {
 //  specularReflection     - Percentage of specular rays.
 //  roughNess              - How much reflections rays get distorted.
 //  transmissionReflection - Percentage of transmission rays.
-//  ambientReflection      - Percentage of ambient rays.
 //  diffuseReflection      - Percentage of diffuse rays.
 //
 // Returns:
@@ -134,9 +133,9 @@ func (object *Object) IsEqual(other *Object) bool {
 //
 func Init(name string, repository *point_repository.PointRepository, triangles []*triangle.Triangle,
 	normals []*vector.Vector, color []float64, specularDecay, specularReflection, roughNess, transmissionReflection,
-	ambientReflection, diffuseReflection float64) (*Object, error) {
+	diffuseReflection float64) (*Object, error) {
 	lightCharacteristics, err := initLightCharacteristics(color, specularDecay, specularReflection, roughNess,
-		transmissionReflection, ambientReflection, diffuseReflection)
+		transmissionReflection, diffuseReflection)
 	if err != nil {
 		return nil, err
 	}
