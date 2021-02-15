@@ -134,11 +134,11 @@ func (object *Object) IsEqual(other *Object) bool {
 func Init(name string, repository *point_repository.PointRepository, triangles []*triangle.Triangle,
 	normals []*vector.Vector, color []float64, specularDecay, specularReflection, roughNess, transmissionReflection,
 	diffuseReflection float64) (*Object, error) {
-	lightCharacteristics, err := initLightCharacteristics(color, specularDecay, specularReflection, roughNess,
+	characteristics, err := initLightCharacteristics(color, specularDecay, specularReflection, roughNess,
 		transmissionReflection, diffuseReflection)
 	if err != nil {
 		return nil, err
 	}
 	return &Object{name: name, repository: repository, triangles: triangles, normals: normals,
-		lightCharacteristics: lightCharacteristics}, nil
+		lightCharacteristics: characteristics}, nil
 }
