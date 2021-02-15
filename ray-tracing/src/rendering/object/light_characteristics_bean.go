@@ -9,11 +9,11 @@ import (
 // Members:
 //  color                  - RGB for the color of the object.
 //  specularDecay          - Constant for how fast the specular component decays.
-//  specularReflection     - The coefficient of specular reflection.
+//  specularReflection     - Percentage of specular rays.
 //  roughNess              - How much reflections rays get distorted.
-//  transmissionReflection - The coefficient for transmission.
-//  ambientReflection      - The ambient reflection.
-//  diffuseReflection      - Diffuse reflection coefficient.
+//  transmissionReflection - Percentage of transmission rays.
+//  ambientReflection      - Percentage of ambient rays.
+//  diffuseReflection      - Percentage of diffuse rays.
 //
 type lightCharacteristics struct {
 	color              []float64
@@ -132,11 +132,11 @@ func (characteristics *lightCharacteristics) IsEqual(other *lightCharacteristics
 // Parameters:
 //  color                  - RGB for the color of the object.
 //  specularDecay          - Constant for how fast the specular component decays.
-//  specularReflection     - The coefficient of specular reflection.
+//  specularReflection     - Percentage of specular rays.
 //  roughNess              - How much reflections rays get distorted.
-//  transmissionReflection - The coefficient for transmission.
-//  ambientReflection      - The ambient reflection.
-//  diffuseReflection      - Diffuse reflection coefficient.
+//  transmissionReflection - Percentage of transmission rays.
+//  ambientReflection      - Percentage of ambient rays.
+//  diffuseReflection      - Percentage of diffuse rays.
 //
 // Returns:
 // 	A lightCharacteristics.
@@ -151,6 +151,11 @@ func initLightCharacteristics(color []float64, specularDecay, specularReflection
 		if color[colorIndex] < 0 || color[colorIndex] > 1 {
 			return nil, colorOutOfBoundsError(color)
 		}
+	}
+	if specularReflection + transmissionReflection + diffuseReflection + ambientReflection != 1 ||
+		specularReflection < 0 || transmissionReflection < 0 || diffuseReflection < 0 || ambientReflection < 0 {
+		return nil, invalidReflectionCoefficientsError(
+			specularReflection, transmissionReflection, ambientReflection, diffuseReflection)
 	}
 	return &lightCharacteristics{color: color, specularDecay: specularDecay, specularReflection: specularReflection,
 		roughNess: roughNess, transmissionReflection: transmissionReflection, ambientReflection: ambientReflection,

@@ -122,11 +122,11 @@ func (object *Object) IsEqual(other *Object) bool {
 //  normals                - The normals of the vertices.
 //  color                  - RGB for the color of the object.
 //  specularDecay          - Constant for how fast the specular component decays.
-//  specularReflection     - The coefficient of specular reflection.
+//  specularReflection     - Percentage of specular rays.
 //  roughNess              - How much reflections rays get distorted.
-//  transmissionReflection - The coefficient for transmission.
-//  ambientReflection      - The ambient reflection.
-//  diffuseReflection      - Diffuse reflection coefficient.
+//  transmissionReflection - Percentage of transmission rays.
+//  ambientReflection      - Percentage of ambient rays.
+//  diffuseReflection      - Percentage of diffuse rays.
 //
 // Returns:
 // 	An Object.
