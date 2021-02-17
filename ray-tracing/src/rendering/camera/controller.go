@@ -1,6 +1,9 @@
 package camera
 
-import "github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
+import (
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/utils/matrix"
+)
 
 // Controller is a class for controlling cameras.
 //
@@ -24,29 +27,29 @@ func (*Controller) NormalizeVectors(camera *Camera) {
 	camera.SetRight(vectorController.Normalize(camera.right))
 }
 
-// CamToHomogeneousMatrix is a function to create the matrix ready(after transposition) to multiply the points.
+// ToHomogeneousMatrix creates a matrix ready(after transposition) to multiply the points.
 //
 // Parameters:
-// 	cam - a Camera.
+// 	camera - A Camera.
 //
 // Returns:
-// 	a Matrix.
+// 	A matrix.
 //
-func CamToHomogeneousMatrix(cam *Camera) utils.Matrix {
-	maux := utils.InitMatrix(3, 3)
-	// placing vectors on the matrix on the right form
-	maux.Values[0] = cam.Right.Coordinates
-	maux.Values[1] = cam.Up.Coordinates
-	maux.Values[2] = cam.Look.Coordinates
-	// adding homogeneous and translation
-	maux.Values = append(maux.Values, []float64{0, 0, 0, 1})
-	pValues := cam.Pos.Coordinates
-	for i := 0; i < 3; i++ {
-		maux.Values[i] = append(maux.Values[i], pValues[i]*-1)
+func (*Controller) ToHomogeneousMatrix(camera *Camera) *matrix.Matrix {
+	matrixController := matrix.Controller{}
+	homogeneousMatrix, _ := matrixController.BuildHomogeneousCoordinates(3)
+	
+	for coordinateIndex := 0; coordinateIndex < 3; coordinateIndex++ {
+		lookCoordinate, _ := camera.GetLook().GetCoordinate(coordinateIndex)
+		upCoordinate, _ := camera.GetUp().GetCoordinate(coordinateIndex)
+		rightCoordinate, _ := camera.GetRight().GetCoordinate(coordinateIndex)
+		positionCoordinate, _ := camera.GetPosition().GetCoordinate(coordinateIndex)
+		_ = homogeneousMatrix.SetValue(0, coordinateIndex, rightCoordinate)
+		_ = homogeneousMatrix.SetValue(1, coordinateIndex, upCoordinate)
+		_ = homogeneousMatrix.SetValue(2, coordinateIndex, lookCoordinate)
+		_ = homogeneousMatrix.SetValue(3, coordinateIndex, -1*positionCoordinate)
 	}
-	maux.Lines++
-	maux.Columns++
-	return maux
+	return homogeneousMatrix
 }
 
 // CamToWorld is a function to create the matrix of camera to world.
