@@ -1,7 +1,6 @@
 package camera
 
 import (
-	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/utils/matrix"
 )
 
@@ -11,21 +10,6 @@ import (
 // 	none
 //
 type Controller struct {}
-
-// NormalizeVectors normalizes the Camera vectors.
-//
-// Parameters:
-//  camera - The Camera.
-//
-// Returns:
-// 	none
-//
-func (*Controller) NormalizeVectors(camera *Camera) {
-	vectorController := vector.Controller{}
-	camera.SetLook(vectorController.Normalize(camera.look))
-	camera.SetUp(vectorController.Normalize(camera.up))
-	camera.SetRight(vectorController.Normalize(camera.right))
-}
 
 // WorldToCameraMatrix creates the homogeneous coordinates matrix that parses from world coordinates to Camera
 // coordinates.

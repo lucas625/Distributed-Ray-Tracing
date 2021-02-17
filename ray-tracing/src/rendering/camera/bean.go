@@ -145,8 +145,23 @@ func (camera *Camera) IsEqual(other *Camera) bool {
 		camera.GetLook().IsEqual(other.GetLook()) &&
 		camera.GetUp().IsEqual(other.GetUp()) &&
 		camera.GetRight().IsEqual(other.GetRight()) &&
-		camera.fieldOfView == other.fieldOfView &&
-		camera.distanceToScreen == other.distanceToScreen
+		camera.GetFieldOfView() == other.GetFieldOfView() &&
+		camera.GetDistanceToScreen() == other.GetDistanceToScreen()
+}
+
+// normalizeVectors normalizes the Camera vectors.
+//
+// Parameters:
+//  none
+//
+// Returns:
+// 	none
+//
+func (camera *Camera) normalizeVectors() {
+	vectorController := vector.Controller{}
+	camera.SetLook(vectorController.Normalize(camera.look))
+	camera.SetUp(vectorController.Normalize(camera.up))
+	camera.SetRight(vectorController.Normalize(camera.right))
 }
 
 // Init initializes a Camera.
@@ -165,10 +180,11 @@ func (camera *Camera) IsEqual(other *Camera) bool {
 //
 func Init(position *point.Point, look, up, right *vector.Vector, fieldOfView, distanceToScreen float64) (
 	*Camera, error) {
-	if position.Dimension() != 3 || look.Dimension() != 3 || up.Dimension() != 3 || right.Dimension() != 3{
+	if position.Dimension() != 3 || look.Dimension() != 3 || up.Dimension() != 3 || right.Dimension() != 3 {
 		return nil, non3DCameraError(position, look, up, right)
 	}
 	camera := &Camera{position: position, look: look, up: up, right: right, fieldOfView: fieldOfView,
 		distanceToScreen: distanceToScreen}
+	camera.normalizeVectors()
 	return camera, nil
 }
