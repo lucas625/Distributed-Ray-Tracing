@@ -132,6 +132,23 @@ func (camera *Camera) SetRight(right *vector.Vector) {
 	camera.right = right
 }
 
+// IsEqual checks if a Camera is equal to another.
+//
+// Parameters:
+// 	other - The other Camera.
+//
+// Returns:
+// 	If the cameras are equal.
+//
+func (camera *Camera) IsEqual(other *Camera) bool {
+	return camera.GetPosition().IsEqual(other.GetPosition()) &&
+		camera.GetLook().IsEqual(other.GetLook()) &&
+		camera.GetUp().IsEqual(other.GetUp()) &&
+		camera.GetRight().IsEqual(other.GetRight()) &&
+		camera.fieldOfView == other.fieldOfView &&
+		camera.distanceToScreen == other.distanceToScreen
+}
+
 // Init initializes a Camera.
 //
 // Parameters:
