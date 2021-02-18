@@ -58,7 +58,7 @@ func (*Controller) CameraToWorldMatrix(camera *Camera) *matrix.Matrix {
 		_ = cameraToWorldMatrix.SetValue(coordinateIndex,0, rightCoordinate)
 		_ = cameraToWorldMatrix.SetValue(coordinateIndex,1, upCoordinate)
 		_ = cameraToWorldMatrix.SetValue(coordinateIndex,2, lookCoordinate)
-		_ = cameraToWorldMatrix.SetValue(3, coordinateIndex, positionCoordinate)
+		_ = cameraToWorldMatrix.SetValue(coordinateIndex, 3, positionCoordinate)
 	}
 	return cameraToWorldMatrix
 }
