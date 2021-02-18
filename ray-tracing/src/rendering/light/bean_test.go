@@ -71,7 +71,7 @@ func buildNormals(t *testing.T) []*vector.Vector {
 // Returns:
 //  none
 //
-func TestObject_Init(t *testing.T) {
+func TestLight_Init(t *testing.T) {
 	repository := buildSamplePointRepository(t)
 	normals := buildNormals(t)
 	firstTriangle, err := triangle.Init([]int{0, 1, 2}, []int{0, 1, 2})
@@ -100,7 +100,7 @@ func TestObject_Init(t *testing.T) {
 	test_helpers.AssertEqual(t, true, expectedLight.IsEqual(receivedLight))
 }
 
-// TestObject_Init_NonRGBColorError tests the instantiation of a Light.
+// TestLight_Init_NonRGBColorError tests the instantiation of a Light.
 //
 // Parameters:
 //  t - Test instance.
@@ -108,7 +108,7 @@ func TestObject_Init(t *testing.T) {
 // Returns:
 //  none
 //
-func TestObject_Init_NonRGBColorError(t *testing.T) {
+func TestLight_Init_NonRGBColorError(t *testing.T) {
 	repository := buildSamplePointRepository(t)
 	normals := buildNormals(t)
 	firstTriangle, err := triangle.Init([]int{0, 1, 2}, []int{0, 1, 2})
@@ -137,7 +137,7 @@ func TestObject_Init_NonRGBColorError(t *testing.T) {
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
 
-// TestObject_Init_ColorOutOfBoundsError tests the instantiation of a Light.
+// TestLight_Init_ColorOutOfBoundsError tests the instantiation of a Light.
 //
 // Parameters:
 //  t - Test instance.
@@ -145,7 +145,7 @@ func TestObject_Init_NonRGBColorError(t *testing.T) {
 // Returns:
 //  none
 //
-func TestObject_Init_ColorOutOfBoundsError(t *testing.T) {
+func TestLight_Init_ColorOutOfBoundsError(t *testing.T) {
 	repository := buildSamplePointRepository(t)
 	normals := buildNormals(t)
 	firstTriangle, err := triangle.Init([]int{0, 1, 2}, []int{0, 1, 2})

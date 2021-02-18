@@ -1,6 +1,10 @@
 package matrix
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/utils/math_helper"
+	"math"
+)
 
 // Matrix is a class for matrices.
 //
@@ -82,11 +86,12 @@ func (matrix *Matrix) IsEqual(other *Matrix) bool {
 	if matrix.Lines() != other.Lines() || matrix.Columns() != other.Columns() {
 		return false
 	}
+	mathController := math_helper.Init(math.Pow(1, -10))
 	for lineIndex := 0; lineIndex < matrix.Lines(); lineIndex++{
 		for columnIndex := 0; columnIndex < matrix.Columns(); columnIndex++ {
 			firstMatrixValue, _ := matrix.GetValue(lineIndex, columnIndex)
 			secondMatrixValue, _ := other.GetValue(lineIndex, columnIndex)
-			if firstMatrixValue != secondMatrixValue {
+			if !mathController.IsEqualWithTolerance(firstMatrixValue, secondMatrixValue) {
 				return false
 			}
 		}
