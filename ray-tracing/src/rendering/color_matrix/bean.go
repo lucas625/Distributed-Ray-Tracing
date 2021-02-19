@@ -2,6 +2,7 @@ package color_matrix
 
 import (
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/screen"
+	"reflect"
 )
 
 // ColorMatrix is a class for a ColorMatrix.
@@ -21,8 +22,8 @@ type ColorMatrix struct {
 // Returns:
 // 	The lines of the ColorMatrix.
 //
-func (colorScreen *ColorMatrix) Lines() int {
-	return len(colorScreen.colors)
+func (colorMatrix *ColorMatrix) Lines() int {
+	return len(colorMatrix.colors)
 }
 
 // Columns gets the columns of the ColorMatrix.
@@ -33,8 +34,8 @@ func (colorScreen *ColorMatrix) Lines() int {
 // Returns:
 // 	The columns of the ColorMatrix.
 //
-func (colorScreen *ColorMatrix) Columns() int {
-	return len(colorScreen.colors[0])
+func (colorMatrix *ColorMatrix) Columns() int {
+	return len(colorMatrix.colors[0])
 }
 
 // GetColors gets the colors of the ColorMatrix.
@@ -45,8 +46,8 @@ func (colorScreen *ColorMatrix) Columns() int {
 // Returns:
 // 	The colors of the ColorMatrix.
 //
-func (colorScreen *ColorMatrix) GetColors() [][][]int {
-	return colorScreen.colors
+func (colorMatrix *ColorMatrix) GetColors() [][][]int {
+	return colorMatrix.colors
 }
 
 // SetColor sets the a color of the ColorMatrix.
@@ -59,20 +60,32 @@ func (colorScreen *ColorMatrix) GetColors() [][][]int {
 // Returns:
 // 	none
 //
-func (colorScreen *ColorMatrix) SetColor(lineIndex, columnIndex int, color []int) error {
-	if lineIndex >= colorScreen.Lines() || lineIndex < 0 || columnIndex >= colorScreen.Columns() || columnIndex < 0 {
-		return // Add here the error
+func (colorMatrix *ColorMatrix) SetColor(lineIndex, columnIndex int, color []int) error {
+	if lineIndex >= colorMatrix.Lines() || lineIndex < 0 || columnIndex >= colorMatrix.Columns() || columnIndex < 0 {
+		return indexError(colorMatrix, lineIndex, columnIndex)
 	}
 	if len(color) != 3 {
-		return // Add here the error
+		return nonRGBColorError(color)
 	}
 	for colorIndex := 0; colorIndex < 3; colorIndex++ {
 		if color[colorIndex] < 0 || color[colorIndex] > 255 {
-			return // Add here the error
+			return nonRGBColorError(color)
 		}
 	}
-	colorScreen.colors[lineIndex][columnIndex] = color
+	colorMatrix.colors[lineIndex][columnIndex] = color
 	return nil
+}
+
+// IsEqual checks if two color matrices are equal.
+//
+// Parameters:
+// 	other - the other matrix.
+//
+// Returns:
+// 	If the two color matrices are equal.
+//
+func (colorMatrix *ColorMatrix) IsEqual(other *ColorMatrix) bool {
+	return reflect.DeepEqual(colorMatrix.GetColors(), other.GetColors())
 }
 
 // Init initializes a ColorMatrix.

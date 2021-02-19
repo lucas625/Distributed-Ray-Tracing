@@ -1,51 +1,71 @@
 package screen
 
 import (
-	"errors"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/camera"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/utils/matrix"
 	"math"
-	"strconv"
 )
 
-// PixelToWorld is a function to get the position of a pixel in world coordinates.
+// Controller is a class for controlling screens.
+//
+// Members:
+// 	none
+//
+type Controller struct {}
+
+// BuildRayVectorDirectorToPixel builds a ray is vector director to a pixel, on world coordinates.
 //
 // Parameters:
-// 	x        - position of the pixel.
-//  y        - position of the pixel.
-//  d        - distance viewport to cam.
-//  camWorld - the matrix camera to world.
-//  px       - the additional on x (0->1)
-//  py       - the additional on y (0->1)
-//  fov      - field of view in degrees.
+//  pixelLineIndex   - Y position of the pixel.
+// 	pixelColumnIndex - X position of the pixel.
+//  additionalY      - The additional value to the pixel coordinate on y [0,1).
+//  additionalX      - The additional value to the pixel coordinate on x [0,1).
+//  cameraToWorld    - The matrix from camera to world.
+//  screen           - The Screen that has the pixel.
+//  targetCamera     - The camera of the scene.
 //
 // Returns:
 // 	a Vector.
 //
-func (screen *Screen) PixelToWorld(x, y int, d float64, px, py, fov float64) utils.Vector {
-	if x >= screen.Height || y >= screen.Width {
-		utils.ShowError(errors.New("Invalid Pixel"), "X("+strconv.Itoa(x)+") or Y("+strconv.Itoa(y)+") invalid for screen("+strconv.Itoa(screen.Height)+", "+strconv.Itoa(screen.Width)+").")
+func (*Controller) BuildRayVectorDirectorToPixel(pixelLineIndex, pixelColumnIndex int, additionalY, additionalX float64,
+	cameraToWorld *matrix.Matrix, screen *Screen, targetCamera *camera.Camera) (
+	*vector.Vector, error) {
+	if pixelLineIndex >= screen.GetHeight() || pixelLineIndex < 0 || pixelColumnIndex >= screen.GetWidth() ||
+		pixelColumnIndex < 0 {
+		return nil, pixelIndexError(screen, pixelLineIndex, pixelColumnIndex)
 	}
-	camWorld := screen.CamToWorld
 
-	aspectRatio := float64(screen.Width) / float64(screen.Height)
-	alpha := (fov / 2) * math.Pi / 180.0
-	z := d
-
-	camerax := (2*(float64(x)+px)/float64(screen.Width) - 1) * aspectRatio * math.Tan(alpha)
-	cameray := (1 - 2*(float64(y)+py)/float64(screen.Height)) * math.Tan(alpha)
-
-	v := utils.InitVector(3)
-
-	v.Coordinates[0] = camerax
-	v.Coordinates[1] = cameray
-	v.Coordinates[2] = z
-
-	vMat := utils.VectorToHomogeneousCoord(&v)
-
-	vMatPos := utils.MultMatrix(camWorld, &vMat)
-	for i := 0; i < 3; i++ {
-		v.Coordinates[i] = vMatPos.Values[i][0]
+	if additionalX < 0 || additionalX >= 1 || additionalY < 0 || additionalY >= 1 {
+		return nil, pixelExtraValueError(additionalY, additionalX)
 	}
-	vNormalized := utils.NormalizeVector(&v)
 
-	return vNormalized
+	aspectRatio := float64(screen.GetWidth()) / float64(screen.GetHeight())
+	alpha := (targetCamera.GetFieldOfView() / 2) * math.Pi / 180.0
+
+	vectorDirectorXOnCameraCoordinates := (2*(float64(pixelColumnIndex)+additionalX)/float64(screen.GetWidth()) - 1) *
+		aspectRatio * math.Tan(alpha)
+	vectorDirectorYOnCameraCoordinates := (1 - 2*(float64(pixelLineIndex)+additionalY)/float64(screen.GetHeight())) *
+		math.Tan(alpha)
+
+	vectorDirectorOnCameraCoordinates, _ := vector.Init(3)
+
+	_ = vectorDirectorOnCameraCoordinates.SetCoordinate(0, vectorDirectorXOnCameraCoordinates)
+	_ = vectorDirectorOnCameraCoordinates.SetCoordinate(1, vectorDirectorYOnCameraCoordinates)
+	_ = vectorDirectorOnCameraCoordinates.SetCoordinate(2, targetCamera.GetDistanceToScreen())
+
+	vectorController := vector.Controller{}
+	vectorMatrix := vectorController.ToHomogeneousCoordinates(vectorDirectorOnCameraCoordinates)
+
+	matrixController := matrix.Controller{}
+	vectorMatrixOnWorldCoordinates, _ := matrixController.MultiplyMatrix(cameraToWorld, vectorMatrix)
+
+	vectorDirectorOnWorldCoordinates, _ := vector.Init(3)
+	for coordinateIndex := 0; coordinateIndex < 3; coordinateIndex++ {
+		coordinate, _ := vectorMatrixOnWorldCoordinates.GetValue(coordinateIndex, 0)
+		_ = vectorDirectorOnWorldCoordinates.SetCoordinate(coordinateIndex, coordinate)
+	}
+	normalizedVectorDirector := vectorController.Normalize(vectorDirectorOnWorldCoordinates)
+
+	return normalizedVectorDirector, nil
 }

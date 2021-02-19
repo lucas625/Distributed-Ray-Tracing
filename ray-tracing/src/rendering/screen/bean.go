@@ -44,7 +44,7 @@ func (screen *Screen) GetHeight() int {
 // 	If the screens are equal.
 //
 func (screen *Screen) IsEqual(other *Screen) bool {
-	return screen.GetWidth() == other.GetWidth() && screen.GetHeight() == other.GetHeight() &&
+	return screen.GetWidth() == other.GetWidth() && screen.GetHeight() == other.GetHeight()
 }
 
 // Init initializes a Screen.
