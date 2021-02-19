@@ -20,18 +20,18 @@ import (
 // Returns:
 // 	a Vector.
 //
-func (sc *Screen) PixelToWorld(x, y int, d float64, px, py, fov float64) utils.Vector {
-	if x >= sc.Height || y >= sc.Width {
-		utils.ShowError(errors.New("Invalid Pixel"), "X("+strconv.Itoa(x)+") or Y("+strconv.Itoa(y)+") invalid for screen("+strconv.Itoa(sc.Height)+", "+strconv.Itoa(sc.Width)+").")
+func (screen *Screen) PixelToWorld(x, y int, d float64, px, py, fov float64) utils.Vector {
+	if x >= screen.Height || y >= screen.Width {
+		utils.ShowError(errors.New("Invalid Pixel"), "X("+strconv.Itoa(x)+") or Y("+strconv.Itoa(y)+") invalid for screen("+strconv.Itoa(screen.Height)+", "+strconv.Itoa(screen.Width)+").")
 	}
-	camWorld := sc.CamToWorld
+	camWorld := screen.CamToWorld
 
-	aspectRatio := float64(sc.Width) / float64(sc.Height)
+	aspectRatio := float64(screen.Width) / float64(screen.Height)
 	alpha := (fov / 2) * math.Pi / 180.0
 	z := d
 
-	camerax := (2*(float64(x)+px)/float64(sc.Width) - 1) * aspectRatio * math.Tan(alpha)
-	cameray := (1 - 2*(float64(y)+py)/float64(sc.Height)) * math.Tan(alpha)
+	camerax := (2*(float64(x)+px)/float64(screen.Width) - 1) * aspectRatio * math.Tan(alpha)
+	cameray := (1 - 2*(float64(y)+py)/float64(screen.Height)) * math.Tan(alpha)
 
 	v := utils.InitVector(3)
 

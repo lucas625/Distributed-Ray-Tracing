@@ -1,49 +1,67 @@
 package screen
 
-import (
-	"errors"
-	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/utils/matrix"
-	"strconv"
-)
-
-package screen
-
-import (
-"errors"
-"math"
-"strconv"
-
-"github.com/lucas625/Projeto-CG/src/utils"
-)
-
 // Screen is a class for screens.
 //
 // Members:
 // 	width               - The number of x pixels on the screen.
 // 	height              - The number of y pixels on the screen.
-//  cameraToWorldMatrix - The matrix from camera coordinates to world coordinates.
 //
 type Screen struct {
-	width         int
-	height        int
-	cameraToWorldMatrix *matrix.Matrix
+	width  int
+	height int
+}
+
+// GetWidth gets the width of the Screen.
+//
+// Parameters:
+// 	none
+//
+// Returns:
+// 	The width of the Screen.
+//
+func (screen *Screen) GetWidth() int {
+	return screen.width
+}
+
+// GetHeight gets the height of the Screen.
+//
+// Parameters:
+// 	none
+//
+// Returns:
+// 	The height of the Screen.
+//
+func (screen *Screen) GetHeight() int {
+	return screen.height
+}
+
+// IsEqual checks if two screens are equal.
+//
+// Parameters:
+// 	other - The other Screen.
+//
+// Returns:
+// 	If the screens are equal.
+//
+func (screen *Screen) IsEqual(other *Screen) bool {
+	return screen.GetWidth() == other.GetWidth() && screen.GetHeight() == other.GetHeight() &&
 }
 
 // Init initializes a Screen.
 //
 // Parameters:
-// 	width               - The width of the screen.
-//  height              - The height of the screen.
-//  cameraToWorldMatrix - The matrix from camera coordinates to world coordinates.
+// 	width  - The width of the Screen.
+//  height - The height of the Screen.
 //
 // Returns:
 // 	a Screen.
+// 	an error.
 //
-func InitScreen(width, height int, cameraToWorldMatrix *matrix.Matrix) (*Screen, error) {
-	if width < 0 || height < 0 {
-		utils.ShowError(errors.New("Invalid Screen"), "width("+strconv.Itoa(width)+") or height("+strconv.Itoa(height)+") invalid for screen.")
+func Init(width, height int) (*Screen, error) {
+	if width <= 0 || height <= 0 {
+		 return nil, screenSizeError(width, height)
 	}
-	screen := &Screen{width: width, height: height, cameraToWorldMatrix: cameraToWorldMatrix}
+	screen := &Screen{width: width, height: height}
 	return screen, nil
 }
 
