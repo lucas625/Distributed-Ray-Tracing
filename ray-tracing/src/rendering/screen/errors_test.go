@@ -32,10 +32,10 @@ func TestScreen_SizeError(t *testing.T) {
 //  none
 //
 func TestScreen_PixelExtraValueError(t *testing.T) {
-	additionalY := 1.0
-	additionalX := 1.0
+	additionalY := -1.0
+	additionalX := -1.0
 
-	expectedErrorMessage := fmt.Sprintf("Pixel extra value error. Expected [0,1), and got %v %v.",
+	expectedErrorMessage := fmt.Sprintf("Pixel extra value error. Expected [0,1], and got %v %v.",
 		additionalY, additionalX)
 	err := pixelExtraValueError(additionalY, additionalX)
 	test_helpers.AssertNotNilError(t, err)

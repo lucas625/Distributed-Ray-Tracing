@@ -36,7 +36,7 @@ func (*Controller) BuildRayVectorDirectorToPixel(pixelLineIndex, pixelColumnInde
 		return nil, pixelIndexError(screen, pixelLineIndex, pixelColumnIndex)
 	}
 
-	if additionalX < 0 || additionalX >= 1 || additionalY < 0 || additionalY >= 1 {
+	if additionalX < 0 || additionalX > 1 || additionalY < 0 || additionalY > 1 {
 		return nil, pixelExtraValueError(additionalY, additionalX)
 	}
 
@@ -65,7 +65,6 @@ func (*Controller) BuildRayVectorDirectorToPixel(pixelLineIndex, pixelColumnInde
 		coordinate, _ := vectorMatrixOnWorldCoordinates.GetValue(coordinateIndex, 0)
 		_ = vectorDirectorOnWorldCoordinates.SetCoordinate(coordinateIndex, coordinate)
 	}
-	normalizedVectorDirector := vectorController.Normalize(vectorDirectorOnWorldCoordinates)
 
-	return normalizedVectorDirector, nil
+	return vectorDirectorOnWorldCoordinates, nil
 }

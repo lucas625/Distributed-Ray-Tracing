@@ -29,7 +29,7 @@ func sizeError(width, height int) error {
 //  An Error.
 //
 func pixelExtraValueError(additionalY, additionalX float64) error {
-	errorMessage := fmt.Sprintf("Pixel extra value error. Expected [0,1), and got %v %v.",
+	errorMessage := fmt.Sprintf("Pixel extra value error. Expected [0,1], and got %v %v.",
 		additionalY, additionalX)
 	return errors.New(errorMessage)
 }
