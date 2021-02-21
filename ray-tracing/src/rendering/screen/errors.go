@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-// screenSizeError is the error where a Screen has an invalid width or height.
+// sizeError is the error where a Screen has an invalid width or height.
 //
 // Parameters:
 //	width  - The width of the Screen.
@@ -14,7 +14,7 @@ import (
 // Returns:
 //  An Error.
 //
-func screenSizeError(width, height int) error {
+func sizeError(width, height int) error {
 	errorMessage := fmt.Sprintf("Invalid size for screen: width: %d, height: %d.", width, height)
 	return errors.New(errorMessage)
 }

@@ -59,7 +59,7 @@ func (screen *Screen) IsEqual(other *Screen) bool {
 //
 func Init(width, height int) (*Screen, error) {
 	if width <= 0 || height <= 0 {
-		 return nil, screenSizeError(width, height)
+		 return nil, sizeError(width, height)
 	}
 	screen := &Screen{width: width, height: height}
 	return screen, nil
