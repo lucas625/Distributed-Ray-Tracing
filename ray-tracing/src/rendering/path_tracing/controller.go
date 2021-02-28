@@ -22,68 +22,45 @@ import (
 //
 type Controller struct {}
 
-// RandomInSemiSphere is a function to find a ray for diffuse reflection in semisphere.
+// findDiffuseReflectionVector finds a ray for diffuse reflection in semi-sphere.
 //
 // Parameters:
 //  normal - the normal.
 //
 // Returns:
-// 	the vector.
+// 	The diffuse vector.
 //
-func RandomInSemiSphere(normal utils.Vector, pos entity.Point) utils.Vector {
+func (controller *Controller) findDiffuseReflectionVector(nextRayOrigin *point.Point,
+	normalVector *vector.Vector) *vector.Vector {
+	offsetVector := controller.findOffsetVectorInSemiSphere()
+	vectorController := &vector.Controller{}
 
-	found := false
-
-	var random1,random2,random3 float64
-	var v utils.Vector
-	for !found {
-		found = true
-		random1 = rand.Float64()
-		random2 = rand.Float64()
-		random3 = rand.Float64()
-
-		v = utils.Vector{Coordinates: []float64{random1, random2, random3}}
-		v = utils.CMultVector(&v, 2)
-		vaux := utils.Vector{Coordinates: []float64{1,1,1}}
-		v = utils.SumVector(&v, &vaux, 1, -1)
-		if math.Pow(utils.VectorNorm(&v),2) >= 1{
-			found = false
-		}
-	}
-	vect := utils.SumVector(&normal, &v, 1, 1)
-	vect = utils.NormalizeVector(&vect)
-	return vect
+	diffuseVector, _ := vectorController.Sum(normalVector, offsetVector, 1, 1)
+	return vectorController.Normalize(diffuseVector)
 }
 
-// RandomInSemiSphereSpecular is a function to find a ray for diffuse reflection in semisphere.
+// findOffsetVectorInSemiSphere finds a offset vector in a semi-sphere.
 //
 // Parameters:
 //  none
 //
 // Returns:
-// 	the vector.
+// 	The offset specular vector.
 //
-func RandomInSemiSphereSpecular() utils.Vector {
+func (*Controller) findOffsetVectorInSemiSphere() *vector.Vector {
+	firstCoordinate := (rand.Float64() * 2) - 1
+	secondCoordinate := (rand.Float64() * 2) - 1
+	thirdCoordinate := (rand.Float64() * 2) - 1
 
-	found := false
+	offsetVector, _ := vector.Init(3)
+	_ = offsetVector.SetCoordinate(0, firstCoordinate)
+	_ = offsetVector.SetCoordinate(1, secondCoordinate)
+	_ = offsetVector.SetCoordinate(2, thirdCoordinate)
 
-	var random1,random2,random3 float64
-	var v utils.Vector
-	for !found {
-		found = true
-		random1 = rand.Float64()
-		random2 = rand.Float64()
-		random3 = rand.Float64()
+	vectorController := &vector.Controller{}
+	normalizedOffsetVector := vectorController.Normalize(offsetVector)
 
-		v = utils.Vector{Coordinates: []float64{random1, random2, random3}}
-		v = utils.CMultVector(&v, 2)
-		vaux := utils.Vector{Coordinates: []float64{1,1,1}}
-		v = utils.SumVector(&v, &vaux, 1, -1)
-		if math.Pow(utils.VectorNorm(&v),2) >= 1{
-			found = false
-		}
-	}
-	return v
+	return normalizedOffsetVector
 }
 
 // findNormal finds the resulting normal of a object intersection.
@@ -96,7 +73,7 @@ func RandomInSemiSphereSpecular() utils.Vector {
 // Returns:
 // 	The resulting normal.
 //
-func (controller *Controller) findNormal(intersectedObject *object.Object, triangleIndex int,
+func (*Controller) findNormal(intersectedObject *object.Object, triangleIndex int,
 	barycentricCoordinates []float64) *vector.Vector {
 	normals := make([]*vector.Vector, 3)
 	for index := 0; index < 3; index++ {
@@ -137,13 +114,13 @@ func (controller *Controller) findSpecularReflectionVector(pathTracer *PathTrace
 	// R = 2N(N.L) - L
 	specularVector, _ := vectorController.Sum(normalVector, normalizedLightVector, 2 * normalDotProductLight, -1)
 
-	offsetVector := RandomInSemiSphereSpecular()
+	offsetVector := controller.findOffsetVectorInSemiSphere()
 	offsetVectorWithRoughness := vectorController.ScalarMultiplication(offsetVector,
 		intersectedObject.GetLightCharacteristics().GetRoughNess())
 
 	resultingSpecularVector, _ := vectorController.Sum(specularVector, offsetVectorWithRoughness, 1, 1)
 
-	return resultingSpecularVector
+	return vectorController.Normalize(resultingSpecularVector)
 }
 
 // findNextRay finds the next ray.
@@ -165,10 +142,11 @@ func (controller *Controller) findNextRay(pathTracer *PathTracer, nextRayOrigin 
 
 	sumOfTotalReflections := intersectedObject.GetLightCharacteristics().GetDiffuseReflection() +
 		intersectedObject.GetLightCharacteristics().GetSpecularReflection() // + intersectedObject.TransReflection
-	selectedRandomValue := 0.0 + rand.Float64()*sumOfTotalReflections
+	selectedRandomValue := rand.Float64() * sumOfTotalReflections
+
 	var newRayVectorDirector *vector.Vector
 	if selectedRandomValue <= intersectedObject.GetLightCharacteristics().GetDiffuseReflection() {
-		newRayVectorDirector = RandomInSemiSphere(normalVector, nextRayOrigin)
+		newRayVectorDirector = controller.findDiffuseReflectionVector(nextRayOrigin, normalVector)
 	} else if selectedRandomValue <= intersectedObject.GetLightCharacteristics().GetDiffuseReflection() +
 		intersectedObject.GetLightCharacteristics().GetSpecularReflection() {
 		newRayVectorDirector = controller.findSpecularReflectionVector(
@@ -177,8 +155,6 @@ func (controller *Controller) findNextRay(pathTracer *PathTracer, nextRayOrigin 
 		// TODO: Transmission reflexion.
 	}
 
-	vectorController := &vector.Controller{}
-	newRayVectorDirector = vectorController.Normalize(newRayVectorDirector)
 	newRay, _ := line.Init(nextRayOrigin, newRayVectorDirector)
 	return newRay
 }
