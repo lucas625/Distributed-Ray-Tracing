@@ -1,9 +1,9 @@
 package object
 
 import (
-	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point_repository"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/triangle"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/point_repository"
 )
 
 // Object is a class for all data of an Object.
@@ -121,7 +121,6 @@ func (object *Object) IsEqual(other *Object) bool {
 // 	triangles              - The triangles that form the Object.
 //  normals                - The normals of the vertices.
 //  color                  - RGB for the color of the object.
-//  specularDecay          - Constant for how fast the specular component decays.
 //  specularReflection     - Percentage of specular rays.
 //  roughNess              - How much reflections rays get distorted.
 //  transmissionReflection - Percentage of transmission rays.
@@ -132,9 +131,9 @@ func (object *Object) IsEqual(other *Object) bool {
 // 	An error.
 //
 func Init(name string, repository *point_repository.PointRepository, triangles []*triangle.Triangle,
-	normals []*vector.Vector, color []float64, specularDecay, specularReflection, roughNess, transmissionReflection,
+	normals []*vector.Vector, color []float64, specularReflection, roughNess, transmissionReflection,
 	diffuseReflection float64) (*Object, error) {
-	characteristics, err := initLightCharacteristics(color, specularDecay, specularReflection, roughNess,
+	characteristics, err := initLightCharacteristics(color, specularReflection, roughNess,
 		transmissionReflection, diffuseReflection)
 	if err != nil {
 		return nil, err

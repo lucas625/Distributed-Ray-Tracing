@@ -3,9 +3,9 @@ package object
 import (
 	"fmt"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point"
-	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point_repository"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/triangle"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/point_repository"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/test_helpers"
 	"testing"
 )
@@ -79,17 +79,16 @@ func TestObject_Init(t *testing.T) {
 
 	name := "my object"
 	color := []float64{0.1, 0.25, 0.5}
-	specularDecay := 5.0
 	specularReflection := 0.5
 	roughNess := 0.0
 	transmissionReflection := 0.25
 	diffuseReflection := 0.25
 
-	object, err := Init(name, repository, triangles, normals, color, specularDecay, specularReflection, roughNess,
+	object, err := Init(name, repository, triangles, normals, color, specularReflection, roughNess,
 		transmissionReflection, diffuseReflection)
 	test_helpers.AssertNilError(t, err)
 
-	expectedLightCharacteristics := &lightCharacteristics{color: color, specularDecay: specularDecay,
+	expectedLightCharacteristics := &lightCharacteristics{color: color,
 		specularReflection: specularReflection, roughNess: roughNess, transmissionReflection: transmissionReflection,
 		diffuseReflection: diffuseReflection}
 
@@ -116,7 +115,6 @@ func TestObject_Init_Error(t *testing.T) {
 
 	name := "my object"
 	color := []float64{0.1, 0.25, 0.5, 10}
-	specularDecay := 5.0
 	specularReflection := 0.5
 	roughNess := 0.0
 	transmissionReflection := 0.25
@@ -124,8 +122,8 @@ func TestObject_Init_Error(t *testing.T) {
 
 	expectedErrorMessage := fmt.Sprintf("There are not 3 color values: %d.", len(color))
 
-	_, err = Init(name, repository, triangles, normals, color, specularDecay, specularReflection, roughNess,
-		transmissionReflection, diffuseReflection)
+	_, err = Init(name, repository, triangles, normals, color, specularReflection, roughNess, transmissionReflection,
+		diffuseReflection)
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
@@ -150,17 +148,16 @@ func TestObject_IsEqual_DifferentTriangleLength(t *testing.T) {
 
 	name := "my object"
 	color := []float64{0.1, 0.25, 0.5}
-	specularDecay := 5.0
 	specularReflection := 0.5
 	roughNess := 0.0
 	transmissionReflection := 0.25
 	diffuseReflection := 0.25
 
-	firstObject, err := Init(name, repository, firstTriangles, normals, color, specularDecay, specularReflection, roughNess,
+	firstObject, err := Init(name, repository, firstTriangles, normals, color, specularReflection, roughNess,
 		transmissionReflection, diffuseReflection)
 	test_helpers.AssertNilError(t, err)
 
-	secondObject, err := Init(name, repository, otherTriangles, normals, color, specularDecay, specularReflection, roughNess,
+	secondObject, err := Init(name, repository, otherTriangles, normals, color, specularReflection, roughNess,
 		transmissionReflection, diffuseReflection)
 	test_helpers.AssertNilError(t, err)
 
@@ -189,17 +186,16 @@ func TestObject_IsEqual_DifferentNormalsLength(t *testing.T) {
 
 	name := "my object"
 	color := []float64{0.1, 0.25, 0.5}
-	specularDecay := 5.0
 	specularReflection := 0.5
 	roughNess := 0.0
 	transmissionReflection := 0.25
 	diffuseReflection := 0.25
 
-	firstObject, err := Init(name, repository, firstTriangles, firstNormals, color, specularDecay, specularReflection, roughNess,
+	firstObject, err := Init(name, repository, firstTriangles, firstNormals, color, specularReflection, roughNess,
 		transmissionReflection, diffuseReflection)
 	test_helpers.AssertNilError(t, err)
 
-	secondObject, err := Init(name, repository, firstTriangles, otherNormals, color, specularDecay, specularReflection, roughNess,
+	secondObject, err := Init(name, repository, firstTriangles, otherNormals, color, specularReflection, roughNess,
 		transmissionReflection, diffuseReflection)
 	test_helpers.AssertNilError(t, err)
 
@@ -226,17 +222,16 @@ func TestObject_IsEqual_DifferentTriangles(t *testing.T) {
 
 	name := "my object"
 	color := []float64{0.1, 0.25, 0.5}
-	specularDecay := 5.0
 	specularReflection := 0.5
 	roughNess := 0.0
 	transmissionReflection := 0.25
 	diffuseReflection := 0.25
 
-	firstObject, err := Init(name, repository, firstTriangles, normals, color, specularDecay, specularReflection, roughNess,
+	firstObject, err := Init(name, repository, firstTriangles, normals, color, specularReflection, roughNess,
 		transmissionReflection, diffuseReflection)
 	test_helpers.AssertNilError(t, err)
 
-	secondObject, err := Init(name, repository, otherTriangles, normals, color, specularDecay, specularReflection, roughNess,
+	secondObject, err := Init(name, repository, otherTriangles, normals, color, specularReflection, roughNess,
 		transmissionReflection, diffuseReflection)
 	test_helpers.AssertNilError(t, err)
 
@@ -266,17 +261,16 @@ func TestObject_IsEqual_DifferentNormals(t *testing.T) {
 
 	name := "my object"
 	color := []float64{0.1, 0.25, 0.5}
-	specularDecay := 5.0
 	specularReflection := 0.5
 	roughNess := 0.0
 	transmissionReflection := 0.25
 	diffuseReflection := 0.25
 
-	firstObject, err := Init(name, repository, firstTriangles, firstNormals, color, specularDecay, specularReflection, roughNess,
+	firstObject, err := Init(name, repository, firstTriangles, firstNormals, color, specularReflection, roughNess,
 		transmissionReflection, diffuseReflection)
 	test_helpers.AssertNilError(t, err)
 
-	secondObject, err := Init(name, repository, firstTriangles, otherNormals, color, specularDecay, specularReflection, roughNess,
+	secondObject, err := Init(name, repository, firstTriangles, otherNormals, color, specularReflection, roughNess,
 		transmissionReflection, diffuseReflection)
 	test_helpers.AssertNilError(t, err)
 

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/line"
-	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point_repository"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/point_repository"
 )
 
 // non3DRayPointsError is the error where a ray or the points are not on the third dimension.

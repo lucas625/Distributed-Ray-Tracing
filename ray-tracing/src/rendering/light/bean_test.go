@@ -3,10 +3,10 @@ package light
 import (
 	"fmt"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point"
-	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point_repository"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/triangle"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/object"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/point_repository"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/test_helpers"
 	"testing"
 )
@@ -80,13 +80,12 @@ func TestLight_Init(t *testing.T) {
 
 	name := "my light"
 	color := []float64{0, 0, 0}
-	specularDecay := 0.0
 	specularReflection := 1.0
 	roughNess := 0.0
 	transmissionReflection := 0.0
 	diffuseReflection := 0.0
 
-	lightObject, err := object.Init(name, repository, triangles, normals, color, specularDecay, specularReflection, roughNess,
+	lightObject, err := object.Init(name, repository, triangles, normals, color, specularReflection, roughNess,
 		transmissionReflection, diffuseReflection)
 	test_helpers.AssertNilError(t, err)
 
@@ -117,13 +116,12 @@ func TestLight_Init_NonRGBColorError(t *testing.T) {
 
 	name := "my light"
 	color := []float64{0, 0, 0}
-	specularDecay := 0.0
 	specularReflection := 1.0
 	roughNess := 0.0
 	transmissionReflection := 0.0
 	diffuseReflection := 0.0
 
-	lightObject, err := object.Init(name, repository, triangles, normals, color, specularDecay, specularReflection, roughNess,
+	lightObject, err := object.Init(name, repository, triangles, normals, color, specularReflection, roughNess,
 		transmissionReflection, diffuseReflection)
 	test_helpers.AssertNilError(t, err)
 
@@ -154,13 +152,12 @@ func TestLight_Init_ColorOutOfBoundsError(t *testing.T) {
 
 	name := "my light"
 	color := []float64{0, 0, 0}
-	specularDecay := 0.0
 	specularReflection := 1.0
 	roughNess := 0.0
 	transmissionReflection := 0.0
 	diffuseReflection := 0.0
 
-	lightObject, err := object.Init(name, repository, triangles, normals, color, specularDecay, specularReflection, roughNess,
+	lightObject, err := object.Init(name, repository, triangles, normals, color, specularReflection, roughNess,
 		transmissionReflection, diffuseReflection)
 	test_helpers.AssertNilError(t, err)
 

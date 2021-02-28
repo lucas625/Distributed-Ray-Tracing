@@ -16,6 +16,7 @@ The implementation of a distributed ray tracing based on microservices as [Lucas
   - [Run the project](#run-the-project)
   - [Testing](#testing)
     - [Ray-Tracing Test](#ray-tracing-test)
+  - [Examples](#examples)
 
 ## Team
 
@@ -60,3 +61,7 @@ Inside **drt-ray-tracing-container** run:
 ```sh
 go test ./...
 ```
+
+## Examples
+
+You can see samples for the path tracing on the `sample_objects` folder. The structure of the `.JSON` files is the same as the beans is structure.
