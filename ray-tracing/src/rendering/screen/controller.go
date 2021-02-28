@@ -17,36 +17,36 @@ type Controller struct {}
 // BuildRayVectorDirectorToPixel builds a ray is vector director to a pixel, on world coordinates.
 //
 // Parameters:
-//  pixelLineIndex   - Y position of the pixel.
-// 	pixelColumnIndex - X position of the pixel.
-//  additionalY      - The additional value to the pixel coordinate on y [0,1).
-//  additionalX      - The additional value to the pixel coordinate on x [0,1).
-//  cameraToWorld    - The matrix from camera to world.
-//  screen           - The Screen that has the pixel.
-//  targetCamera     - The camera of the scene.
+//  pixelLineIndex    - Y position of the pixel.
+// 	pixelColumnIndex  - X position of the pixel.
+//  pixelLineOffset   - The additional value to the pixel coordinate on y [0,1).
+//  pixelColumnOffset - The additional value to the pixel coordinate on x [0,1).
+//  cameraToWorld     - The matrix from camera to world.
+//  screen            - The Screen that has the pixel.
+//  targetCamera      - The camera of the scene.
 //
 // Returns:
-// 	a Vector.
+// 	A vector.
 //
-func (*Controller) BuildRayVectorDirectorToPixel(pixelLineIndex, pixelColumnIndex int, additionalY, additionalX float64,
-	cameraToWorld *matrix.Matrix, screen *Screen, targetCamera *camera.Camera) (
+func (*Controller) BuildRayVectorDirectorToPixel(pixelLineIndex, pixelColumnIndex int, pixelLineOffset,
+	pixelColumnOffset float64, cameraToWorld *matrix.Matrix, screen *Screen, targetCamera *camera.Camera) (
 	*vector.Vector, error) {
 	if pixelLineIndex >= screen.GetHeight() || pixelLineIndex < 0 || pixelColumnIndex >= screen.GetWidth() ||
 		pixelColumnIndex < 0 {
 		return nil, pixelIndexError(screen, pixelLineIndex, pixelColumnIndex)
 	}
 
-	if additionalX < 0 || additionalX > 1 || additionalY < 0 || additionalY > 1 {
-		return nil, pixelExtraValueError(additionalY, additionalX)
+	if pixelColumnOffset < 0 || pixelColumnOffset > 1 || pixelLineOffset < 0 || pixelLineOffset > 1 {
+		return nil, pixelExtraValueError(pixelLineOffset, pixelColumnOffset)
 	}
 
 	aspectRatio := float64(screen.GetWidth()) / float64(screen.GetHeight())
 	alpha := (targetCamera.GetFieldOfView() / 2) * math.Pi / 180.0
 
-	vectorDirectorXOnCameraCoordinates := (2*(float64(pixelColumnIndex)+additionalX)/float64(screen.GetWidth()) - 1) *
-		aspectRatio * math.Tan(alpha)
-	vectorDirectorYOnCameraCoordinates := (1 - 2*(float64(pixelLineIndex)+additionalY)/float64(screen.GetHeight())) *
-		math.Tan(alpha)
+	vectorDirectorXOnCameraCoordinates := (2*(float64(pixelColumnIndex)+pixelColumnOffset)/
+		float64(screen.GetWidth()) - 1) * aspectRatio * math.Tan(alpha)
+	vectorDirectorYOnCameraCoordinates := (1 - 2*(float64(pixelLineIndex)+pixelLineOffset)/
+		float64(screen.GetHeight())) * math.Tan(alpha)
 
 	vectorDirectorOnCameraCoordinates, _ := vector.Init(3)
 
