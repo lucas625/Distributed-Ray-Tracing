@@ -133,84 +133,12 @@ func (controller *Controller) FindNextRay(ptracer *PathTracer, pos entity.Point,
 	return line
 }
 
-// TraceRayDepth is a function to trace a ray and return the resulting color.
-//
-// Parameters:
-//  line       - the ray.
-//  recursions - number of recursions.
-//
-// Returns:
-// 	the rgb color at a given position.
-//
-func (ptracer *PathTracer) TraceRayDepth(line entity.Line, recursions int) []float64 {
-	color := make([]float64, 3)
-
-	closestT := math.MaxFloat64
-	closestObjIdx := -1
-	closestTriangleIndex := -1
-	closestBCoords := make([]float64, 3)
-	for objIdx, obj := range ptracer.Objs.ObjList { // iterating through all objects
-		for triangIdx, triangle := range obj.Triangles { // iterating through all triangles of an object
-			points := make([]entity.Point, 3)
-			for pi := 0; pi < 3; pi++ { // getting triangle points
-				points[pi] = obj.Vertices.Points[triangle.Vertices[pi]]
-			}
-			t, bCoords, intersected := line.IntersectTriangle(points)
-			if intersected {
-				if t > 0 && t < closestT {
-					closestT = t
-					closestObjIdx = objIdx
-					closestTriangleIndex = triangIdx
-					closestBCoords = bCoords
-				}
-			}
-		}
-	}
-
-	// intersecting lights
-	lightClosest := false
-	for lgtIdx, lgt := range ptracer.Lgts.LightList {
-		for _, triangle := range lgt.LightObject.Triangles { // iterating through all triangles of an object
-			points := make([]entity.Point, 3)
-			for pi := 0; pi < 3; pi++ { // getting triangle points
-				points[pi] = lgt.LightObject.Vertices.Points[triangle.Vertices[pi]]
-			}
-			t, _, intersected := line.IntersectTriangle(points)
-			if intersected {
-				if t > 0 && t <= closestT {
-					lightClosest = true
-					closestT = t
-					closestObjIdx = lgtIdx
-				}
-			}
-		}
-	}
-
-	if !lightClosest {
-		if closestObjIdx != -1 {
-			colorAux := []float64{1, 1, 1}
-			if recursions > 0 {
-				newLine := ptracer.FindNextRay(line.FindPos(closestT), ptracer.Objs.ObjList[closestObjIdx], closestTriangleIndex, closestBCoords)
-				colorAux = ptracer.TraceRayDepth(newLine, recursions-1)
-			}
-			for i := 0; i < 3; i++ {
-				color[i] = ptracer.Objs.ObjList[closestObjIdx].Color[i] * colorAux[i]
-			}
-		}
-	} else {
-		for i := 0; i < 3; i++ {
-			lgtAux := ptracer.Lgts.LightList[closestObjIdx]
-			color[i] = lgtAux.Color[i] * lgtAux.LightIntensity
-		}
-	}
-	return color
-}
-
 // intersectObjects uses a ray to intersect all objects.
 //
 // Parameters:
-// 	pathTracer - The PathTracer.
-//  currentRay - The current ray.
+// 	pathTracer          - The PathTracer.
+//  currentRay          - The current ray.
+//  minimumRayParameter - The minimum value for the ray parametric is parameter.
 //
 // Returns:
 // 	If there is intersections with the objects.
@@ -219,8 +147,8 @@ func (ptracer *PathTracer) TraceRayDepth(line entity.Line, recursions int) []flo
 // 	The closest triangle index.
 // 	The closest triangle is barycentric coordinates.
 //
-func (controller *Controller) intersectObjects(pathTracer *PathTracer, currentRay *line.Line) (bool, float64, int, int,
-	[]float64) {
+func (controller *Controller) intersectObjects(pathTracer *PathTracer, currentRay *line.Line,
+	minimumRayParameter float64) (bool, float64, int, int, []float64) {
 	closestLineParameter := math.MaxFloat64
 	closesObjectIndex := -1
 	closestTriangleIndex := -1
@@ -234,9 +162,9 @@ func (controller *Controller) intersectObjects(pathTracer *PathTracer, currentRa
 			lineParameter, barycentricCoordinates, hasIntersection, _ := rayController.IntersectRayTriangle(
 				currentRay, currentTriangle, currentObject.GetRepository())
 
-			if hasIntersection {
+			if hasIntersection && lineParameter >= minimumRayParameter {
 				hasObjectIntersections = true
-				if lineParameter >= 1 && lineParameter < closestLineParameter {
+				if  lineParameter < closestLineParameter {
 					closestLineParameter = lineParameter
 					closesObjectIndex = objectIndex
 					closestTriangleIndex = triangleIndex
@@ -252,16 +180,17 @@ func (controller *Controller) intersectObjects(pathTracer *PathTracer, currentRa
 // intersectLights uses a ray to intersect all lights.
 //
 // Parameters:
-// 	pathTracer           - The PathTracer.
-//  currentRay           - The current ray.
-//  closestLineParameter - The closest line parameter found through objects intersections.
+// 	pathTracer          - The PathTracer.
+//  currentRay          - The current ray.
+//  minimumRayParameter - The minimum value for the ray parametric is parameter.
 //
 // Returns:
 // 	If there is intersections with lights.
 // 	The closest light is line parameter.
 // 	The closest light index.
 //
-func (controller *Controller) intersectLights(pathTracer *PathTracer, currentRay *line.Line) (bool, float64, int) {
+func (controller *Controller) intersectLights(pathTracer *PathTracer, currentRay *line.Line,
+	minimumRayParameter float64) (bool, float64, int) {
 	closesLightLineParameterIndex := math.MaxFloat64
 	closestLightIndex := -1
 	hasLightIntersection := false
@@ -272,9 +201,9 @@ func (controller *Controller) intersectLights(pathTracer *PathTracer, currentRay
 			lineParameter, _, hasIntersection, _ := rayController.IntersectRayTriangle(
 				currentRay, currentTriangle, currentLight.GetLightObject().GetRepository())
 
-			if hasIntersection {
+			if hasIntersection && lineParameter >= minimumRayParameter {
 				hasLightIntersection = true
-				if lineParameter >= 1 && lineParameter <= closesLightLineParameterIndex {
+				if lineParameter <= closesLightLineParameterIndex {
 					closesLightLineParameterIndex = lineParameter
 					closestLightIndex = lightIndex
 				}
@@ -300,11 +229,19 @@ func (controller *Controller) iterateRay(pathTracer *PathTracer, currentIteratio
 	currentRay *line.Line) []float64 {
 	color := make([]float64, 3)
 
-	hasObjectIntersection, closestLineParameter, closesObjectIndex, closestTriangleIndex, closestTriangleBarycentricCoordinates :=
-		controller.intersectObjects(pathTracer, currentRay)
+	var minimumRayParameter float64
 
+	if currentIteration == 0 {
+		minimumRayParameter = 0
+	} else {
+		minimumRayParameter = 1
+	}
+
+	hasObjectIntersection, closestLineParameter, closesObjectIndex, closestTriangleIndex,
+		closestTriangleBarycentricCoordinates := controller.intersectObjects(pathTracer, currentRay,
+			minimumRayParameter)
 	hasLightIntersection, closestLightLineParameter, closestLight := controller.intersectLights(
-		pathTracer, currentRay)
+		pathTracer, currentRay, minimumRayParameter)
 
 	if hasLightIntersection && closestLightLineParameter <= closestLineParameter {
 		intersectedLight := pathTracer.GetLights()[closestLight]
@@ -314,14 +251,19 @@ func (controller *Controller) iterateRay(pathTracer *PathTracer, currentIteratio
 
 	} else {
 		if hasObjectIntersection {
-			colorAux := []float64{0, 0, 0}
+			var colorAux []float64
+			if currentIteration == 0 {
+				colorAux = []float64{0, 0, 0}
+			} else {
+				colorAux = []float64{1, 1, 1}
+			}
 			if depthIterations > 0 {
 				lineController := line.Controller{}
 				newRayStartingPoint, _ := lineController.FindPoint(currentRay, closestLineParameter)
-				newLine := controller.FindNextRay(pathTracer, newRayStartingPoint,
+				newRay := controller.FindNextRay(pathTracer, newRayStartingPoint,
 					pathTracer.GetObjects()[closesObjectIndex], closestTriangleIndex,
 					closestTriangleBarycentricCoordinates)
-				colorAux = pathTracer.TraceRayDepth(newLine, depthIterations-1)
+				colorAux = controller.iterateRay(pathTracer, currentIteration+1, depthIterations, newRay)
 			}
 			objectColor := pathTracer.GetObjects()[closesObjectIndex].GetLightCharacteristics().GetColor()
 			for index := 0; index < 3; index++ {
