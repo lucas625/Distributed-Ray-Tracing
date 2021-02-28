@@ -1,12 +1,12 @@
 package path_tracing
 
 import (
-	"fmt"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/line"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point"
-	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/triangle"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/camera"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/color_matrix"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/object"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/ray"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/screen"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/utils/thread_locker"
@@ -86,51 +86,101 @@ func RandomInSemiSphereSpecular() utils.Vector {
 	return v
 }
 
-// FindNextRay is a function to find the next line.
+// findNormal finds the resulting normal of a object intersection.
 //
 // Parameters:
-//  pos       - the point.
-//  obj       - the object.
-//  triangIdx - the index of the triangle.
-//  bCoords   - baricentric coords for each respective normal.
+//  intersectedObject      - The object that has the next ray is origin.
+//  triangleIndex          - The index of the triangle of the intersected object that hast the point.
+//  barycentricCoordinates - The barycentric coordinates of the next ray origin relative to the triangle.
 //
 // Returns:
-// 	the line
+// 	The resulting normal.
 //
-func (controller *Controller) FindNextRay(ptracer *PathTracer, pos entity.Point, obj general.Object, triangleIdx int, bCoords []float64) entity.Line {
-	normals := make([]utils.Vector, 3)
-	for i := 0; i < 3; i++ {
-		normals[i] = obj.Normals[obj.Triangles[triangleIdx].Normals[i]]
+func (controller *Controller) findNormal(intersectedObject *object.Object, triangleIndex int,
+	barycentricCoordinates []float64) *vector.Vector {
+	normals := make([]*vector.Vector, 3)
+	for index := 0; index < 3; index++ {
+		normalIndex, _ := intersectedObject.GetTriangles()[triangleIndex].GetVertexNormalIndex(index)
+		normals[index] = intersectedObject.GetNormals()[normalIndex]
 	}
-	resultingNormal := utils.SumVector(&normals[0], &normals[1], bCoords[0], bCoords[1])
-	resultingNormal = utils.SumVector(&resultingNormal, &normals[2], 1, bCoords[2])
-	resultingNormal = utils.NormalizeVector(&resultingNormal)
+	vectorController := &vector.Controller{}
+	firstPlusSecondNormal, _ := vectorController.Sum(normals[0], normals[1], barycentricCoordinates[0],
+		barycentricCoordinates[1])
+	sumNormals, _ := vectorController.Sum(firstPlusSecondNormal, normals[2], 1, barycentricCoordinates[2])
+	return vectorController.Normalize(sumNormals)
+}
 
-	ktot := obj.DiffuseReflection + obj.SpecularReflection // + obj.TransReflection
-	r := 0.0 + rand.Float64()*ktot
-	vector := utils.Vector{Coordinates: []float64{1.0, 1.0, 1.0}}
-	if r <= obj.DiffuseReflection {
-		vector = RandomInSemiSphere(resultingNormal, pos)
-	} else if r <= obj.DiffuseReflection+obj.SpecularReflection {
-		lightPos := ptracer.Lgts.LightList[0].LightObject.GetCenter()
-		Lvector := entity.ExtractVector(&pos, &lightPos)
-		Lvector = utils.NormalizeVector(&Lvector)
+// findSpecularReflectionVector finds the resulting normal.
+//
+// Parameters:
+//  pathTracer        - The PathTracer.
+//  nextRayOrigin     - The origin of the next ray.
+//  intersectedObject - The object that has the next ray is origin.
+//  normalVector      - The resulting normal of a object intersection.
+//
+// Returns:
+// 	The specular vector.
+//
+func (controller *Controller) findSpecularReflectionVector(pathTracer *PathTracer, nextRayOrigin *point.Point,
+	intersectedObject *object.Object, normalVector *vector.Vector) *vector.Vector {
 
-		constantPart := 2 * utils.DotProduct(&resultingNormal, &Lvector)
+	vectorController := &vector.Controller{}
+	pointController := &point.Controller{}
+	objectController := &object.Controller{}
 
-		vector = utils.SumVector(&resultingNormal, &Lvector, constantPart, -1) // R = 2N(N.L) - L
+	lightCenter := objectController.GetCenter(pathTracer.GetLights()[0].GetLightObject())
+	lightVector, _ := pointController.ExtractVector(nextRayOrigin, lightCenter)
+	normalizedLightVector := vectorController.Normalize(lightVector)
 
-		offsetVector := RandomInSemiSphereSpecular()
-		offsetVector = utils.CMultVector(&offsetVector, obj.RoughNess)
+	normalDotProductLight, _ := vectorController.DotProduct(normalVector, normalizedLightVector)
 
-		vector = utils.SumVector(&vector, &offsetVector, 1, 1)
+	// R = 2N(N.L) - L
+	specularVector, _ := vectorController.Sum(normalVector, normalizedLightVector, 2 * normalDotProductLight, -1)
 
+	offsetVector := RandomInSemiSphereSpecular()
+	offsetVectorWithRoughness := vectorController.ScalarMultiplication(offsetVector,
+		intersectedObject.GetLightCharacteristics().GetRoughNess())
+
+	resultingSpecularVector, _ := vectorController.Sum(specularVector, offsetVectorWithRoughness, 1, 1)
+
+	return resultingSpecularVector
+}
+
+// findNextRay finds the next ray.
+//
+// Parameters:
+//  pathTracer             - The PathTracer.
+//  nextRayOrigin          - The origin of the next ray.
+//  intersectedObject      - The object that has the next ray is origin.
+//  triangleIndex          - The index of the triangle of the intersected object that hast the point.
+//  barycentricCoordinates - The barycentric coordinates of the next ray origin relative to the triangle.
+//
+// Returns:
+// 	The next ray.
+//
+func (controller *Controller) findNextRay(pathTracer *PathTracer, nextRayOrigin *point.Point,
+	intersectedObject *object.Object, triangleIndex int, barycentricCoordinates []float64) *line.Line {
+
+	normalVector := controller.findNormal(intersectedObject, triangleIndex, barycentricCoordinates)
+
+	sumOfTotalReflections := intersectedObject.GetLightCharacteristics().GetDiffuseReflection() +
+		intersectedObject.GetLightCharacteristics().GetSpecularReflection() // + intersectedObject.TransReflection
+	selectedRandomValue := 0.0 + rand.Float64()*sumOfTotalReflections
+	var newRayVectorDirector *vector.Vector
+	if selectedRandomValue <= intersectedObject.GetLightCharacteristics().GetDiffuseReflection() {
+		newRayVectorDirector = RandomInSemiSphere(normalVector, nextRayOrigin)
+	} else if selectedRandomValue <= intersectedObject.GetLightCharacteristics().GetDiffuseReflection() +
+		intersectedObject.GetLightCharacteristics().GetSpecularReflection() {
+		newRayVectorDirector = controller.findSpecularReflectionVector(
+			pathTracer, nextRayOrigin, intersectedObject, normalVector)
 	} else {
-		// use transmission (unavailable)
+		// TODO: Transmission reflexion.
 	}
-	vector = utils.NormalizeVector(&vector)
-	line := entity.Line{Start: pos, Director: vector}
-	return line
+
+	vectorController := &vector.Controller{}
+	newRayVectorDirector = vectorController.Normalize(newRayVectorDirector)
+	newRay, _ := line.Init(nextRayOrigin, newRayVectorDirector)
+	return newRay
 }
 
 // intersectObjects uses a ray to intersect all objects.
@@ -260,7 +310,7 @@ func (controller *Controller) iterateRay(pathTracer *PathTracer, currentIteratio
 			if depthIterations > 0 {
 				lineController := line.Controller{}
 				newRayStartingPoint, _ := lineController.FindPoint(currentRay, closestLineParameter)
-				newRay := controller.FindNextRay(pathTracer, newRayStartingPoint,
+				newRay := controller.findNextRay(pathTracer, newRayStartingPoint,
 					pathTracer.GetObjects()[closesObjectIndex], closestTriangleIndex,
 					closestTriangleBarycentricCoordinates)
 				colorAux = controller.iterateRay(pathTracer, currentIteration+1, depthIterations, newRay)
