@@ -32,13 +32,12 @@ func TestController_GetBoundingBox(t *testing.T) {
 
 	name := "my object"
 	color := []float64{0.1, 0.25, 0.5}
-	specularDecay := 5.0
 	specularReflection := 0.5
 	roughNess := 0.0
 	transmissionReflection := 0.25
 	diffuseReflection := 0.25
 
-	object, err := Init(name, repository, triangles, firstNormals, color, specularDecay, specularReflection, roughNess,
+	object, err := Init(name, repository, triangles, firstNormals, color, specularReflection, roughNess,
 		transmissionReflection, diffuseReflection)
 	test_helpers.AssertNilError(t, err)
 
@@ -73,13 +72,12 @@ func TestController_GetCenter(t *testing.T) {
 
 	name := "my object"
 	color := []float64{0.1, 0.25, 0.5}
-	specularDecay := 5.0
 	specularReflection := 0.5
 	roughNess := 0.0
 	transmissionReflection := 0.25
 	diffuseReflection := 0.25
 
-	object, err := Init(name, repository, triangles, firstNormals, color, specularDecay, specularReflection, roughNess,
+	object, err := Init(name, repository, triangles, firstNormals, color, specularReflection, roughNess,
 		transmissionReflection, diffuseReflection)
 	test_helpers.AssertNilError(t, err)
 

@@ -3,7 +3,7 @@ package triangle
 import (
 	"fmt"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point"
-	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point_repository"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/point_repository"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/test_helpers"
 	"testing"
 )

@@ -1,0 +1,777 @@
+{
+    "pathTracingParameters": {
+        "raysPerPixel": 100,
+        "recursions": 3,
+        "windowStartLine": 0,
+        "windowStartColumn": 0,
+        "windowEndLine": 768,
+        "windowEndColumn": 1024
+    },
+    "objects": [
+        {
+            "name": "back",
+            "repository": {
+                "points": [
+                    {
+                        "coordinates": [
+                            1,
+                            2,
+                            -1
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            1,
+                            0,
+                            -1
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            -1,
+                            2,
+                            -1
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            -1,
+                            0,
+                            -1
+                        ]
+                    }
+                ]
+            },
+            "triangles": [
+                {
+                    "verticesIndexes": [
+                        2,
+                        1,
+                        3
+                    ],
+                    "verticesNormalsIndexes": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "verticesIndexes": [
+                        2,
+                        0,
+                        1
+                    ],
+                    "verticesNormalsIndexes": [
+                        0,
+                        0,
+                        0
+                    ]
+                }
+            ],
+            "normals": [
+                {
+                    "coordinates": [
+                        0,
+                        0,
+                        1
+                    ]
+                }
+            ],
+            "lightCharacteristics": {
+                "color": [
+                    0.7,
+                    0.7,
+                    0.7
+                ],
+                "specularReflection": 0,
+                "roughNess": 0,
+                "transmissionReflection": 0,
+                "diffuseReflection": 1
+            }
+        },
+        {
+            "name": "left_wall",
+            "repository": {
+                "points": [
+                    {
+                        "coordinates": [
+                            -1,
+                            2,
+                            -1
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            -1,
+                            0,
+                            -1
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            -1,
+                            2,
+                            1
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            -1,
+                            0,
+                            1
+                        ]
+                    }
+                ]
+            },
+            "triangles": [
+                {
+                    "verticesIndexes": [
+                        2,
+                        1,
+                        3
+                    ],
+                    "verticesNormalsIndexes": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "verticesIndexes": [
+                        2,
+                        0,
+                        1
+                    ],
+                    "verticesNormalsIndexes": [
+                        0,
+                        0,
+                        0
+                    ]
+                }
+            ],
+            "normals": [
+                {
+                    "coordinates": [
+                        1,
+                        0,
+                        0
+                    ]
+                }
+            ],
+            "lightCharacteristics": {
+                "color": [
+                    0.75,
+                    0.1,
+                    0.1
+                ],
+                "specularReflection": 0,
+                "roughNess": 0,
+                "transmissionReflection": 0,
+                "diffuseReflection": 1
+            }
+        },
+        {
+            "name": "right_wall",
+            "repository": {
+                "points": [
+                    {
+                        "coordinates": [
+                            1,
+                            2,
+                            -1
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            1,
+                            0,
+                            -1
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            1,
+                            2,
+                            1
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            1,
+                            0,
+                            1
+                        ]
+                    }
+                ]
+            },
+            "triangles": [
+                {
+                    "verticesIndexes": [
+                        0,
+                        3,
+                        1
+                    ],
+                    "verticesNormalsIndexes": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "verticesIndexes": [
+                        0,
+                        2,
+                        3
+                    ],
+                    "verticesNormalsIndexes": [
+                        0,
+                        0,
+                        0
+                    ]
+                }
+            ],
+            "normals": [
+                {
+                    "coordinates": [
+                        -1,
+                        0,
+                        0
+                    ]
+                }
+            ],
+            "lightCharacteristics": {
+                "color": [
+                    0.1,
+                    0.75,
+                    0.1
+                ],
+                "specularReflection": 0,
+                "roughNess": 0,
+                "transmissionReflection": 0,
+                "diffuseReflection": 1
+            }
+        },
+        {
+            "name": "ground",
+            "repository": {
+                "points": [
+                    {
+                        "coordinates": [
+                            1,
+                            0,
+                            -1
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            1,
+                            0,
+                            1
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            -1,
+                            0,
+                            -1
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            -1,
+                            0,
+                            1
+                        ]
+                    }
+                ]
+            },
+            "triangles": [
+                {
+                    "verticesIndexes": [
+                        0,
+                        3,
+                        2
+                    ],
+                    "verticesNormalsIndexes": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "verticesIndexes": [
+                        0,
+                        1,
+                        3
+                    ],
+                    "verticesNormalsIndexes": [
+                        0,
+                        0,
+                        0
+                    ]
+                }
+            ],
+            "normals": [
+                {
+                    "coordinates": [
+                        0,
+                        1,
+                        0
+                    ]
+                }
+            ],
+            "lightCharacteristics": {
+                "color": [
+                    0.7,
+                    0.7,
+                    0.7
+                ],
+                "specularReflection": 0.7,
+                "roughNess": 0.3,
+                "transmissionReflection": 0,
+                "diffuseReflection": 0.3
+            }
+        },
+        {
+            "name": "ceiling",
+            "repository": {
+                "points": [
+                    {
+                        "coordinates": [
+                            1,
+                            2,
+                            -1
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            1,
+                            2,
+                            1
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            -1,
+                            2,
+                            -1
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            -1,
+                            2,
+                            1
+                        ]
+                    }
+                ]
+            },
+            "triangles": [
+                {
+                    "verticesIndexes": [
+                        2,
+                        1,
+                        0
+                    ],
+                    "verticesNormalsIndexes": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "verticesIndexes": [
+                        2,
+                        3,
+                        1
+                    ],
+                    "verticesNormalsIndexes": [
+                        0,
+                        0,
+                        0
+                    ]
+                }
+            ],
+            "normals": [
+                {
+                    "coordinates": [
+                        0,
+                        -1,
+                        0
+                    ]
+                }
+            ],
+            "lightCharacteristics": {
+                "color": [
+                    0.7,
+                    0.7,
+                    0.7
+                ],
+                "specularReflection": 0.3,
+                "roughNess": 0,
+                "transmissionReflection": 0,
+                "diffuseReflection": 0.7
+            }
+        },
+        {
+            "name": "box",
+            "repository": {
+                "points": [
+                    {
+                        "coordinates": [
+                            -0.368342,
+                            1.172996,
+                            0.115575
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            -0.664049,
+                            -0.001363,
+                            -0.415826
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            -0.368342,
+                            -0.001363,
+                            0.115575
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            -0.664049,
+                            1.172996,
+                            -0.415826
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            -0.152061,
+                            -0.001363,
+                            -0.700729
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            -0.152061,
+                            1.172996,
+                            -0.700729
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            0.143645,
+                            -0.001363,
+                            -0.169329
+                        ]
+                    },
+                    {
+                        "coordinates": [
+                            0.143645,
+                            1.172996,
+                            -0.169329
+                        ]
+                    }
+                ]
+            },
+            "triangles": [
+                {
+                    "verticesIndexes": [
+                        0,
+                        1,
+                        2
+                    ],
+                    "verticesNormalsIndexes": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "verticesIndexes": [
+                        3,
+                        4,
+                        1
+                    ],
+                    "verticesNormalsIndexes": [
+                        1,
+                        1,
+                        1
+                    ]
+                },
+                {
+                    "verticesIndexes": [
+                        5,
+                        6,
+                        4
+                    ],
+                    "verticesNormalsIndexes": [
+                        2,
+                        2,
+                        2
+                    ]
+                },
+                {
+                    "verticesIndexes": [
+                        3,
+                        7,
+                        5
+                    ],
+                    "verticesNormalsIndexes": [
+                        3,
+                        3,
+                        3
+                    ]
+                },
+                {
+                    "verticesIndexes": [
+                        0,
+                        3,
+                        1
+                    ],
+                    "verticesNormalsIndexes": [
+                        0,
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "verticesIndexes": [
+                        3,
+                        5,
+                        4
+                    ],
+                    "verticesNormalsIndexes": [
+                        1,
+                        1,
+                        1
+                    ]
+                },
+                {
+                    "verticesIndexes": [
+                        5,
+                        7,
+                        6
+                    ],
+                    "verticesNormalsIndexes": [
+                        2,
+                        2,
+                        2
+                    ]
+                },
+                {
+                    "verticesIndexes": [
+                        3,
+                        0,
+                        7
+                    ],
+                    "verticesNormalsIndexes": [
+                        3,
+                        3,
+                        3
+                    ]
+                },
+                {
+                    "verticesIndexes": [
+                        2,
+                        7,
+                        0
+                    ],
+                    "verticesNormalsIndexes": [
+                        4,
+                        4,
+                        4
+                    ]
+                },
+                {
+                    "verticesIndexes": [
+                        7,
+                        2,
+                        6
+                    ],
+                    "verticesNormalsIndexes": [
+                        4,
+                        4,
+                        4
+                    ]
+                }
+            ],
+            "normals": [
+                {
+                    "coordinates": [
+                        -0.8737938266684219,
+                        -0,
+                        0.48629656432690954
+                    ]
+                },
+                {
+                    "coordinates": [
+                        -0.4862202077317588,
+                        0,
+                        -0.873836317392042
+                    ]
+                },
+                {
+                    "coordinates": [
+                        0.8737938266684219,
+                        0,
+                        -0.48629656432690954
+                    ]
+                },
+                {
+                    "coordinates": [
+                        0,
+                        1,
+                        0
+                    ]
+                },
+                {
+                    "coordinates": [
+                        0.48629656432690954,
+                        -0,
+                        0.8737938266684219
+                    ]
+                }
+            ],
+            "lightCharacteristics": {
+                "color": [
+                    0.7,
+                    0.7,
+                    0.7
+                ],
+                "specularReflection": 0.75,
+                "roughNess": 0.3,
+                "transmissionReflection": 0,
+                "diffuseReflection": 0.25
+            }
+        }
+    ],
+    "pixelScreen": {
+        "width": 1024,
+        "height": 768
+    },
+    "screenCamera": {
+        "position": {
+            "coordinates": [
+                0,
+                1,
+                3.2
+            ]
+        },
+        "look": {
+            "coordinates": [
+                0,
+                0,
+                -1
+            ]
+        },
+        "up": {
+            "coordinates": [
+                0,
+                1,
+                0
+            ]
+        },
+        "right": {
+            "coordinates": [
+                1,
+                0,
+                0
+            ]
+        },
+        "fieldOfView": 50.0,
+        "distanceToScreen": 1.0
+    },
+    "lights": [
+        {
+			"lightIntensity": 5.0,
+			"color": [
+				1.0,
+				1.0,
+				1.0
+			],
+			"lightObject": {
+				"name": "light",
+				"repository": {
+					"points": [
+						{
+							"coordinates": [
+								-0.386221,
+								1.965585,
+								0.386221
+							]
+						},
+						{
+							"coordinates": [
+								0.386221,
+								1.965585,
+								0.386221
+							]
+						},
+						{
+							"coordinates": [
+								-0.386221,
+								1.965585,
+								-0.386221
+							]
+						},
+						{
+							"coordinates": [
+								0.386221,
+								1.965585,
+								-0.386221
+							]
+						}
+					]
+				},
+				"triangles": [
+					{
+						"verticesIndexes": [
+							1,
+							2,
+							0
+						],
+						"verticesNormalsIndexes": [
+							0,
+							0,
+							0
+						]
+					},
+					{
+						"verticesIndexes": [
+							1,
+							3,
+							2
+						],
+						"verticesNormalsIndexes": [
+							0,
+							0,
+							0
+						]
+					}
+				],
+				"normals": [
+					{
+						"coordinates": [
+							0,
+							-1,
+							0
+						]
+					}
+				],
+                "lightCharacteristics": {
+                    "color": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "specularReflection": 0,
+                    "roughNess": 0,
+                    "transmissionReflection": 0,
+                    "diffuseReflection": 0
+                }
+			}
+		}
+    ]
+}
