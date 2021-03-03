@@ -3,7 +3,7 @@ package rest
 import (
 	"encoding/json"
 	"errors"
-	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/business"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/marshaller"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/path_tracing"
 	"io/ioutil"
 	"net/http"
@@ -34,8 +34,8 @@ func parsePathTracingRequest(request *http.Request) (*path_tracing.PathTracer, i
 	if err != nil {
 		return nil, 0, 0, 0, 0, 0, 0, errors.New("failed to parse your request")
 	}
-	businessController := business.Controller{}
-	return businessController.ParsePathTracingInputsFromMap(data)
+	marshallerController := &marshaller.Controller{}
+	return marshallerController.ParsePathTracingInputsFromMap(data)
 }
 
 // RunPathTracing runs the requested path tracing, sending a matrix of colors as response.
