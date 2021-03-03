@@ -1,16 +1,44 @@
-package main
+package rest
 
 import (
 	"encoding/json"
-	"fmt"
-	"github.com/gorilla/mux"
+	"errors"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/business"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/path_tracing"
 	"io/ioutil"
-	"log"
 	"net/http"
-	"time"
 )
 
-// runPathTracing runs the requested path tracing, sending a matrix of colors as response.
+// parsePathTracingRequest parses the request for a path tracing run to the corresponding classes.
+//
+// Parameters:
+// 	request - The request.
+//
+// Returns:
+// 	The PathTracer.
+// 	The number of rays per pixel.
+// 	The number recursions of each ray.
+// 	The starting line index of the window of the screen to use the path tracing.
+// 	The starting column index of the window of the screen to use the path tracing.
+// 	The ending line index of the window of the screen to use the path tracing.
+// 	The ending column index of the window of the screen to use the path tracing.
+// 	An error.
+//
+func parsePathTracingRequest(request *http.Request) (*path_tracing.PathTracer, int, int, int, int, int, int, error) {
+	var data map[string]interface{}
+	bodyAsBytes, err := ioutil.ReadAll(request.Body)
+	if err != nil {
+		return nil, 0, 0, 0, 0, 0, 0, errors.New("failed to decode your request")
+	}
+	err = json.Unmarshal(bodyAsBytes, &data)
+	if err != nil {
+		return nil, 0, 0, 0, 0, 0, 0, errors.New("failed to parse your request")
+	}
+	businessController := business.Controller{}
+	return businessController.ParsePathTracingInputsFromMap(data)
+}
+
+// RunPathTracing runs the requested path tracing, sending a matrix of colors as response.
 //
 // Parameters:
 // 	responseWriter - The response writer.
@@ -19,34 +47,30 @@ import (
 // Returns:
 // 	none
 //
-func runPathTracing(responseWriter http.ResponseWriter, request *http.Request) {
-	var data map[string]interface{}
-	bodyAsBytes, err := ioutil.ReadAll(request.Body)
+func RunPathTracing(responseWriter http.ResponseWriter, request *http.Request) {
+	pathTracer, raysPerPixel, recursions, windowStartLine, windowStartColumn, windowEndLine, windowEndColumn, err :=
+		parsePathTracingRequest(request)
+
 	if err != nil {
-		http.Error(responseWriter, "Failed to decode your request.", 500)
+		http.Error(responseWriter, err.Error(), 500)
 	}
-	err = json.Unmarshal(bodyAsBytes, &data)
+
+	pathTracingController := path_tracing.Controller{}
+	colorMatrix, err := pathTracingController.Run(pathTracer, raysPerPixel, recursions, windowStartLine,
+		windowStartColumn, windowEndLine, windowEndColumn)
+
 	if err != nil {
-		http.Error(responseWriter, "Failed to parse your request.", 500)
+		http.Error(responseWriter, "failed to run the path tracing.", 500)
 	}
 
-	fmt.Printf("%v", data)
-	responseWriter.Write([]byte("ok!"))
-}
+	colorMatrixAsBytes, err := json.Marshal(colorMatrix)
 
-func main() {
-	router := mux.NewRouter()
-	router.HandleFunc("/path-tracing", runPathTracing)
-
-	server := &http.Server{
-		Handler:      router,
-		Addr:         "127.0.0.1:8000",
-		WriteTimeout: 1 * time.Hour,
-		ReadTimeout:  1 * time.Hour,
+	if err != nil {
+		http.Error(responseWriter, "failed to serialize the response", 500)
 	}
 
-	fmt.Println("Server running!")
-
-	err := server.ListenAndServe()
-	log.Fatal(err)
+	_, err = responseWriter.Write(colorMatrixAsBytes)
+	if err != nil {
+		http.Error(responseWriter, err.Error(), 500)
+	}
 }
