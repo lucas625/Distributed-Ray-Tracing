@@ -1,9 +1,7 @@
 package marshaller
 
 import (
-	"errors"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/path_tracing"
-	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/screen"
 )
 
 // Controller is a class for controlling the marshaller of the application.
@@ -12,52 +10,6 @@ import (
 // 	none
 //
 type Controller struct {}
-
-// parsePixelScreenFromMap parses the pixel screen from a map.
-//
-// Parameters:
-//  pathTracingData - The path tracing data.
-//
-// Returns:
-// 	The pixel screen.
-// 	An error.
-//
-func (*Controller) parsePixelScreenFromMap(pathTracingData map[string]interface{}) (*screen.Screen, error) {
-	errorMessage := "unable to parse pixel screen"
-
-	pixelScreenMap, found := pathTracingData["pixelScreen"]
-	if !found {
-		return nil, errors.New(errorMessage)
-	}
-	pixelScreenMapParsed, parsed := pixelScreenMap.(map[string]interface{})
-	if !parsed{
-		return nil, errors.New(errorMessage)
-	}
-
-	width, found := pixelScreenMapParsed["width"]
-	if !found {
-		return nil, errors.New(errorMessage)
-	}
-	widthParsed, parsed := width.(float64)
-	if !parsed{
-		return nil, errors.New(errorMessage)
-	}
-
-	height, found := pixelScreenMapParsed["height"]
-	if !found {
-		return nil, errors.New(errorMessage)
-	}
-	heightParsed, parsed := height.(float64)
-	if !parsed{
-		return nil, errors.New(errorMessage)
-	}
-
-	pixelScreen, err := screen.Init(int(widthParsed), int(heightParsed))
-	if err != nil {
-		return nil, errors.New(errorMessage)
-	}
-	return pixelScreen, nil
-}
 
 // ParsePathTracingInputsFromMap parses the inputs for a path tracing run.
 //
@@ -76,10 +28,16 @@ func (*Controller) parsePixelScreenFromMap(pathTracingData map[string]interface{
 //
 func (controller *Controller) ParsePathTracingInputsFromMap(pathTracingData map[string]interface{}) (
 	*path_tracing.PathTracer, int, int, int, int, int, int, error) {
-	pixelScreen, err := controller.parsePixelScreenFromMap(pathTracingData)
+	screenMarshallerController := screenController{}
+	pixelScreen, err := screenMarshallerController.parsePixelScreenFromMap(pathTracingData)
 	if err != nil {
 		return nil, 0, 0, 0, 0, 0, 0, nil
 	}
-	pathTracer := path_tracing.Init(nil, pixelScreen, nil, nil)
+	cameraMarshallerController := cameraController{}
+	sceneCamera, err := cameraMarshallerController.parseCameraFromMap(pathTracingData)
+	if err != nil {
+		return nil, 0, 0, 0, 0, 0, 0, nil
+	}
+	pathTracer := path_tracing.Init(nil, pixelScreen, sceneCamera, nil)
 	return pathTracer, 0, 0, 0, 0, 0, 0, nil
 }
