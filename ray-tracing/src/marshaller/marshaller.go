@@ -41,12 +41,20 @@ func (controller *Controller) ParsePathTracingParametersFromMap(pathTracingData 
 	if err != nil {
 		return nil, 0, 0, 0, 0, 0, 0, err
 	}
+
 	cameraMarshallerController := cameraController{}
 	sceneCamera, err := cameraMarshallerController.parseCameraFromMap(pathTracingData)
 	if err != nil {
 		return nil, 0, 0, 0, 0, 0, 0, err
 	}
-	pathTracer := path_tracing.Init(nil, pixelScreen, sceneCamera, nil)
+
+	lightMarshallerController := lightController{}
+	lights, err := lightMarshallerController.parseLightsFromMap(pathTracingData)
+	if err != nil {
+		return nil, 0, 0, 0, 0, 0, 0, err
+	}
+
+	pathTracer := path_tracing.Init(nil, pixelScreen, sceneCamera, lights)
 	return pathTracer, pathTracingParametersInstance.raysPerPixel, pathTracingParametersInstance.recursions,
 	pathTracingParametersInstance.windowStartLine, pathTracingParametersInstance.windowStartColumn,
 	pathTracingParametersInstance.windowEndLine, pathTracingParametersInstance.windowEndColumn, nil
