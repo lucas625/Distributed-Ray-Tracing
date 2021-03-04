@@ -7,3 +7,5 @@ RUN apk add git
 RUN go mod download
 
 ENV CGO_ENABLED 0
+
+ENTRYPOINT ["go run src/main.go"]
