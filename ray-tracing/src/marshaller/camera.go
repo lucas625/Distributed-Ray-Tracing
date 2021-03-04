@@ -38,7 +38,7 @@ func (*cameraController) parseCameraVectorFromMap(cameraMap map[string]interface
 	if !parsed {
 		return nil, errors.New(errorMessage)
 	}
-	parsedVector, err := vectorMarshallerController.parseVectorFromInterface(vectorMapParsed)
+	parsedVector, err := vectorMarshallerController.parseVectorFromMap(vectorMapParsed)
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}
@@ -98,7 +98,7 @@ func (*cameraController) parseCameraPositionFromMap(cameraMap map[string]interfa
 	if !parsed {
 		return nil, errors.New(errorMessage)
 	}
-	parsedPoint, err := pointMarshallerController.parsePointFromInterface(vectorMapParsed)
+	parsedPoint, err := pointMarshallerController.parsePointFromMap(vectorMapParsed)
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}

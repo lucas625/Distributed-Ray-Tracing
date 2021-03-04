@@ -12,7 +12,7 @@ import (
 //
 type vectorController struct {}
 
-// parseVectorFromInterface parses a vector from a map.
+// parseVectorFromMap parses a vector from a map.
 //
 // Parameters:
 //  vectorAsMap - The vector as a map.
@@ -21,7 +21,7 @@ type vectorController struct {}
 // 	The vector.
 // 	An error.
 //
-func (*vectorController) parseVectorFromInterface(vectorAsMap map[string]interface{}) (*vector.Vector, error) {
+func (*vectorController) parseVectorFromMap(vectorAsMap map[string]interface{}) (*vector.Vector, error) {
 	errorMessage := "invalid vector"
 
 	coordinatesAsInterface, found := vectorAsMap["coordinates"]

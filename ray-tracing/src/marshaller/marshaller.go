@@ -11,7 +11,7 @@ import (
 //
 type Controller struct {}
 
-// ParsePathTracingInputsFromMap parses the inputs for a path tracing run.
+// ParsePathTracingParametersFromMap parses the inputs for a path tracing run.
 //
 // Parameters:
 //  pathTracingData - The path tracing data.
@@ -26,8 +26,16 @@ type Controller struct {}
 // 	The ending column index of the window of the screen to use the path tracing.
 // 	An error.
 //
-func (controller *Controller) ParsePathTracingInputsFromMap(pathTracingData map[string]interface{}) (
+func (controller *Controller) ParsePathTracingParametersFromMap(pathTracingData map[string]interface{}) (
 	*path_tracing.PathTracer, int, int, int, int, int, int, error) {
+
+	pathTracingParametersMarshallerController := pathTracingParametersController{}
+	pathTracingParametersInstance, err := pathTracingParametersMarshallerController.parsePathTracingParametersFromMap(
+		pathTracingData)
+	if err != nil {
+		return nil, 0, 0, 0, 0, 0, 0, err
+	}
+
 	screenMarshallerController := screenController{}
 	pixelScreen, err := screenMarshallerController.parsePixelScreenFromMap(pathTracingData)
 	if err != nil {
@@ -39,5 +47,7 @@ func (controller *Controller) ParsePathTracingInputsFromMap(pathTracingData map[
 		return nil, 0, 0, 0, 0, 0, 0, err
 	}
 	pathTracer := path_tracing.Init(nil, pixelScreen, sceneCamera, nil)
-	return pathTracer, 0, 0, 0, 0, 0, 0, nil
+	return pathTracer, pathTracingParametersInstance.raysPerPixel, pathTracingParametersInstance.recursions,
+	pathTracingParametersInstance.windowStartLine, pathTracingParametersInstance.windowStartColumn,
+	pathTracingParametersInstance.windowEndLine, pathTracingParametersInstance.windowEndColumn, nil
 }

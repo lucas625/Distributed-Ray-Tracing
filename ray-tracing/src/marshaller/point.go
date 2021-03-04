@@ -12,16 +12,16 @@ import (
 //
 type pointController struct {}
 
-// parsePointFromInterface parses a point from a map.
+// parsePointFromMap parses a point from a map.
 //
 // Parameters:
-//  pointAsInterface - The point as a map.
+//  pointAsMap - The point as a map.
 //
 // Returns:
 // 	The point.
 // 	An error.
 //
-func (*pointController) parsePointFromInterface(pointAsMap map[string]interface{}) (*point.Point, error) {
+func (*pointController) parsePointFromMap(pointAsMap map[string]interface{}) (*point.Point, error) {
 	errorMessage := "invalid point"
 
 	coordinatesAsInterface, found := pointAsMap["coordinates"]
