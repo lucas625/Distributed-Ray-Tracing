@@ -2,8 +2,100 @@ package marshaller
 
 import (
 	"errors"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/object"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/point_repository"
 )
+
+// parseRepositoryFromMap parses repository from map.
+//
+// Parameters:
+//  objectData - The object data.
+//
+// Returns:
+// 	The point repository.
+// 	An error.
+//
+func (controller *Controller) parseRepositoryFromMap(objectData map[string]interface{}) (
+	*point_repository.PointRepository, error) {
+	errorMessage := "unable to parse repository"
+
+	repositoryInterface, found := objectData["repository"]
+	if !found {
+		return nil, errors.New(errorMessage)
+	}
+	repositoryMap, parsed := repositoryInterface.(map[string]interface{})
+	if !parsed {
+		return nil, errors.New(errorMessage)
+	}
+
+	pointsInterface, found := repositoryMap["points"]
+	if !found {
+		return nil, errors.New(errorMessage)
+	}
+	pointsInterfaceList, parsed := pointsInterface.([]interface{})
+	if !parsed {
+		return nil, errors.New(errorMessage)
+	}
+
+	points := make([]*point.Point, len(pointsInterfaceList))
+	for pointIndex := 0; pointIndex < len(pointsInterfaceList); pointIndex++ {
+		pointMap, parsed := pointsInterfaceList[pointIndex].(map[string]interface{})
+		if !parsed {
+			return nil, errors.New(errorMessage)
+		}
+		currentPoint, err := controller.parsePointFromMap(pointMap)
+		if err != nil {
+			return nil, errors.New(errorMessage)
+		}
+		points[pointIndex] = currentPoint
+	}
+
+	repository, err := point_repository.Init(points, 3)
+	if err != nil {
+		return nil, errors.New(errorMessage)
+	}
+
+	return repository, nil
+}
+
+// parseNormalsFromMap parses normals from map.
+//
+// Parameters:
+//  objectData - The object data.
+//
+// Returns:
+// 	The list of normal vectors.
+// 	An error.
+//
+func (controller *Controller) parseNormalsFromMap(objectData map[string]interface{}) ([]*vector.Vector, error) {
+	errorMessage := "unable to parse normals"
+
+	normalsInterface, found := objectData["normals"]
+	if !found {
+		return nil, errors.New(errorMessage)
+	}
+	normalsInterfaceList, parsed := normalsInterface.([]interface{})
+	if !parsed {
+		return nil, errors.New(errorMessage)
+	}
+
+	normals := make([]*vector.Vector, len(normalsInterfaceList))
+	for normalIndex := 0; normalIndex < len(normalsInterfaceList); normalIndex++ {
+		normalMap, parsed := normalsInterfaceList[normalIndex].(map[string]interface{})
+		if !parsed {
+			return nil, errors.New(errorMessage)
+		}
+		currentNormal, err := controller.parseVectorFromMap(normalMap)
+		if err != nil {
+			return nil, errors.New(errorMessage)
+		}
+		normals[normalIndex] = currentNormal
+	}
+
+	return normals, nil
+}
 
 // parseLightCharacteristicsFromMap parses an object is light characteristics from a map.
 //
@@ -79,7 +171,17 @@ func (controller *Controller) parseObjectFromMap(objectData map[string]interface
 		return nil, errors.New(errorMessage)
 	}
 
-	parsedObject, err := object.Init(name, nil, nil, nil, color, specularReflection, roughness,
+	normals, err := controller.parseNormalsFromMap(objectData)
+	if err != nil {
+		return nil, errors.New(errorMessage)
+	}
+
+	repository, err := controller.parseRepositoryFromMap(objectData)
+	if err != nil {
+		return nil, errors.New(errorMessage)
+	}
+
+	parsedObject, err := object.Init(name, repository, nil, normals, color, specularReflection, roughness,
 		transmissionReflection, diffuseReflection)
 	if err != nil {
 		return nil, errors.New(errorMessage)
