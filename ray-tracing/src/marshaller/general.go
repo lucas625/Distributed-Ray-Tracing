@@ -4,41 +4,73 @@ import (
 	"errors"
 )
 
-// parseColorFromMap parses a color from a map.
+// parseFloatListFromMap parses a float list from a map.
 //
 // Parameters:
-//  mapContainingColor - The map that contains the color.
+//  mapContainingFloats - The map that contains the floats.
+//  listName            - The name of the list of floats.
 //
 // Returns:
-// 	The float.
+// 	The float list.
 // 	An error.
 //
-func (*Controller) parseColorFromMap(mapContainingColor map[string]interface{}) ([]float64, error) {
-	errorMessage := "unable to parse color"
+func (*Controller) parseFloatListFromMap(mapContainingFloats map[string]interface{}, listName string) (
+	[]float64, error) {
+	errorMessage := "unable to parse floats"
 
-	colorInterface, found := mapContainingColor["color"]
+	floatListInterface, found := mapContainingFloats[listName]
 	if !found {
 		return nil, errors.New(errorMessage)
 	}
-	colorInterfaceList, parsed := colorInterface.([]interface{})
+	floatListInterfaceList, parsed := floatListInterface.([]interface{})
 	if !parsed {
 		return nil, errors.New(errorMessage)
 	}
 
-	if len(colorInterfaceList) != 3 {
-		return nil, errors.New(errorMessage)
-	}
-
-	color := make([]float64, 3)
-	for index := 0; index < 3; index++ {
-		coordinate, parsed := colorInterfaceList[index].(float64)
+	floats := make([]float64, len(floatListInterfaceList))
+	for index := 0; index < len(floatListInterfaceList); index++ {
+		currentFloat, parsed := floatListInterfaceList[index].(float64)
 		if !parsed {
 			return nil, errors.New(errorMessage)
 		}
-		color[index] = coordinate
+		floats[index] = currentFloat
 	}
 
-	return color, nil
+	return floats, nil
+}
+
+// parseIntListFromMap parses a int list from a map.
+//
+// Parameters:
+//  mapContainingIntegers - The map that contains the integers.
+//  listName              - The name of the list of integers.
+//
+// Returns:
+// 	The int list.
+// 	An error.
+//
+func (*Controller) parseIntListFromMap(mapContainingIntegers map[string]interface{}, listName string) ([]int, error) {
+	errorMessage := "unable to parse floats"
+
+	intListInterface, found := mapContainingIntegers[listName]
+	if !found {
+		return nil, errors.New(errorMessage)
+	}
+	intListInterfaceList, parsed := intListInterface.([]interface{})
+	if !parsed {
+		return nil, errors.New(errorMessage)
+	}
+
+	integers := make([]int, len(intListInterfaceList))
+	for index := 0; index < len(intListInterfaceList); index++ {
+		currentFloat, parsed := intListInterfaceList[index].(float64)
+		if !parsed {
+			return nil, errors.New(errorMessage)
+		}
+		integers[index] = int(currentFloat)
+	}
+
+	return integers, nil
 }
 
 // parseFloatFromMap parses a float from a map.

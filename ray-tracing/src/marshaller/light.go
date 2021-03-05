@@ -51,7 +51,7 @@ func (controller *Controller) parseLightFromMap(lightData map[string]interface{}
 		return nil, errors.New(errorMessage)
 	}
 
-	color, err := controller.parseColorFromMap(lightData)
+	color, err := controller.parseFloatListFromMap(lightData, "color")
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}

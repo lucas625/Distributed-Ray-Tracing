@@ -3,6 +3,7 @@ package marshaller
 import (
 	"errors"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/triangle"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/object"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/point_repository"
@@ -58,6 +59,43 @@ func (controller *Controller) parseRepositoryFromMap(objectData map[string]inter
 	}
 
 	return repository, nil
+}
+
+// parseTrianglesFromMap parses triangles from map.
+//
+// Parameters:
+//  objectData - The object data.
+//
+// Returns:
+// 	The list of triangles.
+// 	An error.
+//
+func (controller *Controller) parseTrianglesFromMap(objectData map[string]interface{}) ([]*triangle.Triangle, error) {
+	errorMessage := "unable to parse triangles"
+
+	trianglesInterface, found := objectData["triangles"]
+	if !found {
+		return nil, errors.New(errorMessage)
+	}
+	trianglesInterfaceList, parsed := trianglesInterface.([]interface{})
+	if !parsed {
+		return nil, errors.New(errorMessage)
+	}
+
+	triangles := make([]*triangle.Triangle, len(trianglesInterfaceList))
+	for triangleIndex := 0; triangleIndex < len(trianglesInterfaceList); triangleIndex++ {
+		triangleMap, parsed := trianglesInterfaceList[triangleIndex].(map[string]interface{})
+		if !parsed {
+			return nil, errors.New(errorMessage)
+		}
+		currentTriangle, err := controller.parseTriangleFromMap(triangleMap)
+		if err != nil {
+			return nil, errors.New(errorMessage)
+		}
+		triangles[triangleIndex] = currentTriangle
+	}
+
+	return triangles, nil
 }
 
 // parseNormalsFromMap parses normals from map.
@@ -123,7 +161,7 @@ func (controller *Controller) parseLightCharacteristicsFromMap(objectData map[st
 		return nil, 0, 0, 0, 0, errors.New(errorMessage)
 	}
 
-	color, err := controller.parseColorFromMap(lightsInterfaceListMap)
+	color, err := controller.parseFloatListFromMap(lightsInterfaceListMap, "color")
 	if err != nil {
 		return nil, 0, 0, 0, 0, errors.New(errorMessage)
 	}
@@ -181,7 +219,12 @@ func (controller *Controller) parseObjectFromMap(objectData map[string]interface
 		return nil, errors.New(errorMessage)
 	}
 
-	parsedObject, err := object.Init(name, repository, nil, normals, color, specularReflection, roughness,
+	triangles, err := controller.parseTrianglesFromMap(objectData)
+	if err != nil {
+		return nil, errors.New(errorMessage)
+	}
+
+	parsedObject, err := object.Init(name, repository, triangles, normals, color, specularReflection, roughness,
 		transmissionReflection, diffuseReflection)
 	if err != nil {
 		return nil, errors.New(errorMessage)
