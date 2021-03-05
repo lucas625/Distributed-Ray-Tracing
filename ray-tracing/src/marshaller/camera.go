@@ -7,13 +7,6 @@ import (
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/camera"
 )
 
-// cameraController is a class for controlling the marshaller of cameras.
-//
-// Members:
-// 	none
-//
-type cameraController struct {}
-
 // parseCameraVectorFromMap parses the vector of the camera.
 //
 // Parameters:
@@ -24,11 +17,9 @@ type cameraController struct {}
 // 	The vector.
 // 	An error.
 //
-func (*cameraController) parseCameraVectorFromMap(cameraMap map[string]interface{}, vectorName string) (
+func (controller *Controller) parseCameraVectorFromMap(cameraMap map[string]interface{}, vectorName string) (
 	*vector.Vector, error) {
 	errorMessage := "unable to parse camera vector"
-
-	vectorMarshallerController := vectorController{}
 
 	vectorMap, found := cameraMap[vectorName]
 	if !found {
@@ -38,7 +29,7 @@ func (*cameraController) parseCameraVectorFromMap(cameraMap map[string]interface
 	if !parsed {
 		return nil, errors.New(errorMessage)
 	}
-	parsedVector, err := vectorMarshallerController.parseVectorFromMap(vectorMapParsed)
+	parsedVector, err := controller.parseVectorFromMap(vectorMapParsed)
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}
@@ -57,7 +48,7 @@ func (*cameraController) parseCameraVectorFromMap(cameraMap map[string]interface
 // 	The right vector.
 // 	An error.
 //
-func (controller *cameraController) parseCameraVectorsFromMap(cameraMap map[string]interface{}) (
+func (controller *Controller) parseCameraVectorsFromMap(cameraMap map[string]interface{}) (
 	*vector.Vector, *vector.Vector, *vector.Vector, error) {
 	errorMessage := "unable to parse camera vectors"
 	lookVector, err := controller.parseCameraVectorFromMap(cameraMap, "look")
@@ -84,11 +75,9 @@ func (controller *cameraController) parseCameraVectorsFromMap(cameraMap map[stri
 // 	The vector.
 // 	An error.
 //
-func (*cameraController) parseCameraPositionFromMap(cameraMap map[string]interface{}) (
+func (controller *Controller) parseCameraPositionFromMap(cameraMap map[string]interface{}) (
 	*point.Point, error) {
 	errorMessage := "unable to parse camera position"
-
-	pointMarshallerController := pointController{}
 
 	vectorMap, found := cameraMap["position"]
 	if !found {
@@ -98,7 +87,7 @@ func (*cameraController) parseCameraPositionFromMap(cameraMap map[string]interfa
 	if !parsed {
 		return nil, errors.New(errorMessage)
 	}
-	parsedPoint, err := pointMarshallerController.parsePointFromMap(vectorMapParsed)
+	parsedPoint, err := controller.parsePointFromMap(vectorMapParsed)
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}
@@ -115,7 +104,7 @@ func (*cameraController) parseCameraPositionFromMap(cameraMap map[string]interfa
 // 	The scene camera.
 // 	An error.
 //
-func (controller *cameraController) parseCameraFromMap(pathTracingData map[string]interface{}) (*camera.Camera, error) {
+func (controller *Controller) parseCameraFromMap(pathTracingData map[string]interface{}) (*camera.Camera, error) {
 	errorMessage := "unable to parse scene is camera"
 
 	sceneCameraMap, found := pathTracingData["sceneCamera"]
@@ -136,12 +125,11 @@ func (controller *cameraController) parseCameraFromMap(pathTracingData map[strin
 		return nil, errors.New(errorMessage)
 	}
 
-	generalMarshallerController := generalController{}
-	fieldOfView, err := generalMarshallerController.parseFloatFromMap(sceneCameraMapParsed, "fieldOfView")
+	fieldOfView, err := controller.parseFloatFromMap(sceneCameraMapParsed, "fieldOfView")
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}
-	distanceToScreen, err := generalMarshallerController.parseFloatFromMap(
+	distanceToScreen, err := controller.parseFloatFromMap(
 		sceneCameraMapParsed, "distanceToScreen")
 	if err != nil {
 		return nil, errors.New(errorMessage)

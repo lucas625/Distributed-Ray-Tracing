@@ -11,7 +11,7 @@ import (
 //
 type Controller struct {}
 
-// ParsePathTracingParametersFromMap parses the inputs for a path tracing run.
+// ParsePathTracingFromMap parses the inputs for a path tracing run.
 //
 // Parameters:
 //  pathTracingData - The path tracing data.
@@ -26,30 +26,26 @@ type Controller struct {}
 // 	The ending column index of the window of the screen to use the path tracing.
 // 	An error.
 //
-func (controller *Controller) ParsePathTracingParametersFromMap(pathTracingData map[string]interface{}) (
+func (controller *Controller) ParsePathTracingFromMap(pathTracingData map[string]interface{}) (
 	*path_tracing.PathTracer, int, int, int, int, int, int, error) {
 
-	pathTracingParametersMarshallerController := pathTracingParametersController{}
-	pathTracingParametersInstance, err := pathTracingParametersMarshallerController.parsePathTracingParametersFromMap(
+	pathTracingParametersInstance, err := controller.parsePathTracingParametersFromMap(
 		pathTracingData)
 	if err != nil {
 		return nil, 0, 0, 0, 0, 0, 0, err
 	}
 
-	screenMarshallerController := screenController{}
-	pixelScreen, err := screenMarshallerController.parsePixelScreenFromMap(pathTracingData)
+	pixelScreen, err := controller.parsePixelScreenFromMap(pathTracingData)
 	if err != nil {
 		return nil, 0, 0, 0, 0, 0, 0, err
 	}
 
-	cameraMarshallerController := cameraController{}
-	sceneCamera, err := cameraMarshallerController.parseCameraFromMap(pathTracingData)
+	sceneCamera, err := controller.parseCameraFromMap(pathTracingData)
 	if err != nil {
 		return nil, 0, 0, 0, 0, 0, 0, err
 	}
 
-	lightMarshallerController := lightController{}
-	lights, err := lightMarshallerController.parseLightsFromMap(pathTracingData)
+	lights, err := controller.parseLightsFromMap(pathTracingData)
 	if err != nil {
 		return nil, 0, 0, 0, 0, 0, 0, err
 	}

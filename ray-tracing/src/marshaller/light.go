@@ -3,14 +3,36 @@ package marshaller
 import (
 	"errors"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/light"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/object"
 )
 
-// lightController is a class for controlling the marshaller of lights.
+// parseLightObjectFromMap parses a light object from a map.
 //
-// Members:
-// 	none
+// Parameters:
+//  lightData - The light data.
 //
-type lightController struct {}
+// Returns:
+// 	An object.
+// 	An error.
+//
+func (controller *Controller) parseLightObjectFromMap(lightData map[string]interface{}) (*object.Object, error) {
+	errorMessage := "unable to parse light object"
+
+	lightObjectInterface, found := lightData["lightObject"]
+	if !found {
+		return nil, errors.New(errorMessage)
+	}
+	lightObjectMap, parsed := lightObjectInterface.(map[string]interface{})
+	if !parsed {
+		return nil, errors.New(errorMessage)
+	}
+
+	lightObject, err := controller.parseObjectFromMap(lightObjectMap)
+	if err != nil {
+		return nil, errors.New(errorMessage)
+	}
+	return lightObject, nil
+}
 
 // parseLightFromMap parses a light from a map.
 //
@@ -21,22 +43,25 @@ type lightController struct {}
 // 	A light.
 // 	An error.
 //
-func (controller *lightController) parseLightFromMap(lightData map[string]interface{}) (*light.Light, error) {
+func (controller *Controller) parseLightFromMap(lightData map[string]interface{}) (*light.Light, error) {
 	errorMessage := "unable to parse light"
 
-	generalMarshallerController := generalController{}
-
-	lightIntensity, err := generalMarshallerController.parseFloatFromMap(lightData, "lightIntensity")
+	lightIntensity, err := controller.parseFloatFromMap(lightData, "lightIntensity")
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}
 
-	color, err := generalMarshallerController.parseColorFromMap(lightData)
+	color, err := controller.parseColorFromMap(lightData)
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}
 
-	parsedLight, err := light.Init(lightIntensity, nil, color)
+	lightObject, err := controller.parseLightObjectFromMap(lightData)
+	if err != nil {
+		return nil, errors.New(errorMessage)
+	}
+
+	parsedLight, err := light.Init(lightIntensity, lightObject, color)
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}
@@ -52,7 +77,7 @@ func (controller *lightController) parseLightFromMap(lightData map[string]interf
 // 	The list of lights.
 // 	An error.
 //
-func (controller *lightController) parseLightsFromMap(pathTracingData map[string]interface{}) ([]*light.Light, error) {
+func (controller *Controller) parseLightsFromMap(pathTracingData map[string]interface{}) ([]*light.Light, error) {
 	errorMessage := "unable to parse lights"
 
 	lightsInterface, found := pathTracingData["lights"]

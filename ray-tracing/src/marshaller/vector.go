@@ -5,13 +5,6 @@ import (
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
 )
 
-// vectorController is a class for controlling the marshaller of vectors.
-//
-// Members:
-// 	none
-//
-type vectorController struct {}
-
 // parseVectorFromMap parses a vector from a map.
 //
 // Parameters:
@@ -21,7 +14,7 @@ type vectorController struct {}
 // 	The vector.
 // 	An error.
 //
-func (*vectorController) parseVectorFromMap(vectorAsMap map[string]interface{}) (*vector.Vector, error) {
+func (*Controller) parseVectorFromMap(vectorAsMap map[string]interface{}) (*vector.Vector, error) {
 	errorMessage := "invalid vector"
 
 	coordinatesAsInterface, found := vectorAsMap["coordinates"]

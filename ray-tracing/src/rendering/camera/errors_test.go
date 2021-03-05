@@ -32,3 +32,23 @@ func TestCamera_Non3DCameraError(t *testing.T) {
 	test_helpers.AssertNotNilError(t, err)
 	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
 }
+
+// TestCamera_nonOrthogonalCameraVectorsError tests the error where the Camera vectors are not orthogonal to each other.
+//
+// Parameters:
+//  t - Test instance.
+//
+// Returns:
+//  none
+//
+func TestCamera_nonOrthogonalCameraVectorsError(t *testing.T) {
+	lookUpIsOrthogonal := true
+	lookRightIsOrthogonal := false
+	rightUpIsOrthogonal := false
+
+	expectedErrorMessage := fmt.Sprintf("Not all camera vectors are orthogonal to each other: look and up: %v, look" +
+		" and right: %v, right and up: %v.", lookUpIsOrthogonal, lookRightIsOrthogonal, rightUpIsOrthogonal)
+	err := nonOrthogonalCameraVectorsError(lookUpIsOrthogonal, lookRightIsOrthogonal, rightUpIsOrthogonal)
+	test_helpers.AssertNotNilError(t, err)
+	test_helpers.AssertEqual(t, expectedErrorMessage, err.Error())
+}

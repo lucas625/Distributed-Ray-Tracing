@@ -5,13 +5,6 @@ import (
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point"
 )
 
-// pointController is a class for controlling the marshaller of vectors.
-//
-// Members:
-// 	none
-//
-type pointController struct {}
-
 // parsePointFromMap parses a point from a map.
 //
 // Parameters:
@@ -21,7 +14,7 @@ type pointController struct {}
 // 	The point.
 // 	An error.
 //
-func (*pointController) parsePointFromMap(pointAsMap map[string]interface{}) (*point.Point, error) {
+func (*Controller) parsePointFromMap(pointAsMap map[string]interface{}) (*point.Point, error) {
 	errorMessage := "invalid point"
 
 	coordinatesAsInterface, found := pointAsMap["coordinates"]

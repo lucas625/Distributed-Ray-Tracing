@@ -35,7 +35,7 @@ func parsePathTracingRequest(request *http.Request) (*path_tracing.PathTracer, i
 		return nil, 0, 0, 0, 0, 0, 0, errors.New("failed to parse your request")
 	}
 	marshallerController := &marshaller.Controller{}
-	return marshallerController.ParsePathTracingParametersFromMap(data)
+	return marshallerController.ParsePathTracingFromMap(data)
 }
 
 // RunPathTracing runs the requested path tracing, sending a matrix of colors as response.

@@ -183,6 +183,13 @@ func Init(position *point.Point, look, up, right *vector.Vector, fieldOfView, di
 	if position.Dimension() != 3 || look.Dimension() != 3 || up.Dimension() != 3 || right.Dimension() != 3 {
 		return nil, non3DCameraError(position, look, up, right)
 	}
+	vectorController := vector.Controller{}
+	lookUpIsOrthogonal, _ := vectorController.IsOrthogonalVector(look, up)
+	lookRightIsOrthogonal, _ := vectorController.IsOrthogonalVector(look, right)
+	rightUpIsOrthogonal, _ := vectorController.IsOrthogonalVector(right, up)
+	if !lookUpIsOrthogonal || !lookRightIsOrthogonal || !rightUpIsOrthogonal {
+		return nil, nonOrthogonalCameraVectorsError(lookUpIsOrthogonal, lookRightIsOrthogonal, rightUpIsOrthogonal)
+	}
 	camera := &Camera{position: position, look: look, up: up, right: right, fieldOfView: fieldOfView,
 		distanceToScreen: distanceToScreen}
 	camera.normalizeVectors()

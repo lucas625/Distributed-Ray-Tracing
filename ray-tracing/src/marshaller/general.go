@@ -4,13 +4,6 @@ import (
 	"errors"
 )
 
-// generalController is a class for controlling the marshaller of the general types.
-//
-// Members:
-// 	none
-//
-type generalController struct {}
-
 // parseColorFromMap parses a color from a map.
 //
 // Parameters:
@@ -20,7 +13,7 @@ type generalController struct {}
 // 	The float.
 // 	An error.
 //
-func (*generalController) parseColorFromMap(mapContainingColor map[string]interface{}) ([]float64, error) {
+func (*Controller) parseColorFromMap(mapContainingColor map[string]interface{}) ([]float64, error) {
 	errorMessage := "unable to parse color"
 
 	colorInterface, found := mapContainingColor["color"]
@@ -58,8 +51,7 @@ func (*generalController) parseColorFromMap(mapContainingColor map[string]interf
 // 	The float.
 // 	An error.
 //
-func (*generalController) parseFloatFromMap(mapContainingFloat map[string]interface{}, floatName string) (
-	float64, error) {
+func (*Controller) parseFloatFromMap(mapContainingFloat map[string]interface{}, floatName string) (float64, error) {
 	errorMessage := "unable to parse float"
 
 	floatInterface, found := mapContainingFloat[floatName]
@@ -72,4 +64,29 @@ func (*generalController) parseFloatFromMap(mapContainingFloat map[string]interf
 	}
 
 	return floatParsed, nil
+}
+
+// parseStringFromMap parses a string from a map.
+//
+// Parameters:
+//  mapContainingString - The map that contains the string.
+//  stringName          - The name of the string.
+//
+// Returns:
+// 	The string.
+// 	An error.
+//
+func (*Controller) parseStringFromMap(mapContainingString map[string]interface{}, stringName string) (string, error) {
+	errorMessage := "unable to parse string"
+
+	stringInterface, found := mapContainingString[stringName]
+	if !found {
+		return "", errors.New(errorMessage)
+	}
+	stringParsed, parsed := stringInterface.(string)
+	if !parsed {
+		return "", errors.New(errorMessage)
+	}
+
+	return stringParsed, nil
 }

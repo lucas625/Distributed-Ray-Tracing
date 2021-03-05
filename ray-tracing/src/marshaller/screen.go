@@ -5,13 +5,6 @@ import (
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/screen"
 )
 
-// screenController is a class for controlling the marshaller of the screens.
-//
-// Members:
-// 	none
-//
-type screenController struct {}
-
 // parsePixelScreenFromMap parses the pixel screen from a map.
 //
 // Parameters:
@@ -21,7 +14,7 @@ type screenController struct {}
 // 	The pixel screen.
 // 	An error.
 //
-func (*screenController) parsePixelScreenFromMap(pathTracingData map[string]interface{}) (*screen.Screen, error) {
+func (controller *Controller) parsePixelScreenFromMap(pathTracingData map[string]interface{}) (*screen.Screen, error) {
 	errorMessage := "unable to parse pixel screen"
 
 	pixelScreenMap, found := pathTracingData["pixelScreen"]
@@ -33,13 +26,11 @@ func (*screenController) parsePixelScreenFromMap(pathTracingData map[string]inte
 		return nil, errors.New(errorMessage)
 	}
 
-	generalController := generalController{}
-
-	width, err := generalController.parseFloatFromMap(pixelScreenMapParsed, "width")
+	width, err := controller.parseFloatFromMap(pixelScreenMapParsed, "width")
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}
-	height, err := generalController.parseFloatFromMap(pixelScreenMapParsed, "height")
+	height, err := controller.parseFloatFromMap(pixelScreenMapParsed, "height")
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}

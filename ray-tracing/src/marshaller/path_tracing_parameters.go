@@ -4,13 +4,6 @@ import (
 	"errors"
 )
 
-// pathTracingParametersController is a class for controlling the marshaller of the path tracing parameters.
-//
-// Members:
-// 	none
-//
-type pathTracingParametersController struct {}
-
 // pathTracingParameters is a class for lines.
 //
 // Members:
@@ -39,7 +32,7 @@ type pathTracingParameters struct {
 // 	The path tracing parameters.
 // 	An error.
 //
-func (*pathTracingParametersController) parsePathTracingParametersFromMap(pathTracingData map[string]interface{}) (
+func (controller *Controller) parsePathTracingParametersFromMap(pathTracingData map[string]interface{}) (
 	*pathTracingParameters, error) {
 	errorMessage := "invalid path tracing parameters"
 
@@ -52,28 +45,27 @@ func (*pathTracingParametersController) parsePathTracingParametersFromMap(pathTr
 		return nil, errors.New(errorMessage)
 	}
 
-	generalMarshallerController := generalController{}
-	raysPerPixel, err := generalMarshallerController.parseFloatFromMap(pathTracingParametersMap, "raysPerPixel")
+	raysPerPixel, err := controller.parseFloatFromMap(pathTracingParametersMap, "raysPerPixel")
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}
-	recursions, err := generalMarshallerController.parseFloatFromMap(pathTracingParametersMap, "recursions")
+	recursions, err := controller.parseFloatFromMap(pathTracingParametersMap, "recursions")
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}
-	windowStartLine, err := generalMarshallerController.parseFloatFromMap(pathTracingParametersMap, "windowStartLine")
+	windowStartLine, err := controller.parseFloatFromMap(pathTracingParametersMap, "windowStartLine")
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}
-	windowStartColumn, err := generalMarshallerController.parseFloatFromMap(pathTracingParametersMap, "windowStartColumn")
+	windowStartColumn, err := controller.parseFloatFromMap(pathTracingParametersMap, "windowStartColumn")
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}
-	windowEndLine, err := generalMarshallerController.parseFloatFromMap(pathTracingParametersMap, "windowEndLine")
+	windowEndLine, err := controller.parseFloatFromMap(pathTracingParametersMap, "windowEndLine")
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}
-	windowEndColumn, err := generalMarshallerController.parseFloatFromMap(pathTracingParametersMap, "windowEndColumn")
+	windowEndColumn, err := controller.parseFloatFromMap(pathTracingParametersMap, "windowEndColumn")
 	if err != nil {
 		return nil, errors.New(errorMessage)
 	}
