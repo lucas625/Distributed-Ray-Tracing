@@ -13,7 +13,7 @@ The implementation of a distributed ray tracing based on microservices as [Lucas
   - [Guidelines](#guidelines)
   - [Run the project](#run-the-project)
     - [Building Images](#building-images)
-    - [Run the images](#run-the-images)
+    - [Running the images](#running-the-images)
   - [Testing](#testing)
     - [Ray-Tracing Test](#ray-tracing-test)
   - [Examples](#examples)
@@ -32,8 +32,6 @@ Developer: [Lucas Aurelio](https://github.com/lucas625)
 
 ## Run the project
 
-After completing the installation of the project, follow the next steps to execute it.
-
 ### Building Images
 
 ```sh
@@ -41,7 +39,7 @@ After completing the installation of the project, follow the next steps to execu
 docker build -t drt-ray-tracing -f ray-tracing/Dockerfile ray-tracing
 ```
 
-### Run the images
+### Running the images
 
 ```sh
 # Run the ray tracing image
