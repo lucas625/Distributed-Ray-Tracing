@@ -186,7 +186,7 @@ func (controller *Controller) parseLightCharacteristicsFromMap(objectData map[st
 	return color, specularReflection, roughNess, transmissionReflection, diffuseReflection, nil
 }
 
-// parseLightFromMap parses an object from a map.
+// parseObjectFromMap parses an object from a map.
 //
 // Parameters:
 //  objectData - The object data.
@@ -230,4 +230,41 @@ func (controller *Controller) parseObjectFromMap(objectData map[string]interface
 		return nil, errors.New(errorMessage)
 	}
 	return parsedObject, nil
+}
+
+// parseObjectsFromMap parses objects from map.
+//
+// Parameters:
+//  pathTracingData - The path tracing data.
+//
+// Returns:
+// 	The list of objects.
+// 	An error.
+//
+func (controller *Controller) parseObjectsFromMap(pathTracingData map[string]interface{}) ([]*object.Object, error) {
+	errorMessage := "unable to parse objects"
+
+	objectsInterface, found := pathTracingData["objects"]
+	if !found {
+		return nil, errors.New(errorMessage)
+	}
+	objectsInterfaceList, parsed := objectsInterface.([]interface{})
+	if !parsed {
+		return nil, errors.New(errorMessage)
+	}
+
+	objects := make([]*object.Object, len(objectsInterfaceList))
+	for objectIndex := 0; objectIndex < len(objectsInterfaceList); objectIndex++ {
+		objectMap, parsed := objectsInterfaceList[objectIndex].(map[string]interface{})
+		if !parsed {
+			return nil, errors.New(errorMessage)
+		}
+		currentObject, err := controller.parseObjectFromMap(objectMap)
+		if err != nil {
+			return nil, errors.New(errorMessage)
+		}
+		objects[objectIndex] = currentObject
+	}
+
+	return objects, nil
 }

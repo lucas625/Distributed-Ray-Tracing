@@ -1,6 +1,8 @@
 package marshaller
 
 import (
+	"encoding/json"
+	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/color_matrix"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/path_tracing"
 )
 
@@ -11,6 +13,19 @@ import (
 //
 type Controller struct {}
 
+// ColorMatrixToJson parses a color matrix to JSON.
+//
+// Parameters:
+//  pathTracingData - The path tracing data.
+//
+// Returns:
+// 	The list of objects.
+// 	An error.
+//
+func (controller *Controller) ColorMatrixToJson(colorMatrix *color_matrix.ColorMatrix) ([]byte, error) {
+	dtoColorMatrix := ColorMatrixDTO{Colors: colorMatrix.GetColors()}
+	return json.Marshal(dtoColorMatrix)
+}
 // ParsePathTracingFromMap parses the inputs for a path tracing run.
 //
 // Parameters:
@@ -50,7 +65,12 @@ func (controller *Controller) ParsePathTracingFromMap(pathTracingData map[string
 		return nil, 0, 0, 0, 0, 0, 0, err
 	}
 
-	pathTracer := path_tracing.Init(nil, pixelScreen, sceneCamera, lights)
+	objects, err := controller.parseObjectsFromMap(pathTracingData)
+	if err != nil {
+		return nil, 0, 0, 0, 0, 0, 0, err
+	}
+
+	pathTracer := path_tracing.Init(objects, pixelScreen, sceneCamera, lights)
 	return pathTracer, pathTracingParametersInstance.raysPerPixel, pathTracingParametersInstance.recursions,
 	pathTracingParametersInstance.windowStartLine, pathTracingParametersInstance.windowStartColumn,
 	pathTracingParametersInstance.windowEndLine, pathTracingParametersInstance.windowEndColumn, nil

@@ -63,7 +63,8 @@ func RunPathTracing(responseWriter http.ResponseWriter, request *http.Request) {
 		http.Error(responseWriter, "failed to run the path tracing.", 500)
 	}
 
-	colorMatrixAsBytes, err := json.Marshal(colorMatrix)
+	marshallerController := &marshaller.Controller{}
+	colorMatrixAsBytes, err := marshallerController.ColorMatrixToJson(colorMatrix)
 
 	if err != nil {
 		http.Error(responseWriter, "failed to serialize the response", 500)
