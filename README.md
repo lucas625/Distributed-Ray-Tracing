@@ -11,9 +11,9 @@ The implementation of a distributed ray tracing based on microservices as [Lucas
   - [Team](#team)
   - [Requirements](#requirements)
   - [Guidelines](#guidelines)
-  - [Installation](#installation)
-    - [Ray-Tracing](#ray-tracing)
   - [Run the project](#run-the-project)
+    - [Building Images](#building-images)
+    - [Run the images](#run-the-images)
   - [Testing](#testing)
     - [Ray-Tracing Test](#ray-tracing-test)
   - [Examples](#examples)
@@ -30,25 +30,23 @@ Developer: [Lucas Aurelio](https://github.com/lucas625)
 
 - [The Twelve-Factor App](https://12factor.net/)
 
-## Installation
-
-Follow the next steps to install the dependencies.
-
-### Ray-Tracing
-
-To set ray tracing project use:
-
-```sh
-# Build the image
-docker build -t drt-ray-tracing .
-
-# Run the container
-docker run -p 8081:8081 --name drt-ray-tracing-container -v $(pwd):/ray-tracing --rm drt-ray-tracing
-```
-
 ## Run the project
 
 After completing the installation of the project, follow the next steps to execute it.
+
+### Building Images
+
+```sh
+# Build the ray tracing image
+docker build -t drt-ray-tracing -f ray-tracing/Dockerfile ray-tracing
+```
+
+### Run the images
+
+```sh
+# Run the ray tracing image
+docker run -p 8081:8081 --rm --name drt-ray-tracing-container drt-ray-tracing
+```
 
 ## Testing
 

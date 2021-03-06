@@ -15,7 +15,7 @@ func main() {
 
 	server := &http.Server{
 		Handler:      router,
-		Addr:         "127.0.0.1:8000",
+		Addr:         ":8081",
 		WriteTimeout: 1 * time.Hour,
 		ReadTimeout:  1 * time.Hour,
 	}
