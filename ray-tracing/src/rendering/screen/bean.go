@@ -3,8 +3,8 @@ package screen
 // Screen is a class for screens.
 //
 // Members:
-// 	width               - The number of x pixels on the screen.
-// 	height              - The number of y pixels on the screen.
+// 	width  - The number of x pixels on the screen.
+// 	height - The number of y pixels on the screen.
 //
 type Screen struct {
 	width  int

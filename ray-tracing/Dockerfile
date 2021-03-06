@@ -1,9 +1,16 @@
 FROM golang:1.15-rc-alpine3.12
 
-COPY . /ray-tracing
+RUN apk add git
+
+COPY go.mod /ray-tracing/
+COPY go.sum /ray-tracing/
+
 WORKDIR /ray-tracing
 
-RUN apk add git
 RUN go mod download
 
+COPY . /ray-tracing
+
 ENV CGO_ENABLED 0
+
+ENTRYPOINT ["./entrypoint.sh"]
