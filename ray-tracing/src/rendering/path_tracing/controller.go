@@ -1,6 +1,7 @@
 package path_tracing
 
 import (
+	"fmt"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/line"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/point"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/geometry/vector"
@@ -416,6 +417,7 @@ func (controller *Controller) Run(pathTracer *PathTracer, raysPerPixel, recursio
 			pixelColor := controller.traceFirstRays(pathTracer, lineIndex, columnIndex, raysPerPixel, recursions)
 			_ = colorMatrix.SetColor(lineIndex, columnIndex, pixelColor)
 		}
+		fmt.Println(float64(lineIndex-windowStartLine)/float64(windowEndLine-windowStartLine),"%")
 	}
 	return colorMatrix, nil
 }
