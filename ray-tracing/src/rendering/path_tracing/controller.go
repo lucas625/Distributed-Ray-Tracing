@@ -290,9 +290,9 @@ func (controller *Controller) iterateRay(pathTracer *PathTracer, currentIteratio
 	var minimumRayParameter float64
 
 	if currentIteration == 0 {
-		minimumRayParameter = 0
-	} else {
 		minimumRayParameter = 1
+	} else {
+		minimumRayParameter = 0
 	}
 
 	hasObjectIntersection, closestLineParameter, closesObjectIndex, closestTriangleIndex,
@@ -314,18 +314,18 @@ func (controller *Controller) iterateRay(pathTracer *PathTracer, currentIteratio
 			newRayStartingPoint, _ := lineController.FindPoint(currentRay, closestLineParameter)
 			if controller.traceShadowRays(pathTracer, newRayStartingPoint) {
 				objectColor := pathTracer.GetObjects()[closesObjectIndex].GetLightCharacteristics().GetColor()
+				for index := 0; index < 3; index++ {
+					color[index] = objectColor[index]
+				}
 				if currentIteration < depthIterations {
 					newRay := controller.findNextRay(pathTracer, newRayStartingPoint,
 						pathTracer.GetObjects()[closesObjectIndex], closestTriangleIndex,
 						closestTriangleBarycentricCoordinates)
-					colorAux, nextIsShadow := controller.iterateRay(pathTracer, currentIteration+1, depthIterations, newRay)
-					if nextIsShadow {
+					colorAux, nextIsShadow := controller.iterateRay(pathTracer, currentIteration+1, depthIterations,
+						newRay)
+					if !nextIsShadow {
 						for index := 0; index < 3; index++ {
-							color[index] = objectColor[index]
-						}
-					} else {
-						for index := 0; index < 3; index++ {
-							color[index] = objectColor[index] * colorAux[index]
+							color[index] = color[index] * colorAux[index]
 						}
 					}
 
@@ -333,6 +333,8 @@ func (controller *Controller) iterateRay(pathTracer *PathTracer, currentIteratio
 			} else {
 				isShadowed = true
 			}
+		} else {
+			isShadowed = true
 		}
 	}
 	return color, isShadowed
@@ -448,13 +450,17 @@ func (controller *Controller) Run(pathTracer *PathTracer, raysPerPixel, recursio
 		return nil, windowError(pathTracer, windowStartLine, windowStartColumn, windowEndLine, windowEndColumn)
 	}
 
+	if raysPerPixel < 1 || recursions < 1 {
+		return nil, raysError(raysPerPixel, recursions)
+	}
+
 	colorMatrix := color_matrix.Init(pathTracer.pixelScreen)
 	for lineIndex := windowStartLine; lineIndex < windowEndLine; lineIndex++ {
 		for columnIndex := windowStartColumn; columnIndex < windowEndColumn; columnIndex++ {
 			pixelColor := controller.traceFirstRays(pathTracer, lineIndex, columnIndex, raysPerPixel, recursions)
 			_ = colorMatrix.SetColor(lineIndex, columnIndex, pixelColor)
 		}
-		fmt.Println(float64(lineIndex-windowStartLine)/float64(windowEndLine-windowStartLine),"%")
+		fmt.Println(100*float64(lineIndex-windowStartLine)/float64(windowEndLine-windowStartLine),"%")
 	}
 	return colorMatrix, nil
 }

@@ -24,3 +24,18 @@ func windowError(pathTracer *PathTracer, windowStartLine, windowStartColumn, win
 		windowStartLine, windowStartColumn, windowEndLine, windowEndColumn)
 	return errors.New(errorMessage)
 }
+
+// raysError is the error where the properties of the rays are invalid.
+//
+// Parameters:
+// 	raysPerPixel - The number of rays per pixel.
+// 	recursions   - The number recursions of each ray.
+//
+// Returns:
+//  An Error.
+//
+func raysError(raysPerPixel, recursions int) error {
+	errorMessage := fmt.Sprintf("Invalid number of rays per pixel(%d) or recursions (%d)",
+		raysPerPixel, recursions)
+	return errors.New(errorMessage)
+}
