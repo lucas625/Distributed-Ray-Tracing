@@ -241,6 +241,36 @@ func (controller *Controller) intersectLights(pathTracer *PathTracer, currentRay
 	return hasLightIntersection, closesLightLineParameterIndex, closestLightIndex
 }
 
+// traceShadowRays traces a ray to evey light to see if any can be directly intersected.
+//
+// Parameters:
+// 	pathTracer    - The PathTracer.
+//  startingPoint - The starting point of the ray.
+//
+// Returns:
+// 	If there is any intersection with lights.
+//
+func (controller *Controller) traceShadowRays(pathTracer *PathTracer, startingPoint *point.Point) bool {
+	lineController := line.Controller{}
+	objectController := object.Controller{}
+	for lightIndex := 0; lightIndex < len(pathTracer.GetLights()); lightIndex++ {
+		currentLight := pathTracer.GetLights()[lightIndex]
+		lightCenter := objectController.GetCenter(currentLight.GetLightObject())
+		currentRay, _ := lineController.ExtractLine(startingPoint, lightCenter)
+
+		hasLightIntersection, closestLineLightParameter, _ := controller.intersectLights(pathTracer, currentRay, 0)
+
+		if hasLightIntersection {
+			hasObjectIntersection, closestLineObjectParameter, _, _, _ := controller.intersectObjects(pathTracer, currentRay, 0)
+			if (hasObjectIntersection && closestLineLightParameter <= closestLineObjectParameter) || !hasObjectIntersection {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
 // iterateRay uses a ray to calculate the color.
 //
 // Parameters:
@@ -251,9 +281,10 @@ func (controller *Controller) intersectLights(pathTracer *PathTracer, currentRay
 //
 // Returns:
 // 	The color found by the ray.
+// 	If the last point is shadowed.
 //
 func (controller *Controller) iterateRay(pathTracer *PathTracer, currentIteration, depthIterations int,
-	currentRay *line.Line) []float64 {
+	currentRay *line.Line) ([]float64, bool) {
 	color := make([]float64, 3)
 
 	var minimumRayParameter float64
@@ -270,6 +301,7 @@ func (controller *Controller) iterateRay(pathTracer *PathTracer, currentIteratio
 	hasLightIntersection, closestLightLineParameter, closestLight := controller.intersectLights(
 		pathTracer, currentRay, minimumRayParameter)
 
+	isShadowed := false
 	if hasLightIntersection && closestLightLineParameter <= closestLineParameter {
 		intersectedLight := pathTracer.GetLights()[closestLight]
 		for index := 0; index < 3; index++ {
@@ -278,27 +310,32 @@ func (controller *Controller) iterateRay(pathTracer *PathTracer, currentIteratio
 
 	} else {
 		if hasObjectIntersection {
-			var colorAux []float64
-			if currentIteration == 0 {
-				colorAux = []float64{0, 0, 0}
+			lineController := line.Controller{}
+			newRayStartingPoint, _ := lineController.FindPoint(currentRay, closestLineParameter)
+			if controller.traceShadowRays(pathTracer, newRayStartingPoint) {
+				objectColor := pathTracer.GetObjects()[closesObjectIndex].GetLightCharacteristics().GetColor()
+				if currentIteration < depthIterations {
+					newRay := controller.findNextRay(pathTracer, newRayStartingPoint,
+						pathTracer.GetObjects()[closesObjectIndex], closestTriangleIndex,
+						closestTriangleBarycentricCoordinates)
+					colorAux, nextIsShadow := controller.iterateRay(pathTracer, currentIteration+1, depthIterations, newRay)
+					if nextIsShadow {
+						for index := 0; index < 3; index++ {
+							color[index] = objectColor[index]
+						}
+					} else {
+						for index := 0; index < 3; index++ {
+							color[index] = objectColor[index] * colorAux[index]
+						}
+					}
+
+				}
 			} else {
-				colorAux = []float64{1, 1, 1}
-			}
-			if depthIterations > 0 {
-				lineController := line.Controller{}
-				newRayStartingPoint, _ := lineController.FindPoint(currentRay, closestLineParameter)
-				newRay := controller.findNextRay(pathTracer, newRayStartingPoint,
-					pathTracer.GetObjects()[closesObjectIndex], closestTriangleIndex,
-					closestTriangleBarycentricCoordinates)
-				colorAux = controller.iterateRay(pathTracer, currentIteration+1, depthIterations, newRay)
-			}
-			objectColor := pathTracer.GetObjects()[closesObjectIndex].GetLightCharacteristics().GetColor()
-			for index := 0; index < 3; index++ {
-				color[index] = objectColor[index] * colorAux[index]
+				isShadowed = true
 			}
 		}
 	}
-	return color
+	return color, isShadowed
 }
 
 // parseRaysColorsToRGB traces all primary rays of a pixel.
@@ -363,7 +400,7 @@ func (controller *Controller) traceFirstRays(pathTracer *PathTracer, lineIndex, 
 					pathTracer.GetSceneCamera())
 
 				currentRay, _ := line.Init(pathTracer.GetSceneCamera().GetPosition(), rayVectorDirector)
-				currentRayReturnedColor := controller.iterateRay(pathTracer, 0, depthIterations, currentRay)
+				currentRayReturnedColor, _ := controller.iterateRay(pathTracer, 0, depthIterations, currentRay)
 				floatColors[threadRayIndex] = currentRayReturnedColor
 				lock.RemoveThread()
 			}(rayIndex)
