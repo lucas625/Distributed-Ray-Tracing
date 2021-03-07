@@ -132,24 +132,39 @@ func (controller *Controller) findSpecularReflectionVector(pathTracer *PathTrace
 //  intersectedObject      - The object that has the next ray is origin.
 //  triangleIndex          - The index of the triangle of the intersected object that hast the point.
 //  barycentricCoordinates - The barycentric coordinates of the next ray origin relative to the triangle.
+//  isShadowed             - The flag for if the starting point of the next ray is shadowed.
 //
 // Returns:
 // 	The next ray.
 //
 func (controller *Controller) findNextRay(pathTracer *PathTracer, nextRayOrigin *point.Point,
-	intersectedObject *object.Object, triangleIndex int, barycentricCoordinates []float64) *line.Line {
+	intersectedObject *object.Object, triangleIndex int, barycentricCoordinates []float64, isShadowed bool) *line.Line {
 
 	normalVector := controller.findNormal(intersectedObject, triangleIndex, barycentricCoordinates)
 
-	sumOfTotalReflections := intersectedObject.GetLightCharacteristics().GetDiffuseReflection() +
-		intersectedObject.GetLightCharacteristics().GetSpecularReflection() // + intersectedObject.TransReflection
+	diffusedReflection := intersectedObject.GetLightCharacteristics().GetDiffuseReflection()
+	specularReflection := intersectedObject.GetLightCharacteristics().GetSpecularReflection()
+	transmissionReflection := 0.0
+
+	if isShadowed {
+		if specularReflection > 0 {
+			diffusedReflection = 0.95
+			specularReflection = 0.05
+		} else {
+			diffusedReflection = 1
+			specularReflection = 0
+		}
+
+		transmissionReflection = 0
+	}
+
+	sumOfTotalReflections := diffusedReflection + specularReflection + transmissionReflection
 	selectedRandomValue := rand.Float64() * sumOfTotalReflections
 
 	var newRayVectorDirector *vector.Vector
-	if selectedRandomValue <= intersectedObject.GetLightCharacteristics().GetDiffuseReflection() {
+	if selectedRandomValue <= diffusedReflection {
 		newRayVectorDirector = controller.findDiffuseReflectionVector(nextRayOrigin, normalVector)
-	} else if selectedRandomValue <= intersectedObject.GetLightCharacteristics().GetDiffuseReflection() +
-		intersectedObject.GetLightCharacteristics().GetSpecularReflection() {
+	} else if selectedRandomValue <= diffusedReflection + specularReflection {
 		newRayVectorDirector = controller.findSpecularReflectionVector(
 			pathTracer, nextRayOrigin, intersectedObject, normalVector)
 	} else {
@@ -281,7 +296,7 @@ func (controller *Controller) traceShadowRays(pathTracer *PathTracer, startingPo
 //
 // Returns:
 // 	The color found by the ray.
-// 	If the last point is shadowed.
+// 	If the following iteration has intersections.
 //
 func (controller *Controller) iterateRay(pathTracer *PathTracer, currentIteration, depthIterations int,
 	currentRay *line.Line) ([]float64, bool) {
@@ -301,7 +316,7 @@ func (controller *Controller) iterateRay(pathTracer *PathTracer, currentIteratio
 	hasLightIntersection, closestLightLineParameter, closestLight := controller.intersectLights(
 		pathTracer, currentRay, minimumRayParameter)
 
-	isShadowed := false
+	hasIntersection := hasObjectIntersection || hasLightIntersection
 	if hasLightIntersection && closestLightLineParameter <= closestLineParameter {
 		intersectedLight := pathTracer.GetLights()[closestLight]
 		for index := 0; index < 3; index++ {
@@ -312,32 +327,31 @@ func (controller *Controller) iterateRay(pathTracer *PathTracer, currentIteratio
 		if hasObjectIntersection {
 			lineController := line.Controller{}
 			newRayStartingPoint, _ := lineController.FindPoint(currentRay, closestLineParameter)
-			if controller.traceShadowRays(pathTracer, newRayStartingPoint) {
-				objectColor := pathTracer.GetObjects()[closesObjectIndex].GetLightCharacteristics().GetColor()
-				for index := 0; index < 3; index++ {
-					color[index] = objectColor[index]
-				}
-				if currentIteration < depthIterations {
-					newRay := controller.findNextRay(pathTracer, newRayStartingPoint,
-						pathTracer.GetObjects()[closesObjectIndex], closestTriangleIndex,
-						closestTriangleBarycentricCoordinates)
-					colorAux, nextIsShadow := controller.iterateRay(pathTracer, currentIteration+1, depthIterations,
-						newRay)
-					if !nextIsShadow {
-						for index := 0; index < 3; index++ {
-							color[index] = color[index] * colorAux[index]
-						}
-					}
-
-				}
-			} else {
-				isShadowed = true
+			isShadowed := !controller.traceShadowRays(pathTracer, newRayStartingPoint)
+			colorReduction := 1.0
+			if isShadowed {
+				colorReduction = 10.0
 			}
-		} else {
-			isShadowed = true
+			objectColor := pathTracer.GetObjects()[closesObjectIndex].GetLightCharacteristics().GetColor()
+			for index := 0; index < 3; index++ {
+				color[index] = objectColor[index] / colorReduction
+			}
+			if currentIteration < depthIterations {
+				newRay := controller.findNextRay(pathTracer, newRayStartingPoint,
+					pathTracer.GetObjects()[closesObjectIndex], closestTriangleIndex,
+					closestTriangleBarycentricCoordinates, isShadowed)
+				colorAux, nextHasIntersection := controller.iterateRay(pathTracer, currentIteration+1, depthIterations,
+					newRay)
+				if nextHasIntersection {
+					for index := 0; index < 3; index++ {
+						color[index] = color[index] * colorAux[index]
+					}
+				}
+
+			}
 		}
 	}
-	return color, isShadowed
+	return color, hasIntersection
 }
 
 // parseRaysColorsToRGB traces all primary rays of a pixel.
