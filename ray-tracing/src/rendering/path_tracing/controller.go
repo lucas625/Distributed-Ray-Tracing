@@ -328,13 +328,11 @@ func (controller *Controller) iterateRay(pathTracer *PathTracer, currentIteratio
 			lineController := line.Controller{}
 			newRayStartingPoint, _ := lineController.FindPoint(currentRay, closestLineParameter)
 			isShadowed := !controller.traceShadowRays(pathTracer, newRayStartingPoint)
-			colorReduction := 1.0
-			if isShadowed {
-				colorReduction = 10.0
-			}
 			objectColor := pathTracer.GetObjects()[closesObjectIndex].GetLightCharacteristics().GetColor()
-			for index := 0; index < 3; index++ {
-				color[index] = objectColor[index] / colorReduction
+			if !isShadowed {
+				for index := 0; index < 3; index++ {
+					color[index] = objectColor[index]
+				}
 			}
 			if currentIteration < depthIterations {
 				newRay := controller.findNextRay(pathTracer, newRayStartingPoint,
@@ -344,7 +342,7 @@ func (controller *Controller) iterateRay(pathTracer *PathTracer, currentIteratio
 					newRay)
 				if nextHasIntersection {
 					for index := 0; index < 3; index++ {
-						color[index] = color[index] * colorAux[index]
+						color[index] = color[index] + colorAux[index]
 					}
 				}
 
@@ -359,11 +357,12 @@ func (controller *Controller) iterateRay(pathTracer *PathTracer, currentIteratio
 // Parameters:
 // 	raysColors   - The colors found by the rays.
 // 	numberOfRays - The number of rays.
+// 	recursions   - The number of recursions.
 //
 // Returns:
 // 	The average of the colors as RGB.
 //
-func (controller *Controller) parseRaysColorsToRGB(raysColors [][]float64, numberOfRays int) []int {
+func (controller *Controller) parseRaysColorsToRGB(raysColors [][]float64, numberOfRays, recursions int) []int {
 	color := make([]float64, 3)
 	for rayIndex := 0; rayIndex < numberOfRays; rayIndex++ {
 		for rayColorCoordinateIndex := 0; rayColorCoordinateIndex < 3; rayColorCoordinateIndex++ {
@@ -374,7 +373,7 @@ func (controller *Controller) parseRaysColorsToRGB(raysColors [][]float64, numbe
 
 	rgbColor := make([]int, 3)
 	for index := 0; index < 3; index++ {
-		rgbColor[index] = int(math.Floor(math.Sqrt(color[index]/float64(numberOfRays)) * 255))
+		rgbColor[index] = int(math.Floor(color[index]/float64(numberOfRays*(recursions+1)) * 255))
 		if rgbColor[index] > 255 {
 			rgbColor[index] = 255
 		} else if rgbColor[index] < 0 {
@@ -435,7 +434,7 @@ func (controller *Controller) traceFirstRays(pathTracer *PathTracer, lineIndex, 
 	}
 
 
-	return controller.parseRaysColorsToRGB(floatColors, numberOfRays)
+	return controller.parseRaysColorsToRGB(floatColors, numberOfRays, depthIterations)
 
 }
 
