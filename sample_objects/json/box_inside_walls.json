@@ -1,11 +1,11 @@
 {
     "pathTracingParameters": {
-        "raysPerPixel": 1,
-        "recursions": 1,
+        "raysPerPixel": 100,
+        "recursions": 3,
         "windowStartLine": 0,
         "windowStartColumn": 0,
-        "windowEndLine": 768,
-        "windowEndColumn": 1024
+        "windowEndLine": 400,
+        "windowEndColumn": 400
     },
     "objects": [
         {
@@ -648,8 +648,8 @@
         }
     ],
     "pixelScreen": {
-        "width": 1024,
-        "height": 768
+        "width": 400,
+        "height": 400
     },
     "sceneCamera": {
         "position": {

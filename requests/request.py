@@ -1,5 +1,6 @@
 import json
 
+import uuid
 from PIL import Image
 import numpy as np
 import requests
@@ -18,6 +19,6 @@ if __name__ == '__main__':
                 for colorIndex in range(3):
                     imageData[lineIndex][columnIndex][colorIndex] = colorMatrix[lineIndex][columnIndex][colorIndex]
         image = Image.fromarray(imageData, "RGB")
-        image.save("test.png")
+        image.save("out/{}.png".format(uuid.uuid4()))
     except Exception as e:
         print(e)
