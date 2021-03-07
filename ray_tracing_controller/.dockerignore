@@ -1,0 +1,22 @@
+# -------------- IDEs --------------
+
+.vscode
+.idea
+
+# -------------- Environment --------------
+
+.env
+venv
+
+# -------------- Git --------------
+
+.gitignore
+
+# -------------- Docker --------------
+
+Dockerfile
+.dockerignore
+
+# -------------- Coverage --------------
+
+coverage.txt
