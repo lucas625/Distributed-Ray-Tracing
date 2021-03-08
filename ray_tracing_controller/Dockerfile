@@ -11,5 +11,7 @@ WORKDIR /ray_tracing_controller
 # Env vars
 ENV SECRET_KEY ""
 ENV DEBUG false
+ENV IMAGE_GENERATOR_ADDRESS "http://127.0.0.1:8082/"
+ENV RAY_TRACING_ADDRESS "http://127.0.0.1:8081/"
 
 ENTRYPOINT ["./entrypoint.sh"]
