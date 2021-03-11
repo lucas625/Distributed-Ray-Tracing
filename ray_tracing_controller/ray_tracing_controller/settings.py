@@ -137,5 +137,5 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Project services address
-IMAGE_GENERATOR_ADDRESS = decouple.config('IMAGE_GENERATOR_ADDRESS', default= 'http://127.0.0.1:8082/',cast=str)
+IMAGE_GENERATOR_ADDRESS = decouple.config('IMAGE_GENERATOR_ADDRESS', default= 'http://127.0.0.1:8082/', cast=str)
 RAY_TRACING_ADDRESS = decouple.config('RAY_TRACING_ADDRESS', default='http://127.0.0.1:8081/', cast=str)
