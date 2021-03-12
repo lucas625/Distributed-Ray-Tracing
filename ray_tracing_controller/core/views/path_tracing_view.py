@@ -2,6 +2,7 @@
 
 import os
 
+from django.http import FileResponse
 from django.conf import settings
 import requests
 from rest_framework.views import APIView
@@ -19,8 +20,8 @@ class PathTracingView(APIView):
         """
         path_tracing_response = requests.post(
             os.path.join(settings.RAY_TRACING_ADDRESS, 'path-tracing'), json=request.data)
-        color_matrix = path_tracing_response.json()["Colors"]
+        color_matrix = path_tracing_response.json()
 
         response = requests.post(os.path.join(settings.IMAGE_GENERATOR_ADDRESS, 'api', 'png'), json=color_matrix)
 
-        return response
+        return FileResponse(response.content)

@@ -1,10 +1,11 @@
 """View for generating the png image."""
 
 import os
-from io import BytesIO
+import shutil
+from tempfile import NamedTemporaryFile
 import uuid
 
-from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.conf import settings
 from django.http import FileResponse
 from PIL import Image
 import numpy as np
@@ -29,15 +30,18 @@ class PngGenerationView(APIView):
                 for colorIndex in range(3):
                     image_data[lineIndex][columnIndex][colorIndex] = color_matrix[lineIndex][columnIndex][colorIndex]
         image = Image.fromarray(image_data, "RGB")
-        image_as_bytes = BytesIO()
-        image.save(image_as_bytes, format='png')
 
-        in_memory_image = InMemoryUploadedFile(
-            file=image_as_bytes,
-            field_name='test_file_{}.png'.format(uuid.uuid4()),
-            name='test_file_{}.png'.format(uuid.uuid4()),
-            content_type='image/png',
-            size=None,
-            charset=None)
+        temporary_images_path = os.path.join(settings.MEDIA_ROOT, 'core', 'temporary_images')
+        if not os.path.exists(temporary_images_path):
+            os.makedirs(temporary_images_path)
 
-        return FileResponse(in_memory_image)
+        temporary_file_path = os.path.join(temporary_images_path, '{}.png'.format(uuid.uuid4()))
+        image.save(temporary_file_path, format='png')
+
+        temporary_file = NamedTemporaryFile(mode='w+b', suffix='png')
+        with open(temporary_file_path, 'rb') as saved_image:
+            shutil.copyfileobj(saved_image, temporary_file)
+        os.remove(temporary_file_path)
+        temporary_file.seek(0, 0)
+
+        return FileResponse(temporary_file)

@@ -20,3 +20,6 @@ Dockerfile
 # -------------- Coverage --------------
 
 coverage.txt
+
+# -------------- Python --------------
+*.pyc
