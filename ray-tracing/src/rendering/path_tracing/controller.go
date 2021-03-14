@@ -403,7 +403,7 @@ func (controller *Controller) traceFirstRays(pathTracer *PathTracer, lineIndex, 
 	cameraController := &camera.Controller{}
 	cameraToWorldMatrix := cameraController.CameraToWorldMatrix(pathTracer.GetSceneCamera())
 	for rayIndex := 0; rayIndex < numberOfRays; rayIndex++ {
-		if lock.GetThreads() < 12 {
+		if lock.GetThreads() < 2 {
 			lock.AddThread()
 			go func(threadRayIndex int) {
 				pixelLineOffset := rand.Float64()
