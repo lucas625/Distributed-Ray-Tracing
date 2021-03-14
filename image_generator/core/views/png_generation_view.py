@@ -9,7 +9,7 @@ from core.business import ImageGeneratorBusiness
 class PngGenerationView(APIView):
     """View for generating the png image."""
 
-    http_method_names = ['post', 'get']
+    http_method_names = ['post']
 
     def post(self, request, *args, **kwargs):
         """

@@ -9,7 +9,7 @@ from core.business import PathTracingBusiness
 class PathTracingView(APIView):
     """View for running the path tracing."""
 
-    http_method_names = ['post', 'get']
+    http_method_names = ['post']
 
     def post(self, request, *args, **kwargs):
         """

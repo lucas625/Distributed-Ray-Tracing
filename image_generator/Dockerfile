@@ -1,6 +1,7 @@
-FROM python:3.9.0-alpine3.12
+FROM python:3.9-slim
 
 # Install dependencies only
+RUN pip install --upgrade pip
 COPY requirements.txt /image_generator/
 RUN pip install -r /image_generator/requirements.txt
 

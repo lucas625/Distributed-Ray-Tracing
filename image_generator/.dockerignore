@@ -23,3 +23,7 @@ coverage.txt
 
 # -------------- Python --------------
 *.pyc
+
+# -------------- Django --------------
+media
+db.sqlite3
