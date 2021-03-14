@@ -1,11 +1,7 @@
 {
     "pathTracingParameters": {
         "raysPerPixel": 100,
-        "recursions": 3,
-        "windowStartLine": 0,
-        "windowStartColumn": 0,
-        "windowEndLine": 400,
-        "windowEndColumn": 400
+        "recursions": 3
     },
     "objects": [
         {

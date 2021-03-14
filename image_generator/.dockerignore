@@ -1,0 +1,29 @@
+# -------------- IDEs --------------
+
+.vscode
+.idea
+
+# -------------- Environment --------------
+
+.env
+venv
+
+# -------------- Git --------------
+
+.gitignore
+
+# -------------- Docker --------------
+
+Dockerfile
+.dockerignore
+
+# -------------- Coverage --------------
+
+coverage.txt
+
+# -------------- Python --------------
+*.pyc
+
+# -------------- Django --------------
+media
+db.sqlite3

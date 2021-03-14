@@ -12,7 +12,6 @@ The implementation of a distributed ray tracing based on microservices as [Lucas
   - [Requirements](#requirements)
   - [Guidelines](#guidelines)
   - [Run the project](#run-the-project)
-    - [Building Images](#building-images)
     - [Running the images](#running-the-images)
   - [Testing](#testing)
     - [Ray-Tracing Test](#ray-tracing-test)
@@ -32,18 +31,15 @@ Developer: [Lucas Aurelio](https://github.com/lucas625)
 
 ## Run the project
 
-### Building Images
-
-```sh
-# Build the ray tracing image
-docker build -t drt-ray-tracing -f ray-tracing/Dockerfile ray-tracing
-```
-
 ### Running the images
 
 ```sh
-# Run the ray tracing image
-docker run -p 8081:8081 --rm --name drt-ray-tracing-container drt-ray-tracing
+# Build the environment variables
+# Remember to change the values as needed.
+./build_env_vars.sh
+
+# Run the services
+./run_docker.sh
 ```
 
 ## Testing

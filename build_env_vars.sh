@@ -1,0 +1,22 @@
+#!/bin/bash
+
+rm env_vars.sh
+
+echo '#!/bin/bash' >> env_vars.sh
+
+# General
+echo 'export DRT_TAG_PREFIX="development"' >> env_vars.sh
+echo 'export DRT_TAG_VERSION="1.0"' >> env_vars.sh
+echo 'export DRT_IMAGE_PULL_POLICY="Never"' >> env_vars.sh
+
+# DRT ray tracing controller
+echo 'export DRT_RAY_TRACING_CONTROLLER_SECRET_KEY=' >> env_vars.sh
+echo 'export DRT_RAY_TRACING_CONTROLLER_DEBUG=false' >> env_vars.sh
+echo 'export DRT_RAY_TRACING_CONTROLLER_IMAGE_GENERATOR_ADDRESS=drt-image-generator-container' >> env_vars.sh
+echo 'export DRT_RAY_TRACING_CONTROLLER_RAY_TRACING_ADDRESS=drt-ray-tracing-container' >> env_vars.sh
+
+# DRT image generator
+echo 'export DRT_RAY_TRACING_IMAGE_GENERATOR_SECRET_KEY=' >> env_vars.sh
+echo 'export DRT_RAY_TRACING_IMAGE_GENERATOR_DEBUG=false' >> env_vars.sh
+
+chmod +x env_vars.sh
