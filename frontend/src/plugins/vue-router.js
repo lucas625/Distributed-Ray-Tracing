@@ -6,21 +6,18 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '',
-    name: 'analyze',
+    name: 'ray-tracing',
     props: false,
-    component: () => import('@/views/AnalysisView'),
+    component: () => import('@/views/RayTracingView'),
     meta: {
-      title: 'MLog | Analysis'
+      title: 'Distributed Ray Tracing'
     }
   }
 ]
 
 const router = new VueRouter({
   mode: 'history',
-  routes: routes,
-  scrollBehavior (to, from, savedPosition) {
-    return { x: 0, y: 0 }
-  }
+  routes: routes
 })
 
 export default router
