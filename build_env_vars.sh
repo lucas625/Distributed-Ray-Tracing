@@ -19,4 +19,7 @@ echo 'export DRT_RAY_TRACING_CONTROLLER_RAY_TRACING_ADDRESS=drt-ray-tracing-cont
 echo 'export DRT_RAY_TRACING_IMAGE_GENERATOR_SECRET_KEY=' >> env_vars.sh
 echo 'export DRT_RAY_TRACING_IMAGE_GENERATOR_DEBUG=false' >> env_vars.sh
 
+# DRT frontend
+echo 'export VUE_APP_RAY_TRACING_CONTROLLER_URL=' >> env_vars.sh
+
 chmod +x env_vars.sh

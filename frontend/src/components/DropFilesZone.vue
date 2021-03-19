@@ -20,7 +20,7 @@
               id="file-input"
               :value="selectedFiles"
               multiple
-              accept=".pdf"
+              :accept="fileType"
               class="d-none"
               @change="receiveFiles($event)"
           />
@@ -37,7 +37,7 @@ export default {
   name: 'DropFilesZone',
   props: {
     selectedFiles: {
-      type: File,
+      type: Array[File],
       required: true
     },
     fileType: {

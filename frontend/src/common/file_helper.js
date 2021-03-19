@@ -9,7 +9,8 @@ export default class FileHelper {
      * @returns {boolean}
      */
     static isOfValidType (file, validTypes) {
-        return file.name.split('.').pop() in validTypes
+        const fileExtension = `.${file.name.split('.').pop()}`
+        return validTypes.includes(fileExtension)
     }
 
     /**

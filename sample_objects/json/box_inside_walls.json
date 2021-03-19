@@ -1,8 +1,4 @@
 {
-    "pathTracingParameters": {
-        "raysPerPixel": 100,
-        "recursions": 3
-    },
     "objects": [
         {
             "name": "back",
