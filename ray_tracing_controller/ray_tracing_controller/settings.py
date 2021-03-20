@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Lib apps
+    'corsheaders',
     'rest_framework',
 
     # Project apps
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -139,3 +141,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Project services address
 IMAGE_GENERATOR_ADDRESS = decouple.config('IMAGE_GENERATOR_ADDRESS', default= 'http://127.0.0.1:8082/', cast=str)
 RAY_TRACING_ADDRESS = decouple.config('RAY_TRACING_ADDRESS', default='http://127.0.0.1:8081/', cast=str)
+
+CORS_ORIGIN_ALLOW_ALL = True

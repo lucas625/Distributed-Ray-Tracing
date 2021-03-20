@@ -31,4 +31,20 @@ export default class FileHelper {
         const sizeMB = sizeInBytes / Math.pow(1024, 2)
         return Number(parseFloat(sizeMB.toString()).toFixed(2))
     }
+
+    /**
+     * Reads a json file.
+     * @param {File} file
+     * @return {Promise<Object>}
+     */
+    static async readJsonFile(file) {
+        const reader = new FileReader();
+        reader.readAsText(file);
+        const result = await new Promise((resolve, reject) => {
+            reader.onload = function(event) {
+                resolve(JSON.parse(reader.result))
+            }
+        })
+        return result
+    }
 }

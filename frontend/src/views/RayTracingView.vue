@@ -63,9 +63,10 @@
 
 <script>
 
-import PathTracingParametersBean from "@/beans/path_tracing_parameters_bean";
-import RayTracingControllerService from "@/services/ray_tracing_controller_service";
-import DropFilesZone from "@/components/DropFilesZone";
+import FileHelper from "@/common/file_helper"
+import PathTracingParametersBean from "@/beans/path_tracing_parameters_bean"
+import RayTracingControllerService from "@/services/ray_tracing_controller_service"
+import DropFilesZone from "@/components/DropFilesZone"
 
 const rayTracingControllerService = new RayTracingControllerService()
 
@@ -81,19 +82,13 @@ export default {
   },
   methods: {
     /**
-     * Peforms the submit of all scenes and downloads the png images.
+     * Performs the submit of all scenes and downloads the png images.
      */
-    submit: function () {
-
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        return JSON.parse(event.target.result)
-      }
-
-      const jsonObj = reader.readAsText(this.selectedFiles[0])
+    submit: async function () {
+      const jsonObj = await FileHelper.readJsonFile(this.selectedFiles[0])
 
       const rayTracingParameters = {
-        jsonObj,
+        ...jsonObj,
         pathTracingParameters: this.pathTracingParameters
       }
 
@@ -106,6 +101,7 @@ export default {
       }
 
       const errorCallBack = (error) => {
+        console.log(jsonObj)
         alert('Failed to run path tracing.')
       }
 
@@ -128,7 +124,7 @@ export default {
         is_valid = value && value.length > 0
       }
       return is_valid || msg
-    },
+    }
   }
 }
 </script>
