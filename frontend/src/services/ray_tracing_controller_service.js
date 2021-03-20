@@ -20,7 +20,7 @@ export default class RayTracingControllerService {
    * @param {function} finallyCallback - The function to be performed after the success/error callback.
    */
   renderWithPathTracing (data, successCallBack, errorCallback, finallyCallback) {
-    this.client.post('', data)
+    this.client.post('', data, { responseType: 'arraybuffer' })
       .then(successCallBack)
       .catch(errorCallback)
       .then(finallyCallback)
