@@ -9,7 +9,7 @@ export default class RayTracingControllerService {
    * {RayTracingControllerService} constructor.
    */
   constructor () {
-    this.client = axios.create({ baseURL: `${process.env.VUE_APP_RAY_TRACING_CONTROLLER_URL}/api/path-tracing` })
+    this.client = axios.create({ baseURL: `${process.env.VUE_APP_RAY_TRACING_CONTROLLER_URL}api/path-tracing` })
   }
 
   /**

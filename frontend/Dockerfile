@@ -1,8 +1,6 @@
 # Front-end build stage
 FROM alpine:3.12.0 as build-stage
 
-ARG VUE_APP_RAY_TRACING_CONTROLLER_URL="http://127.0.0.1:8083/"
-
 # Install dependencies only
 RUN apk add yarn
 COPY package.json /frontend/
