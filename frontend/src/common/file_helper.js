@@ -14,6 +14,16 @@ export default class FileHelper {
     }
 
     /**
+     * Checks if a file is in file list.
+     * @param {File} file - The target file.
+     * @param {[File]} fileList - The file list.
+     * @returns {boolean}
+     */
+    static isFileInFileList (file, fileList) {
+        return Boolean(fileList.find((el) => {return el.name == file.name}))
+    }
+
+    /**
      * Sums all file sizes.
      * @param {[File]} files - The array of files.
      * @return {Number}

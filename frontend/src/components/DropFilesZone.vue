@@ -52,7 +52,6 @@ export default {
     openFileInputNavigator: function () {
       document.getElementById('file-input').click()
     },
-
     /**
      * Emits an event to push the file to the file list.
      * @param {[File]} files.
@@ -60,7 +59,9 @@ export default {
     receiveFiles: function (files) {
       let validFiles = []
       for (const file of files) {
-        if (FileHelper.isOfValidType(file, [this.fileType])) { // Add check to see if file is already selected
+        if (
+            FileHelper.isOfValidType(file, [this.fileType]) &&
+            !FileHelper.isFileInFileList(file, this.selectedFiles)) {
           validFiles.push(file)
         }
       }
