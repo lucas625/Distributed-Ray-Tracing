@@ -135,7 +135,14 @@ export default {
 
         const rayTracingParameters = {
           ...jsonObj,
-          pathTracingParameters: this.pathTracingParameters
+          pathTracingParameters: {
+            raysPerPixel: Number(this.pathTracingParameters.raysPerPixel),
+            recursions: Number(this.pathTracingParameters.recursions)
+          },
+          pixelScreen: {
+            width: Number(this.pathTracingParameters.width),
+            height: Number(this.pathTracingParameters.height)
+          }
         }
 
         const successCallBack = (response) => {

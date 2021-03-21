@@ -27,10 +27,10 @@ class PathTracingBusiness:
         :param dict path_tracing_data:
         :return bytes:
         """
-        height = path_tracing_data.get('pixelScreen').get('height')
-        width = path_tracing_data.get('pixelScreen').get('width')
-        rays_per_pixel = path_tracing_data.get('pathTracingParameters').get('raysPerPixel')
-        recursions = path_tracing_data.get('pathTracingParameters').get('recursions')
+        height = int(path_tracing_data.get('pixelScreen').get('height'))
+        width = int(path_tracing_data.get('pixelScreen').get('width'))
+        rays_per_pixel = int(path_tracing_data.get('pathTracingParameters').get('raysPerPixel'))
+        recursions = int(path_tracing_data.get('pathTracingParameters').get('recursions'))
 
         has_invalid_path_tracing_parameters = \
             rays_per_pixel > _MAX_PATH_TRACING_PARAMETERS.get('raysPerPixel')\
