@@ -7,6 +7,9 @@
       loading-message="Uploading Scenes"
       :is-loading-props="isUploading"
     />
+    <h1>
+      Render scenes with path tracing
+    </h1>
     <v-row>
       <v-col>
         <v-card>
@@ -42,7 +45,7 @@
                       <v-text-field
                           v-model="pathTracingParameters.width"
                           label="Width"
-                          :rules="[ruleRequiredField]"
+                          :rules="[ruleRequiredField, ruleMinMaxValueField(100, 1080)]"
                           type="Number"
                       />
                     </v-col>
@@ -52,7 +55,7 @@
                       <v-text-field
                           v-model="pathTracingParameters.height"
                           label="Height"
-                          :rules="[ruleRequiredField]"
+                          :rules="[ruleRequiredField, ruleMinMaxValueField(100, 768)]"
                           type="Number"
                       />
                     </v-col>
@@ -62,7 +65,7 @@
                       <v-text-field
                           v-model="pathTracingParameters.raysPerPixel"
                           label="Rays Per Pixel"
-                          :rules="[ruleRequiredField]"
+                          :rules="[ruleRequiredField, ruleMinMaxValueField(1, 400)]"
                           type="Number"
                       />
                     </v-col>
@@ -72,7 +75,7 @@
                       <v-text-field
                           v-model="pathTracingParameters.recursions"
                           label="Recursions"
-                          :rules="[ruleRequiredField]"
+                          :rules="[ruleRequiredField, ruleMinMaxValueField(1, 5)]"
                           type="Number"
                       />
                     </v-col>
@@ -179,6 +182,26 @@ export default {
         is_valid = value && value.length > 0
       }
       return is_valid || msg
+    },
+    /**
+     * Forces the form field to provide a value between the min and the max.
+     * @param {Number} min
+     * @param {Number} max
+     * @return {function}
+     */
+    ruleMinMaxValueField: function (min, max) {
+      return function(value) {
+        let msg
+        let is_valid = true
+        if (value < min) {
+          is_valid = false
+          msg = `The value must be at least ${min}.`
+        } else if (value > max) {
+          is_valid = false
+          msg = `The value must not be greater than ${max}.`
+        }
+        return is_valid || msg
+      }
     }
   }
 }
