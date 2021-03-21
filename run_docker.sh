@@ -5,6 +5,7 @@ source env_vars.sh
 docker build -t $DRT_TAG_PREFIX/drt-ray-tracing:$DRT_TAG_VERSION -f ray-tracing/Dockerfile ray-tracing
 docker build -t $DRT_TAG_PREFIX/drt-ray-tracing-controller:$DRT_TAG_VERSION -f ray_tracing_controller/Dockerfile ray_tracing_controller
 docker build -t $DRT_TAG_PREFIX/drt-image-generator:$DRT_TAG_VERSION -f image_generator/Dockerfile image_generator
+docker build -t $DRT_TAG_PREFIX/drt-frontend:$DRT_TAG_VERSION -f frontend/Dockerfile frontend
 
 # Creating the network
 docker network create drt-network
@@ -13,6 +14,7 @@ docker network create drt-network
 docker rm -f drt-ray-tracing-container
 docker rm -f drt-image-generator-container
 docker rm -f drt-ray-tracing-controller-container
+docker rm -f drt-frontend-container
 
 # Running the images
 docker run --rm -d --name drt-ray-tracing-container --network=drt-network \
@@ -30,3 +32,7 @@ docker run --rm -d --name drt-ray-tracing-controller-container --network=drt-net
     -e IMAGE_GENERATOR_ADDRESS=$DRT_RAY_TRACING_CONTROLLER_IMAGE_GENERATOR_ADDRESS \
     -e RAY_TRACING_ADDRESS=$DRT_RAY_TRACING_CONTROLLER_RAY_TRACING_ADDRESS \
     $DRT_TAG_PREFIX/drt-ray-tracing-controller:$DRT_TAG_VERSION
+docker run --rm -d --name drt-frontend-container --network=drt-network \
+    -p 80:80 \
+    -e VUE_APP_RAY_TRACING_CONTROLLER_URL=$DRT_FRONTEND_VUE_APP_RAY_TRACING_CONTROLLER_URL \
+    $DRT_TAG_PREFIX/drt-frontend:$DRT_TAG_VERSION
