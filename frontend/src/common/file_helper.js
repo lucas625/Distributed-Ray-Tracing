@@ -14,6 +14,18 @@ export default class FileHelper {
     }
 
     /**
+     * Gets the name of a file, removing its extension.
+     * @param {File} file - The target file.
+     * @returns {String}
+     */
+    static getFilenameWithoutExtension (file) {
+        let filename = file.name.substring(file.name.lastIndexOf('/')+1)
+        const filenameWithoutExtension = file.name.substring(0, file.name.lastIndexOf('.'))
+        return filenameWithoutExtension
+    }
+
+
+    /**
      * Checks if a file is in file list.
      * @param {File} file - The target file.
      * @param {[File]} fileList - The file list.

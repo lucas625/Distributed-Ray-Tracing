@@ -152,7 +152,7 @@ export default {
           let blob = new Blob([response.data], { type: 'image/png' })
           let link = document.createElement('a')
           link.href = window.URL.createObjectURL(blob)
-          link.download = 'scene.png'
+          link.download = `${FileHelper.getFilenameWithoutExtension(selectedFile)}-w${this.pathTracingParameters.width}-h${this.pathTracingParameters.height}-rpp${this.pathTracingParameters.raysPerPixel}-r${this.pathTracingParameters.recursions}.png`
           link.click()
         }
 
