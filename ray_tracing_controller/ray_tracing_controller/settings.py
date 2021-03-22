@@ -43,15 +43,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Lib apps
+    'corsheaders',
     'rest_framework',
+    'request_logging',
 
     # Project apps
     'core'
 ]
 
 MIDDLEWARE = [
+    'request_logging.middleware.LoggingMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -109,6 +113,26 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# https://docs.djangoproject.com/en/3.1/topics/logging/
+# EXTRA: https://github.com/Rhumbix/django-request-logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
+
+REQUEST_LOGGING_MAX_BODY_LENGTH = 0
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -139,3 +163,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Project services address
 IMAGE_GENERATOR_ADDRESS = decouple.config('IMAGE_GENERATOR_ADDRESS', default= 'http://127.0.0.1:8082/', cast=str)
 RAY_TRACING_ADDRESS = decouple.config('RAY_TRACING_ADDRESS', default='http://127.0.0.1:8081/', cast=str)
+
+CORS_ORIGIN_ALLOW_ALL = True

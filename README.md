@@ -57,3 +57,4 @@ go test ./...
 ## Examples
 
 You can see samples for the path tracing on the `sample_objects` folder. The structure of the `.JSON` files is the same as the beans is structure.
+Please keep in mind that if you want to access the API directly, you will need to provide more information than just the data contained in the sample objects. This data is the `pixelScreen` and the `pathTracingParameters`. You can see how to build this data in `frontend/src/views/RayTracingView.vue`.
