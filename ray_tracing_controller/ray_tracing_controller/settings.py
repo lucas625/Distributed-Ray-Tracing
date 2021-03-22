@@ -45,12 +45,14 @@ INSTALLED_APPS = [
     # Lib apps
     'corsheaders',
     'rest_framework',
+    'request_logging',
 
     # Project apps
     'core'
 ]
 
 MIDDLEWARE = [
+    'request_logging.middleware.LoggingMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -111,6 +113,26 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# https://docs.djangoproject.com/en/3.1/topics/logging/
+# EXTRA: https://github.com/Rhumbix/django-request-logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
+
+REQUEST_LOGGING_MAX_BODY_LENGTH = 0
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

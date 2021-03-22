@@ -5,7 +5,7 @@ source env_vars.sh
 docker build -t $DRT_TAG_PREFIX/drt-ray-tracing:$DRT_TAG_VERSION -f ray-tracing/Dockerfile ray-tracing
 docker build -t $DRT_TAG_PREFIX/drt-ray-tracing-controller:$DRT_TAG_VERSION -f ray_tracing_controller/Dockerfile ray_tracing_controller
 docker build -t $DRT_TAG_PREFIX/drt-image-generator:$DRT_TAG_VERSION -f image_generator/Dockerfile image_generator
-docker build -t $DRT_TAG_PREFIX/drt-frontend:$DRT_TAG_VERSION -f frontend/Dockerfile frontend
+docker build -t $DRT_TAG_PREFIX/drt-frontend:$DRT_TAG_VERSION --build-arg VUE_APP_RAY_TRACING_CONTROLLER_URL=$DRT_FRONTEND_VUE_APP_RAY_TRACING_CONTROLLER_URL -f frontend/Dockerfile frontend
 docker build -t $DRT_TAG_PREFIX/drt-reverse-proxy:$DRT_TAG_VERSION -f reverse_proxy/Dockerfile reverse_proxy
 
 
@@ -33,7 +33,6 @@ docker run --rm -d --name drt-ray-tracing-controller --network=drt-network \
     -e RAY_TRACING_ADDRESS=$DRT_RAY_TRACING_CONTROLLER_RAY_TRACING_ADDRESS \
     $DRT_TAG_PREFIX/drt-ray-tracing-controller:$DRT_TAG_VERSION
 docker run --rm -d --name drt-frontend --network=drt-network \
-    -e VUE_APP_RAY_TRACING_CONTROLLER_URL=$DRT_FRONTEND_VUE_APP_RAY_TRACING_CONTROLLER_URL \
     $DRT_TAG_PREFIX/drt-frontend:$DRT_TAG_VERSION
 docker run --rm -d --name drt-reverse-proxy --network=drt-network \
     -p 80:80 \
