@@ -1,0 +1,218 @@
+# Ray tracing controller Deployment definition
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drt-ray-tracing-controller-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drt-ray-tracing-controller-deployment
+  template:
+    metadata:
+      labels:
+        app: drt-ray-tracing-controller-deployment
+    spec:
+      containers:
+        - name: drt-ray-tracing-controller-container
+          image: $$DRT_TAG_PREFIX/drt-ray-tracing-controller:$$DRT_TAG_VERSION
+          imagePullPolicy: $$DRT_IMAGE_PULL_POLICY
+          ports:
+            - containerPort: 8083
+          env:
+            - name: SECRET_KEY
+              value: "$$DRT_RAY_TRACING_CONTROLLER_SECRET_KEY"
+            - name: DEBUG
+              value: "$$DRT_RAY_TRACING_CONTROLLER_DEBUG"
+            - name: IMAGE_GENERATOR_ADDRESS
+              value: "$$DRT_RAY_TRACING_CONTROLLER_IMAGE_GENERATOR_ADDRESS"
+            - name: RAY_TRACING_ADDRESS
+              value: "$$DRT_RAY_TRACING_CONTROLLER_RAY_TRACING_ADDRESS"
+
+---
+
+# Ray tracing Deployment definition
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drt-ray-tracing-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drt-ray-tracing-deployment
+  template:
+    metadata:
+      labels:
+        app: drt-ray-tracing-deployment
+    spec:
+      containers:
+        - name: drt-ray-tracing-container
+          image: $$DRT_TAG_PREFIX/drt-ray-tracing:$$DRT_TAG_VERSION
+          imagePullPolicy: $$DRT_IMAGE_PULL_POLICY
+          ports:
+            - containerPort: 8081
+
+---
+
+# Image generator Deployment definition
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drt-image-generator-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drt-image-generator-deployment
+  template:
+    metadata:
+      labels:
+        app: drt-image-generator-deployment
+    spec:
+      containers:
+        - name: drt-ray-tracing-container
+          image: $$DRT_TAG_PREFIX/drt-image-generator:$$DRT_TAG_VERSION
+          imagePullPolicy: $$DRT_IMAGE_PULL_POLICY
+          ports:
+            - containerPort: 8082
+          env:
+            - name: SECRET_KEY
+              value: "$$DRT_RAY_TRACING_IMAGE_GENERATOR_SECRET_KEY"
+            - name: DEBUG
+              value: "$$DRT_RAY_TRACING_IMAGE_GENERATOR_DEBUG"
+
+---
+
+# Frontend Deployment definition
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drt-frontend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drt-frontend-deployment
+  template:
+    metadata:
+      labels:
+        app: drt-frontend-deployment
+    spec:
+      containers:
+        - name: drt-frontend-container
+          image: $$DRT_TAG_PREFIX/drt-frontend:$$DRT_TAG_VERSION
+          imagePullPolicy: $$DRT_IMAGE_PULL_POLICY
+          ports:
+            - containerPort: 80
+
+---
+
+# Reverse Proxy Deployment definition
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drt-reverse-proxy-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drt-reverse-proxy-deployment
+  template:
+    metadata:
+      labels:
+        app: drt-reverse-proxy-deployment
+    spec:
+      containers:
+        - name: drt-reverse-proxy-container
+          image: $$DRT_TAG_PREFIX/drt-reverse-proxy:$$DRT_TAG_VERSION
+          imagePullPolicy: $$DRT_IMAGE_PULL_POLICY
+          ports:
+            - containerPort: 80
+
+---
+
+# Ray tracing controller Service definition
+apiVersion: v1
+kind: Service
+metadata:
+  name: drt-ray-tracing-controller
+  labels:
+    run: drt-ray-tracing-controller
+spec:
+  ports:
+    - name: drt-ray-tracing-controller-port
+      port: 8083
+      targetPort: 8083
+  selector:
+    app: drt-ray-tracing-controller-deployment
+
+---
+
+# Ray tracing Service definition
+apiVersion: v1
+kind: Service
+metadata:
+  name: drt-ray-tracing
+  labels:
+    run: drt-ray-tracing
+spec:
+  ports:
+    - name: drt-ray-tracing-port
+      port: 8081
+      targetPort: 8081
+  selector:
+    app: drt-ray-tracing-deployment
+
+---
+
+# Image generator Service definition
+apiVersion: v1
+kind: Service
+metadata:
+  name: drt-image-generator
+  labels:
+    run: drt-image-generator
+spec:
+  ports:
+    - name: drt-ray-tracing-port
+      port: 8082
+      targetPort: 8082
+  selector:
+    app: drt-image-generator-deployment
+
+---
+
+# Frontend Service definition
+apiVersion: v1
+kind: Service
+metadata:
+  name: drt-frontend
+  labels:
+    run: drt-frontend
+spec:
+  ports:
+    - name: drt-frontend-port
+      port: 80
+      targetPort: 80
+  selector:
+    app: drt-frontend-deployment
+
+---
+
+# Reverse Proxy Service definition
+apiVersion: v1
+kind: Service
+metadata:
+  name: drt-reverse-proxy
+  labels:
+    run: drt-reverse-proxy
+spec:
+  ports:
+    - name: drt-reverse-proxy-port
+      port: 80
+      targetPort: 80
+  selector:
+    app: drt-reverse-proxy-deployment
+  type: LoadBalancer
+  loadBalancerIP: $$STATIC_IP
