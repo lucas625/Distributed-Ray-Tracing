@@ -11,8 +11,7 @@ The implementation of a distributed ray tracing based on microservices as [Lucas
   - [Team](#team)
   - [Requirements](#requirements)
   - [Guidelines](#guidelines)
-  - [Run the project](#run-the-project)
-    - [Running the images](#running-the-images)
+  - [Deploy](#deploy)
   - [Testing](#testing)
     - [Ray-Tracing Test](#ray-tracing-test)
   - [Examples](#examples)
@@ -29,18 +28,9 @@ Developer: [Lucas Aurelio](https://github.com/lucas625)
 
 - [The Twelve-Factor App](https://12factor.net/)
 
-## Run the project
+## Deploy
 
-### Running the images
-
-```sh
-# Build the environment variables
-# Remember to change the values as needed.
-./build_env_vars.sh
-
-# Run the services
-./run_docker.sh
-```
+Follow the steps on [deploy file](deploy.md).
 
 ## Testing
 
@@ -48,10 +38,22 @@ Follow the next steps to test the application.
 
 ### Ray-Tracing Test
 
+- Automatic tests
 Inside **drt-ray-tracing-container** run:
 
 ```sh
 go test ./...
+```
+
+- Manual Tests
+
+```bash
+# Build the environment variables
+# Remember to change the values as needed.
+./build_env_vars.sh
+
+# Run the services
+./run_docker.sh
 ```
 
 ## Examples

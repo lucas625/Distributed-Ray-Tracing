@@ -5,10 +5,10 @@ rm env_vars.sh
 echo '#!/bin/bash' >> env_vars.sh
 
 # General
-echo 'export DRT_TAG_PREFIX="development"' >> env_vars.sh
+echo 'export DRT_TAG_PREFIX="distributed-ray-tracing"' >> env_vars.sh
 echo 'export DRT_TAG_VERSION="1.0"' >> env_vars.sh
-echo 'export DRT_IMAGE_PULL_POLICY="Never"' >> env_vars.sh
-echo 'export STATIC_IP="http://127.0.0.1:80"' >> env_vars.sh
+echo 'export DRT_IMAGE_PULL_POLICY="Always"' >> env_vars.sh
+echo 'export DRT_STATIC_IP="http://127.0.0.1:80"' >> env_vars.sh
 
 # DRT ray tracing controller
 echo 'export DRT_RAY_TRACING_CONTROLLER_SECRET_KEY=test-secret-key-controller' >> env_vars.sh
