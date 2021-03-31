@@ -215,4 +215,4 @@ spec:
   selector:
     app: drt-reverse-proxy-deployment
   type: LoadBalancer
-  loadBalancerIP: $$STATIC_IP
+  loadBalancerIP: $$DRT_STATIC_IP

@@ -28,8 +28,6 @@ gcloud auth login
 gcloud config set project distributed-ray-tracing
 ```
 
-source env_vars.sh
-
 ## Building the images
 
 ```bash
@@ -45,16 +43,17 @@ docker build -t $DRT_TAG_PREFIX/drt-reverse-proxy:$DRT_TAG_VERSION -f reverse_pr
 
 ```bash
 # Pushing images.
-gcloud docker -- push $DRT_TAG_PREFIX/drt-ray-tracing:$DRT_TAG_VERSION -f ray-tracing/Dockerfile ray-tracing
-gcloud docker -- push $DRT_TAG_PREFIX/drt-ray-tracing-controller:$DRT_TAG_VERSION -f ray_tracing_controller/Dockerfile ray_tracing_controller
-gcloud docker -- push $DRT_TAG_PREFIX/drt-image-generator:$DRT_TAG_VERSION -f image_generator/Dockerfile image_generator
-gcloud docker -- push $DRT_TAG_PREFIX/drt-frontend:$DRT_TAG_VERSION --build-arg VUE_APP_RAY_TRACING_CONTROLLER_URL=$DRT_FRONTEND_VUE_APP_RAY_TRACING_CONTROLLER_URL -f frontend/Dockerfile frontend
-gcloud docker -- push $DRT_TAG_PREFIX/drt-reverse-proxy:$DRT_TAG_VERSION -f reverse_proxy/Dockerfile reverse_proxy
+gcloud docker -- push $DRT_TAG_PREFIX/drt-ray-tracing:$DRT_TAG_VERSION
+gcloud docker -- push $DRT_TAG_PREFIX/drt-ray-tracing-controller:$DRT_TAG_VERSION
+gcloud docker -- push $DRT_TAG_PREFIX/drt-image-generator:$DRT_TAG_VERSION
+gcloud docker -- push $DRT_TAG_PREFIX/drt-frontend:$DRT_TAG_VERSION
+gcloud docker -- push $DRT_TAG_PREFIX/drt-reverse-proxy:$DRT_TAG_VERSION
 ```
 
 ## Setup cluster
 
 ```bash
+gcloud login
 # Creates the cluster.
 # Remember to go to GKE and delete the cluster when it is no longer necessary.
 gcloud container clusters create drt-e2-small --zone southamerica-east1-a --machine-type e2-small
@@ -89,7 +88,7 @@ gcloud compute addresses delete drt-static-ip --region southamerica-east1
 ```bash
 # Run kubernetes.
 cat kubernetes.yaml | sed \
-    -e "s/\$\$DRT_TAG_PREFIX/$DRT_TAG_PREFIX/" \
+    -e "s/\$\$DRT_TAG_PREFIX/$DRT_TAG_PREFIX_FOR_REPLACEMENT/" \
     -e "s/\$\$DRT_TAG_VERSION/$DRT_TAG_VERSION/" \
     -e "s/\$\$DRT_IMAGE_PULL_POLICY/$DRT_IMAGE_PULL_POLICY/" \
     -e "s/\$\$DRT_STATIC_IP/$DRT_STATIC_IP/" \
@@ -104,7 +103,7 @@ cat kubernetes.yaml | sed \
 
 # Deletes pods and services when no longer necessary.
 cat kubernetes.yaml | sed \
-    -e "s/\$\$DRT_TAG_PREFIX/$DRT_TAG_PREFIX/" \
+    -e "s/\$\$DRT_TAG_PREFIX/$DRT_TAG_PREFIX_FOR_REPLACEMENT/" \
     -e "s/\$\$DRT_TAG_VERSION/$DRT_TAG_VERSION/" \
     -e "s/\$\$DRT_IMAGE_PULL_POLICY/$DRT_IMAGE_PULL_POLICY/" \
     -e "s/\$\$DRT_STATIC_IP/$DRT_STATIC_IP/" \
