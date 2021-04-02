@@ -4,7 +4,7 @@
     fluid
   >
     <loading-bar
-      loading-message="Uploading Scenes"
+      :loading-message="loadingMessage"
       :is-loading-props="isUploading"
     />
     <h1>
@@ -118,12 +118,26 @@ export default {
       selectedFiles: [],
       pathTracingParameters: new PathTracingParametersBean(400, 400, 1, 2),
       isFormValid: false,
-      uploadingCount: 0
+      uploadingCount: 0,
+      startingTime: Date.now(),
+      currentTime: Date.now()
     }
   },
   computed: {
     isUploading: function () {
       return this.uploadingCount > 0
+    },
+    totalTime: function () {
+      let deltaTime = Math.abs(this.currentTime - this.startingTime) / 1000
+      const hours = Math.floor(deltaTime / 3600)
+      deltaTime -= hours * 3600
+      const minutes = Math.floor(deltaTime / 60) % 60
+      deltaTime -= minutes * 60
+      const seconds = Math.floor(deltaTime % 60)
+      return `${hours}h:${minutes}m:${seconds}s`
+    },
+    loadingMessage: function () {
+      return `Uploading Scenes. Elapsed time: ${this.totalTime}`
     }
   },
   methods: {
@@ -131,6 +145,7 @@ export default {
      * Performs the submit of all scenes and downloads the png images.
      */
     submit: async function () {
+      this.startingTime = Date.now()
       this.uploadingCount = this.selectedFiles.length
 
       for (const selectedFile of this.selectedFiles) {
@@ -202,6 +217,21 @@ export default {
         }
         return is_valid || msg
       }
+    }
+  },
+  watch: {
+    isUploading: function(newIsUploading) {
+      if (newIsUploading === false) {
+        console.log(`total time: ${this.totalTime}`)
+      }
+    },
+    currentTime: {
+      handler() {
+        setTimeout(() => {
+          this.currentTime = Date.now()
+        }, 1000)
+      },
+      immediate: true
     }
   }
 }

@@ -31,20 +31,20 @@ spec:
 
 ---
 
-# Ray tracing Deployment definition
+# Ray tracing ReplicaSet definition
 apiVersion: apps/v1
-kind: Deployment
+kind: ReplicaSet
 metadata:
-  name: drt-ray-tracing-deployment
+  name: drt-ray-tracing-replicaset
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: drt-ray-tracing-deployment
+      app: drt-ray-tracing-replicaset
   template:
     metadata:
       labels:
-        app: drt-ray-tracing-deployment
+        app: drt-ray-tracing-replicaset
     spec:
       containers:
         - name: drt-ray-tracing-container
@@ -52,6 +52,9 @@ spec:
           imagePullPolicy: $$DRT_IMAGE_PULL_POLICY
           ports:
             - containerPort: 8081
+          env:
+            - name: NUMBER_OF_THREADS
+              value: "$$DRT_RAY_TRACING_NUMBER_OF_THREADS"
 
 ---
 
@@ -162,7 +165,7 @@ spec:
       port: 8081
       targetPort: 8081
   selector:
-    app: drt-ray-tracing-deployment
+    app: drt-ray-tracing-replicaset
 
 ---
 

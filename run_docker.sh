@@ -1,5 +1,5 @@
 #!/bin/bash
-source env_vars.sh
+source docker_env_vars.sh
 
 # Building images
 docker build -t $DRT_TAG_PREFIX/drt-ray-tracing:$DRT_TAG_VERSION -f ray-tracing/Dockerfile ray-tracing
@@ -21,6 +21,7 @@ docker rm -f drt-reverse-proxy
 
 # Running the images
 docker run --rm -d --name drt-ray-tracing --network=drt-network \
+    -e NUMBER_OF_THREADS=$DRT_RAY_TRACING_NUMBER_OF_THREADS \
     $DRT_TAG_PREFIX/drt-ray-tracing:$DRT_TAG_VERSION
 docker run --rm -d --name drt-image-generator --network=drt-network \
     -e SECRET_KEY=$DRT_RAY_TRACING_IMAGE_GENERATOR_SECRET_KEY \
