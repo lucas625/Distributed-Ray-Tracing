@@ -142,46 +142,57 @@ export default {
   },
   methods: {
     /**
+     * Performs the submit of all scenes and downloads the png images, one by one.
+     * @param {Number} index
+     */
+    submitOneByOne: async function(index) {
+      const selectedFile = this.selectedFiles[index]
+      const jsonObj = await FileHelper.readJsonFile(selectedFile)
+
+      const rayTracingParameters = {
+        ...jsonObj,
+        pathTracingParameters: {
+          raysPerPixel: Number(this.pathTracingParameters.raysPerPixel),
+          recursions: Number(this.pathTracingParameters.recursions)
+        },
+        pixelScreen: {
+          width: Number(this.pathTracingParameters.width),
+          height: Number(this.pathTracingParameters.height)
+        }
+      }
+
+      const successCallBack = (response) => {
+        let blob = new Blob([response.data], { type: 'image/png' })
+        let link = document.createElement('a')
+        link.href = window.URL.createObjectURL(blob)
+        link.download = `${FileHelper.getFilenameWithoutExtension(selectedFile)}-w${this.pathTracingParameters.width}-h${this.pathTracingParameters.height}-rpp${this.pathTracingParameters.raysPerPixel}-r${this.pathTracingParameters.recursions}.png`
+        link.click()
+      }
+
+      const errorCallBack = (error) => {
+        alert('Failed to run path tracing.')
+      }
+
+      const finallyCallBack = () => {
+        this.uploadingCount--
+      }
+
+      rayTracingControllerService.renderWithPathTracing(
+          rayTracingParameters, successCallBack, errorCallBack, finallyCallBack)
+
+      if (index + 1 < this.selectedFiles.length) {
+        setTimeout(() => {
+          this.submitOneByOne(index+1)
+        }, 15000)
+      }
+    },
+    /**
      * Performs the submit of all scenes and downloads the png images.
      */
-    submit: async function () {
+    submit: function () {
       this.startingTime = Date.now()
       this.uploadingCount = this.selectedFiles.length
-
-      for (const selectedFile of this.selectedFiles) {
-        const jsonObj = await FileHelper.readJsonFile(selectedFile)
-
-        const rayTracingParameters = {
-          ...jsonObj,
-          pathTracingParameters: {
-            raysPerPixel: Number(this.pathTracingParameters.raysPerPixel),
-            recursions: Number(this.pathTracingParameters.recursions)
-          },
-          pixelScreen: {
-            width: Number(this.pathTracingParameters.width),
-            height: Number(this.pathTracingParameters.height)
-          }
-        }
-
-        const successCallBack = (response) => {
-          let blob = new Blob([response.data], { type: 'image/png' })
-          let link = document.createElement('a')
-          link.href = window.URL.createObjectURL(blob)
-          link.download = `${FileHelper.getFilenameWithoutExtension(selectedFile)}-w${this.pathTracingParameters.width}-h${this.pathTracingParameters.height}-rpp${this.pathTracingParameters.raysPerPixel}-r${this.pathTracingParameters.recursions}.png`
-          link.click()
-        }
-
-        const errorCallBack = (error) => {
-          alert('Failed to run path tracing.')
-        }
-
-        const finallyCallBack = () => {
-          this.uploadingCount--
-        }
-
-        rayTracingControllerService.renderWithPathTracing(
-            rayTracingParameters, successCallBack, errorCallBack, finallyCallBack)
-      }
+      this.submitOneByOne(0)
     },
     /**
      * Forces the form field to provide a value.
