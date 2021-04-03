@@ -28,23 +28,30 @@ spec:
               value: "$$DRT_RAY_TRACING_CONTROLLER_IMAGE_GENERATOR_ADDRESS"
             - name: RAY_TRACING_ADDRESS
               value: "$$DRT_RAY_TRACING_CONTROLLER_RAY_TRACING_ADDRESS"
+          resources:
+            requests:
+              memory: 500Mi
+              cpu: 500m
+            limits:
+              memory: 4Gi
+              cpu: "2"
 
 ---
 
-# Ray tracing Deployment definition
+# Ray tracing ReplicaSet definition
 apiVersion: apps/v1
-kind: Deployment
+kind: ReplicaSet
 metadata:
-  name: drt-ray-tracing-deployment
+  name: drt-ray-tracing-replicaset
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: drt-ray-tracing-deployment
+      app: drt-ray-tracing-replicaset
   template:
     metadata:
       labels:
-        app: drt-ray-tracing-deployment
+        app: drt-ray-tracing-replicaset
     spec:
       containers:
         - name: drt-ray-tracing-container
@@ -52,6 +59,16 @@ spec:
           imagePullPolicy: $$DRT_IMAGE_PULL_POLICY
           ports:
             - containerPort: 8081
+          env:
+            - name: NUMBER_OF_THREADS
+              value: "$$DRT_RAY_TRACING_NUMBER_OF_THREADS"
+          resources:
+            requests:
+              memory: 8Gi
+              cpu: "4"
+            limits:
+              memory: 16Gi
+              cpu: "8"
 
 ---
 
@@ -81,6 +98,13 @@ spec:
               value: "$$DRT_RAY_TRACING_IMAGE_GENERATOR_SECRET_KEY"
             - name: DEBUG
               value: "$$DRT_RAY_TRACING_IMAGE_GENERATOR_DEBUG"
+          resources:
+            requests:
+              memory: 500Mi
+              cpu: 500m
+            limits:
+              memory: 4Gi
+              cpu: "2"
 
 ---
 
@@ -105,6 +129,13 @@ spec:
           imagePullPolicy: $$DRT_IMAGE_PULL_POLICY
           ports:
             - containerPort: 80
+          resources:
+            requests:
+              memory: 200Mi
+              cpu: 200m
+            limits:
+              memory: 1Gi
+              cpu: "1"
 
 ---
 
@@ -129,6 +160,13 @@ spec:
           imagePullPolicy: $$DRT_IMAGE_PULL_POLICY
           ports:
             - containerPort: 80
+          resources:
+            requests:
+              memory: 200Mi
+              cpu: 200m
+            limits:
+              memory: 1Gi
+              cpu: "1"
 
 ---
 
@@ -162,7 +200,7 @@ spec:
       port: 8081
       targetPort: 8081
   selector:
-    app: drt-ray-tracing-deployment
+    app: drt-ray-tracing-replicaset
 
 ---
 

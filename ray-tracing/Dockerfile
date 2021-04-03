@@ -12,5 +12,6 @@ RUN go mod download
 COPY . /ray-tracing
 
 ENV CGO_ENABLED 0
+ENV NUMBER_OF_THREADS 4
 
 ENTRYPOINT ["./entrypoint.sh"]

@@ -11,8 +11,11 @@ import (
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/ray"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/rendering/screen"
 	"github.com/lucas625/Distributed-Ray-Tracing/ray-tracing/src/utils/thread_locker"
+	"log"
 	"math"
 	"math/rand"
+	"os"
+	"strconv"
 	"time"
 )
 
@@ -402,8 +405,12 @@ func (controller *Controller) traceFirstRays(pathTracer *PathTracer, lineIndex, 
 	lock := thread_locker.Init()
 	cameraController := &camera.Controller{}
 	cameraToWorldMatrix := cameraController.CameraToWorldMatrix(pathTracer.GetSceneCamera())
+	maxNumberOfThreads, err := strconv.Atoi(os.Getenv("NUMBER_OF_THREADS"))
+	if err != nil {
+		log.Fatal(err)
+	}
 	for rayIndex := 0; rayIndex < numberOfRays; rayIndex++ {
-		if lock.GetThreads() < 4 {
+		if lock.GetThreads() < maxNumberOfThreads {
 			lock.AddThread()
 			go func(threadRayIndex int) {
 				pixelLineOffset := rand.Float64()

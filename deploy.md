@@ -53,10 +53,9 @@ gcloud docker -- push $DRT_TAG_PREFIX/drt-reverse-proxy:$DRT_TAG_VERSION
 ## Setup cluster
 
 ```bash
-gcloud login
 # Creates the cluster.
 # Remember to go to GKE and delete the cluster when it is no longer necessary.
-gcloud container clusters create drt-e2-small --zone southamerica-east1-a --machine-type e2-small
+gcloud container clusters create drt-e2-standard-8 --zone southamerica-east1-a --machine-type e2-standard-8
 
 # Update `kubectl` context in case the current context be not pointing to the cluster created.
 kubectl config current-context
@@ -64,7 +63,7 @@ kubectl config get-contexts
 kubectl config use-context [CONTEXT_NAME]
 
 # Ensure connection to cluster.
-gcloud container clusters get-credentials drt-e2-small --zone southamerica-east1-a
+gcloud container clusters get-credentials drt-e2-standard-8 --zone southamerica-east1-a
 ```
 
 ## Create the static IP
@@ -96,6 +95,7 @@ cat kubernetes.yaml | sed \
     -e "s/\$\$DRT_RAY_TRACING_CONTROLLER_DEBUG/$DRT_RAY_TRACING_CONTROLLER_DEBUG/" \
     -e "s/\$\$DRT_RAY_TRACING_CONTROLLER_IMAGE_GENERATOR_ADDRESS/$DRT_RAY_TRACING_CONTROLLER_IMAGE_GENERATOR_ADDRESS/" \
     -e "s/\$\$DRT_RAY_TRACING_CONTROLLER_RAY_TRACING_ADDRESS/$DRT_RAY_TRACING_CONTROLLER_RAY_TRACING_ADDRESS/" \
+    -e "s/\$\$DRT_RAY_TRACING_NUMBER_OF_THREADS/$DRT_RAY_TRACING_NUMBER_OF_THREADS/" \
     -e "s/\$\$DRT_RAY_TRACING_IMAGE_GENERATOR_SECRET_KEY/$DRT_RAY_TRACING_IMAGE_GENERATOR_SECRET_KEY/" \
     -e "s/\$\$DRT_RAY_TRACING_IMAGE_GENERATOR_DEBUG/$DRT_RAY_TRACING_IMAGE_GENERATOR_DEBUG/" \
     -e "s/\$\$DRT_FRONTEND_VUE_APP_RAY_TRACING_CONTROLLER_URL/$DRT_FRONTEND_VUE_APP_RAY_TRACING_CONTROLLER_URL/" | \
@@ -111,6 +111,7 @@ cat kubernetes.yaml | sed \
     -e "s/\$\$DRT_RAY_TRACING_CONTROLLER_DEBUG/$DRT_RAY_TRACING_CONTROLLER_DEBUG/" \
     -e "s/\$\$DRT_RAY_TRACING_CONTROLLER_IMAGE_GENERATOR_ADDRESS/$DRT_RAY_TRACING_CONTROLLER_IMAGE_GENERATOR_ADDRESS/" \
     -e "s/\$\$DRT_RAY_TRACING_CONTROLLER_RAY_TRACING_ADDRESS/$DRT_RAY_TRACING_CONTROLLER_RAY_TRACING_ADDRESS/" \
+    -e "s/\$\$DRT_RAY_TRACING_NUMBER_OF_THREADS/$DRT_RAY_TRACING_NUMBER_OF_THREADS/" \
     -e "s/\$\$DRT_RAY_TRACING_IMAGE_GENERATOR_SECRET_KEY/$DRT_RAY_TRACING_IMAGE_GENERATOR_SECRET_KEY/" \
     -e "s/\$\$DRT_RAY_TRACING_IMAGE_GENERATOR_DEBUG/$DRT_RAY_TRACING_IMAGE_GENERATOR_DEBUG/" \
     -e "s/\$\$DRT_FRONTEND_VUE_APP_RAY_TRACING_CONTROLLER_URL/$DRT_FRONTEND_VUE_APP_RAY_TRACING_CONTROLLER_URL/" | \

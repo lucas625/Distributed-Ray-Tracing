@@ -4,7 +4,7 @@
     fluid
   >
     <loading-bar
-      loading-message="Uploading Scenes"
+      :loading-message="loadingMessage"
       :is-loading-props="isUploading"
     />
     <h1>
@@ -118,55 +118,81 @@ export default {
       selectedFiles: [],
       pathTracingParameters: new PathTracingParametersBean(400, 400, 1, 2),
       isFormValid: false,
-      uploadingCount: 0
+      uploadingCount: 0,
+      startingTime: Date.now(),
+      currentTime: Date.now()
     }
   },
   computed: {
     isUploading: function () {
       return this.uploadingCount > 0
+    },
+    totalTime: function () {
+      let deltaTime = Math.abs(this.currentTime - this.startingTime) / 1000
+      const hours = Math.floor(deltaTime / 3600)
+      deltaTime -= hours * 3600
+      const minutes = Math.floor(deltaTime / 60) % 60
+      deltaTime -= minutes * 60
+      const seconds = Math.floor(deltaTime % 60)
+      return `${hours}h:${minutes}m:${seconds}s`
+    },
+    loadingMessage: function () {
+      return `Uploading Scenes. Elapsed time: ${this.totalTime}`
     }
   },
   methods: {
     /**
+     * Performs the submit of all scenes and downloads the png images, one by one.
+     * @param {Number} index
+     */
+    submitOneByOne: async function(index) {
+      const selectedFile = this.selectedFiles[index]
+      const jsonObj = await FileHelper.readJsonFile(selectedFile)
+
+      const rayTracingParameters = {
+        ...jsonObj,
+        pathTracingParameters: {
+          raysPerPixel: Number(this.pathTracingParameters.raysPerPixel),
+          recursions: Number(this.pathTracingParameters.recursions)
+        },
+        pixelScreen: {
+          width: Number(this.pathTracingParameters.width),
+          height: Number(this.pathTracingParameters.height)
+        }
+      }
+
+      const successCallBack = (response) => {
+        let blob = new Blob([response.data], { type: 'image/png' })
+        let link = document.createElement('a')
+        link.href = window.URL.createObjectURL(blob)
+        link.download = `${FileHelper.getFilenameWithoutExtension(selectedFile)}-w${this.pathTracingParameters.width}-h${this.pathTracingParameters.height}-rpp${this.pathTracingParameters.raysPerPixel}-r${this.pathTracingParameters.recursions}.png`
+        link.click()
+      }
+
+      const errorCallBack = (error) => {
+        alert('Failed to run path tracing.')
+      }
+
+      const finallyCallBack = () => {
+        this.uploadingCount--
+      }
+
+      rayTracingControllerService.renderWithPathTracing(
+          rayTracingParameters, successCallBack, errorCallBack, finallyCallBack)
+
+      if (index + 1 < this.selectedFiles.length) {
+        setTimeout(() => {
+          this.submitOneByOne(index+1)
+        }, 15000)
+      }
+    },
+    /**
      * Performs the submit of all scenes and downloads the png images.
      */
-    submit: async function () {
+    submit: function () {
+      this.startingTime = Date.now()
       this.uploadingCount = this.selectedFiles.length
-
-      for (const selectedFile of this.selectedFiles) {
-        const jsonObj = await FileHelper.readJsonFile(selectedFile)
-
-        const rayTracingParameters = {
-          ...jsonObj,
-          pathTracingParameters: {
-            raysPerPixel: Number(this.pathTracingParameters.raysPerPixel),
-            recursions: Number(this.pathTracingParameters.recursions)
-          },
-          pixelScreen: {
-            width: Number(this.pathTracingParameters.width),
-            height: Number(this.pathTracingParameters.height)
-          }
-        }
-
-        const successCallBack = (response) => {
-          let blob = new Blob([response.data], { type: 'image/png' })
-          let link = document.createElement('a')
-          link.href = window.URL.createObjectURL(blob)
-          link.download = `${FileHelper.getFilenameWithoutExtension(selectedFile)}-w${this.pathTracingParameters.width}-h${this.pathTracingParameters.height}-rpp${this.pathTracingParameters.raysPerPixel}-r${this.pathTracingParameters.recursions}.png`
-          link.click()
-        }
-
-        const errorCallBack = (error) => {
-          alert('Failed to run path tracing.')
-        }
-
-        const finallyCallBack = () => {
-          this.uploadingCount--
-        }
-
-        rayTracingControllerService.renderWithPathTracing(
-            rayTracingParameters, successCallBack, errorCallBack, finallyCallBack)
-      }
+      this.submitOneByOne(0)
     },
     /**
      * Forces the form field to provide a value.
@@ -202,6 +228,21 @@ export default {
         }
         return is_valid || msg
       }
+    }
+  },
+  watch: {
+    isUploading: function(newIsUploading) {
+      if (newIsUploading === false) {
+        console.log(`total time: ${this.totalTime}`)
+      }
+    },
+    currentTime: {
+      handler() {
+        setTimeout(() => {
+          this.currentTime = Date.now()
+        }, 1000)
+      },
+      immediate: true
     }
   }
 }

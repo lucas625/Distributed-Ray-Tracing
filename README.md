@@ -50,7 +50,7 @@ go test ./...
 ```bash
 # Build the environment variables
 # Remember to change the values as needed.
-./build_env_vars.sh
+./build_docker_env_vars.sh
 
 # Run the services
 ./run_docker.sh

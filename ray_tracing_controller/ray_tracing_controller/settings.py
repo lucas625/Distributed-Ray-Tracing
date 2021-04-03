@@ -133,6 +133,10 @@ LOGGING = {
 }
 
 REQUEST_LOGGING_MAX_BODY_LENGTH = 0
+# The maximum size in bytes that a request body may be before a SuspiciousOperation (RequestDataTooBig) is raised
+# Default is 2621440: 2.5 MB
+# https://docs.djangoproject.com/en/3.1/ref/settings/#data-upload-max-memory-size
+DATA_UPLOAD_MAX_MEMORY_SIZE = 2621440 * 100
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

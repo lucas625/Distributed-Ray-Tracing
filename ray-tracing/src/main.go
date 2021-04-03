@@ -16,8 +16,8 @@ func main() {
 	server := &http.Server{
 		Handler:      router,
 		Addr:         ":8081",
-		WriteTimeout: 1 * time.Hour,
-		ReadTimeout:  1 * time.Hour,
+		WriteTimeout: 4 * time.Hour,
+		ReadTimeout:  4 * time.Hour,
 	}
 
 	fmt.Println("Server running!")
