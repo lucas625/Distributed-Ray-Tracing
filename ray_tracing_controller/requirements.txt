@@ -1,4 +1,4 @@
-Django==3.1.7
+Django==3.1.8
 django-cors-headers==3.7.0
 django-request-logging==0.7.2
 djangorestframework==3.12.2
