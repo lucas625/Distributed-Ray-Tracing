@@ -181,9 +181,10 @@ export default {
           rayTracingParameters, successCallBack, errorCallBack, finallyCallBack)
 
       if (index + 1 < this.selectedFiles.length) {
+        this.submitOneByOne(index+1)
         setTimeout(() => {
-          this.submitOneByOne(index+1)
-        }, 15000)
+          
+        }, 5000)
       }
     },
     /**
