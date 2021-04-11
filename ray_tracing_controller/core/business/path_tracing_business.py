@@ -10,9 +10,9 @@ import requests
 from core.exceptions import InvalidPathTracingParametersException
 
 _MAX_PATH_TRACING_PARAMETERS = dict(
-    width=1080,
-    height=768,
-    raysPerPixel=400,
+    width=1920,
+    height=1080,
+    raysPerPixel=1000,
     recursions=5
 )
 

@@ -45,7 +45,7 @@
                       <v-text-field
                           v-model="pathTracingParameters.width"
                           label="Width"
-                          :rules="[ruleRequiredField, ruleMinMaxValueField(100, 1080)]"
+                          :rules="[ruleRequiredField, ruleMinMaxValueField(100, 1920)]"
                           type="Number"
                       />
                     </v-col>
@@ -55,7 +55,7 @@
                       <v-text-field
                           v-model="pathTracingParameters.height"
                           label="Height"
-                          :rules="[ruleRequiredField, ruleMinMaxValueField(100, 768)]"
+                          :rules="[ruleRequiredField, ruleMinMaxValueField(100, 1080)]"
                           type="Number"
                       />
                     </v-col>
@@ -65,7 +65,7 @@
                       <v-text-field
                           v-model="pathTracingParameters.raysPerPixel"
                           label="Rays Per Pixel"
-                          :rules="[ruleRequiredField, ruleMinMaxValueField(1, 400)]"
+                          :rules="[ruleRequiredField, ruleMinMaxValueField(1, 1000)]"
                           type="Number"
                       />
                     </v-col>
@@ -181,9 +181,10 @@ export default {
           rayTracingParameters, successCallBack, errorCallBack, finallyCallBack)
 
       if (index + 1 < this.selectedFiles.length) {
+        this.submitOneByOne(index+1)
         setTimeout(() => {
-          this.submitOneByOne(index+1)
-        }, 15000)
+          
+        }, 5000)
       }
     },
     /**
